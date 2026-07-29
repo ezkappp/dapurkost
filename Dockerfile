@@ -1,4 +1,5 @@
 FROM php:8.3-apache
+RUN echo "DOCKERFILE VERSION 2"
 
 # Ekstensi PHP yang dibutuhkan (koneksi MySQL)
 RUN docker-php-ext-install pdo pdo_mysql

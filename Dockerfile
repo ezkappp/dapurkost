@@ -6,6 +6,11 @@ RUN docker-php-ext-install pdo pdo_mysql
 # Aktifkan mod_rewrite (dipakai backend/public/.htaccess untuk routing API)
 RUN a2enmod rewrite
 
+# Fix "AH00534: More than one MPM loaded": image dasar ini kadang punya
+# mpm_event/mpm_worker ikut ke-load bareng mpm_prefork. mod_php cuma
+# kompatibel dengan mpm_prefork, jadi matikan yang lain secara eksplisit.
+RUN (a2dismod mpm_event || true) && (a2dismod mpm_worker || true) && a2enmod mpm_prefork
+
 # Izinkan .htaccess override (default image ini AllowOverride None)
 RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 

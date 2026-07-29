@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu - DapurKost | Rasa Rumahan, Sampai ke Pintu Kostmu</title>
+
+<!-- Bootstrap 5 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<!-- Google Fonts - Poppins -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  /* ==========================================================
+     ROOT VARIABLES (sama seperti Home)
+  ========================================================== */
+  :root{
+    --cream: #FEF9E1;
+    --beige: #E5D0AC;
+    --merah: #A31D1D;
+    --dark-red: #6D2323;
+    --white: #ffffff;
+    --gradient-primary: linear-gradient(135deg, var(--merah) 0%, var(--dark-red) 100%);
+    --shadow-soft: 0 10px 30px rgba(109, 35, 35, 0.12);
+    --shadow-soft-lg: 0 20px 50px rgba(109, 35, 35, 0.18);
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 10px;
+    --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--cream);
+    color: var(--dark-red);
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+  h1,h2,h3,h4,h5,h6{ font-family: 'Poppins', sans-serif; font-weight: 700; }
+  a{ text-decoration: none; }
+  ::selection{ background: var(--merah); color: var(--cream); }
+  ::-webkit-scrollbar{ width: 10px; }
+  ::-webkit-scrollbar-track{ background: var(--cream); }
+  ::-webkit-scrollbar-thumb{ background: var(--merah); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover{ background: var(--dark-red); }
+
+  /* ==========================================================
+     LOADING SCREEN
+  ========================================================== */
+  #loading-screen{
+    position: fixed; inset: 0; background: var(--gradient-primary); z-index: 99999;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+  #loading-screen.hide{ opacity: 0; visibility: hidden; pointer-events: none; }
+  .loader-logo{
+    width: 80px; height: 80px; border-radius: 50%; background: var(--cream);
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size: 1.8rem;
+    color: var(--merah); margin-bottom: 20px; animation: pulseLogo 1.4s ease-in-out infinite;
+  }
+  @keyframes pulseLogo{
+    0%{ transform: scale(1); box-shadow: 0 0 0 0 rgba(254,249,225,0.5); }
+    70%{ transform: scale(1.08); box-shadow: 0 0 0 20px rgba(254,249,225,0); }
+    100%{ transform: scale(1); box-shadow: 0 0 0 0 rgba(254,249,225,0); }
+  }
+  .loader-text{ color: var(--cream); font-weight: 500; letter-spacing: 2px; font-size: 0.9rem; text-transform: uppercase; opacity: 0.9; }
+  .loader-bar{ width: 160px; height: 4px; background: rgba(254,249,225,0.25); border-radius: 10px; margin-top: 16px; overflow: hidden; }
+  .loader-bar::after{ content:''; display:block; width: 40%; height: 100%; background: var(--cream); border-radius: 10px; animation: loaderMove 1.2s ease-in-out infinite; }
+  @keyframes loaderMove{ 0%{ margin-left: -40%; } 100%{ margin-left: 100%; } }
+
+  /* ==========================================================
+     NAVBAR (sama seperti Home)
+  ========================================================== */
+  .navbar-dapurkost{
+    position: sticky; top: 0; z-index: 1000; padding: 18px 0;
+    background: rgba(254, 249, 225, 0.65);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border-bottom: 1px solid rgba(163, 29, 29, 0.08);
+    transition: var(--transition);
+  }
+  .navbar-dapurkost.scrolled{ padding: 10px 0; background: rgba(254, 249, 225, 0.9); box-shadow: var(--shadow-soft); }
+  .navbar-brand-dk{ display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.4rem; color: var(--merah) !important; }
+  .navbar-brand-dk img{ height: 42px; width: 42px; object-fit: contain; border-radius: 50%; }
+  .navbar-brand-dk span{ background: var(--gradient-primary); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .navbar-nav .nav-link{ font-weight: 500; color: var(--dark-red) !important; margin: 0 12px; position: relative; padding: 6px 2px !important; transition: var(--transition); }
+  .navbar-nav .nav-link::after{ content: ''; position: absolute; left: 0; bottom: 0; width: 0%; height: 2px; background: var(--gradient-primary); border-radius: 10px; transition: width 0.3s ease; }
+  .navbar-nav .nav-link:hover::after, .navbar-nav .nav-link.active::after{ width: 100%; }
+  .navbar-nav .nav-link:hover{ color: var(--merah) !important; }
+  .btn-navbar-order{
+    background: var(--gradient-primary); color: var(--cream) !important; padding: 10px 26px; border-radius: 50px;
+    font-weight: 600; font-size: 0.92rem; box-shadow: var(--shadow-soft); border: none; transition: var(--transition);
+    position: relative; overflow: hidden;
+  }
+  .btn-navbar-order:hover{ transform: translateY(-3px); box-shadow: var(--shadow-soft-lg); color: var(--cream) !important; }
+  .navbar-toggler{ border: none; box-shadow: none !important; }
+
+  /* Ripple */
+  .btn-ripple{ position: relative; overflow: hidden; }
+  .ripple-span{ position: absolute; border-radius: 50%; background: rgba(255,255,255,0.55); transform: scale(0); animation: rippleAnim 0.6s linear; pointer-events: none; }
+  @keyframes rippleAnim{ to{ transform: scale(3); opacity: 0; } }
+
+  .btn-primary-dk{
+    background: var(--gradient-primary); color: var(--cream); border: none; padding: 12px 30px; border-radius: 50px;
+    font-weight: 600; box-shadow: var(--shadow-soft); transition: var(--transition);
+  }
+  .btn-primary-dk:hover{ transform: translateY(-4px); box-shadow: var(--shadow-soft-lg); color: var(--cream); }
+  .btn-primary-dk:disabled{ opacity: 0.6; transform: none; cursor: not-allowed; }
+
+  /* ==========================================================
+     PAGE HEADER
+  ========================================================== */
+  .menu-header{
+    padding: 60px 0 30px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .menu-header::before{
+    content:''; position: absolute; width: 420px; height: 420px; background: var(--beige);
+    border-radius: 50%; top: -220px; left: -140px; opacity: 0.45; filter: blur(10px); z-index: 0;
+  }
+  .menu-header .section-eyebrow{ color: var(--merah); font-weight: 600; letter-spacing: 2px; text-transform: uppercase; font-size: 0.85rem; position: relative; z-index: 1; }
+  .menu-header h1{ font-size: 2.6rem; font-weight: 800; color: var(--dark-red); margin-top: 8px; position: relative; z-index: 1; }
+  .menu-header p{ color: #7a4a4a; max-width: 560px; margin: 12px auto 0; position: relative; z-index: 1; }
+
+  /* ==========================================================
+     SEARCH & FILTER BAR
+  ========================================================== */
+  .filter-bar{
+    position: sticky; top: 78px; z-index: 900;
+    background: rgba(254, 249, 225, 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    padding: 18px 22px;
+    margin-bottom: 40px;
+    border: 1px solid rgba(163,29,29,0.08);
+  }
+  .search-box{ position: relative; }
+  .search-box input{
+    width: 100%; border: 2px solid rgba(163,29,29,0.12); background: var(--white);
+    border-radius: 50px; padding: 12px 20px 12px 46px; font-size: 0.95rem; color: var(--dark-red);
+    transition: var(--transition);
+  }
+  .search-box input:focus{ outline: none; border-color: var(--merah); box-shadow: 0 0 0 4px rgba(163,29,29,0.08); }
+  .search-box i{ position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--merah); font-size: 1.05rem; }
+
+  .filter-pills{ display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .filter-pill{
+    border: 2px solid rgba(163,29,29,0.15); background: var(--white); color: var(--dark-red);
+    padding: 8px 20px; border-radius: 50px; font-weight: 600; font-size: 0.85rem; cursor: pointer;
+    transition: var(--transition); white-space: nowrap;
+  }
+  .filter-pill:hover{ border-color: var(--merah); color: var(--merah); transform: translateY(-2px); }
+  .filter-pill.active{ background: var(--gradient-primary); border-color: transparent; color: var(--cream); box-shadow: var(--shadow-soft); }
+
+  /* ==========================================================
+     MENU GRID / CARD
+  ========================================================== */
+  .menu-section{ padding-top: 0; padding-bottom: 100px; }
+  .menu-card{
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    height: 100%;
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition);
+    border: 1px solid rgba(163,29,29,0.06);
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: cardIn 0.6s cubic-bezier(0.4,0,0.2,1) forwards;
+  }
+  @keyframes cardIn{ to{ opacity: 1; transform: translateY(0); } }
+  .menu-card:hover{
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-soft-lg);
+    border-color: rgba(163,29,29,0.15);
+  }
+  .menu-card-img-wrap{ position: relative; overflow: hidden; aspect-ratio: 4/3; }
+  .menu-card-img-wrap img{ width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+  .menu-card:hover .menu-card-img-wrap img{ transform: scale(1.1); }
+  .menu-card-badge{
+    position: absolute; top: 14px; left: 14px; background: rgba(254,249,225,0.92);
+    color: var(--merah); font-size: 0.72rem; font-weight: 700; padding: 5px 14px;
+    border-radius: 50px; text-transform: uppercase; letter-spacing: 0.5px;
+    box-shadow: var(--shadow-soft);
+  }
+  .menu-card-body{ padding: 20px 22px 22px; display: flex; flex-direction: column; flex: 1; }
+  .menu-card-title{ font-size: 1.08rem; font-weight: 700; color: var(--dark-red); margin-bottom: 6px; }
+  .menu-card-desc{ font-size: 0.85rem; color: #8a5a5a; margin-bottom: 16px; flex: 1; }
+  .menu-card-footer{ display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .menu-card-price{ font-size: 1.15rem; font-weight: 800; color: var(--merah); }
+  .menu-card-price small{ font-size: 0.7rem; font-weight: 500; color: #8a5a5a; display: block; }
+  .btn-add{
+    background: var(--gradient-primary); color: var(--cream); border: none; width: 44px; height: 44px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+    box-shadow: var(--shadow-soft); transition: var(--transition); flex-shrink: 0;
+  }
+  .btn-add:hover{ transform: scale(1.1) rotate(90deg); box-shadow: var(--shadow-soft-lg); }
+  .btn-add:active{ transform: scale(0.92) rotate(90deg); }
+  .btn-add.added{ animation: addPop 0.4s ease; }
+  @keyframes addPop{
+    0%{ transform: scale(1); }
+    40%{ transform: scale(1.35); background: var(--dark-red); }
+    100%{ transform: scale(1); }
+  }
+
+  .empty-state{ text-align: center; padding: 80px 20px; display: none; }
+  .empty-state.show{ display: block; }
+  .empty-state i{ font-size: 3.4rem; color: var(--beige); margin-bottom: 16px; }
+  .empty-state p{ color: #8a5a5a; font-weight: 500; }
+
+  /* ==========================================================
+     FLOATING CART BUTTON
+  ========================================================== */
+  .floating-cart-btn{
+    position: fixed; bottom: 28px; right: 28px; z-index: 1050;
+    width: 66px; height: 66px; border-radius: 50%;
+    background: var(--gradient-primary); color: var(--cream);
+    display: flex; align-items: center; justify-content: center; font-size: 1.6rem;
+    border: none; box-shadow: var(--shadow-soft-lg); cursor: pointer; transition: var(--transition);
+  }
+  .floating-cart-btn:hover{ transform: translateY(-4px) scale(1.05); }
+  .floating-cart-btn.bump{ animation: cartBump 0.5s cubic-bezier(0.4,0,0.2,1); }
+  @keyframes cartBump{
+    0%{ transform: scale(1); }
+    30%{ transform: scale(1.25) rotate(-8deg); }
+    60%{ transform: scale(0.95) rotate(4deg); }
+    100%{ transform: scale(1) rotate(0); }
+  }
+  .floating-cart-badge{
+    position: absolute; top: -6px; right: -6px; background: var(--cream); color: var(--merah);
+    font-size: 0.78rem; font-weight: 800; min-width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-soft);
+    border: 2px solid var(--merah); padding: 0 4px;
+  }
+  .floating-cart-btn.hidden-cart{ transform: scale(0); opacity: 0; pointer-events: none; }
+
+  /* Flying add-to-cart animation element */
+  .fly-item{
+    position: fixed; z-index: 2000; border-radius: 50%; background: var(--gradient-primary);
+    pointer-events: none; box-shadow: var(--shadow-soft-lg);
+  }
+
+  /* ==========================================================
+     OFFCANVAS SIDE CART
+  ========================================================== */
+  .offcanvas-cart{ width: 420px !important; max-width: 92vw; background: var(--cream); }
+  .offcanvas-cart .offcanvas-header{
+    background: var(--gradient-primary); color: var(--cream); padding: 22px 24px;
+  }
+  .offcanvas-cart .offcanvas-header .btn-close{ filter: invert(1) brightness(2); }
+  .offcanvas-cart .offcanvas-title{ font-weight: 800; display: flex; align-items: center; gap: 10px; }
+  .offcanvas-cart .offcanvas-body{ padding: 20px; display: flex; flex-direction: column; }
+
+  .cart-empty{ text-align: center; padding: 60px 10px; color: #8a5a5a; }
+  .cart-empty i{ font-size: 3rem; color: var(--beige); margin-bottom: 14px; display: block; }
+
+  .cart-items{ flex: 1; overflow-y: auto; margin-bottom: 16px; }
+  .cart-item{
+    display: flex; gap: 14px; background: var(--white); border-radius: var(--radius-md);
+    padding: 14px; margin-bottom: 12px; box-shadow: var(--shadow-soft); align-items: center;
+    animation: cardIn 0.4s ease forwards;
+  }
+  .cart-item img{ width: 62px; height: 62px; border-radius: 12px; object-fit: cover; flex-shrink: 0; }
+  .cart-item-info{ flex: 1; min-width: 0; }
+  .cart-item-name{ font-weight: 700; font-size: 0.9rem; color: var(--dark-red); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cart-item-price{ font-size: 0.8rem; color: #8a5a5a; }
+  .cart-item-controls{ display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+  .qty-btn{
+    width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--merah); background: var(--white);
+    color: var(--merah); display: flex; align-items: center; justify-content: center; font-size: 0.85rem;
+    transition: var(--transition); cursor: pointer;
+  }
+  .qty-btn:hover{ background: var(--merah); color: var(--cream); }
+  .qty-value{ font-weight: 700; min-width: 20px; text-align: center; font-size: 0.9rem; }
+  .cart-item-remove{
+    background: none; border: none; color: #c98a8a; font-size: 1.1rem; align-self: flex-start;
+    transition: var(--transition); cursor: pointer;
+  }
+  .cart-item-remove:hover{ color: var(--merah); transform: scale(1.15); }
+
+  .cart-summary{ border-top: 2px dashed rgba(163,29,29,0.2); padding-top: 16px; }
+  .cart-summary-row{ display: flex; justify-content: space-between; font-size: 0.9rem; color: #7a4a4a; margin-bottom: 8px; }
+  .cart-summary-row.total{ font-size: 1.15rem; font-weight: 800; color: var(--merah); margin-top: 10px; }
+  .btn-checkout{
+    width: 100%; background: var(--gradient-primary); color: var(--cream); border: none; padding: 15px;
+    border-radius: 50px; font-weight: 700; margin-top: 16px; box-shadow: var(--shadow-soft); transition: var(--transition);
+  }
+  .btn-checkout:hover{ transform: translateY(-3px); box-shadow: var(--shadow-soft-lg); }
+  .btn-checkout:disabled{ opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* ==========================================================
+     TOAST
+  ========================================================== */
+  .toast-dk-wrap{ position: fixed; top: 90px; right: 20px; z-index: 2100; }
+  .toast-dk{
+    background: var(--white); border-radius: var(--radius-md); box-shadow: var(--shadow-soft-lg);
+    padding: 14px 20px; display: flex; align-items: center; gap: 12px; min-width: 280px;
+    border-left: 4px solid var(--merah); transform: translateX(120%); opacity: 0;
+    transition: transform 0.45s cubic-bezier(0.4,0,0.2,1), opacity 0.45s ease;
+  }
+  .toast-dk.show-toast{ transform: translateX(0); opacity: 1; }
+  .toast-dk-icon{
+    width: 38px; height: 38px; border-radius: 50%; background: var(--gradient-primary); color: var(--cream);
+    display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;
+  }
+  .toast-dk-text{ font-size: 0.88rem; font-weight: 600; color: var(--dark-red); }
+  .toast-dk-sub{ font-size: 0.76rem; color: #8a5a5a; font-weight: 400; }
+
+  /* ==========================================================
+     FOOTER (sama seperti Home)
+  ========================================================== */
+  .footer-dk{ background: var(--gradient-primary); color: var(--cream); padding: 70px 0 24px; margin-top: 60px; }
+  .footer-brand{ display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.3rem; margin-bottom: 14px; }
+  .footer-brand img{ height: 40px; width: 40px; border-radius: 50%; }
+  .footer-desc{ color: rgba(254,249,225,0.75); font-size: 0.9rem; max-width: 320px; margin-bottom: 20px; }
+  .footer-social{ display: flex; gap: 12px; }
+  .footer-social a{
+    width: 38px; height: 38px; border-radius: 50%; background: rgba(254,249,225,0.12); color: var(--cream);
+    display: flex; align-items: center; justify-content: center; transition: var(--transition);
+  }
+  .footer-social a:hover{ background: var(--cream); color: var(--merah); transform: translateY(-4px); }
+  .footer-title{ font-weight: 700; margin-bottom: 18px; font-size: 1.02rem; }
+  .footer-links{ list-style: none; padding: 0; margin: 0; }
+  .footer-links li{ margin-bottom: 12px; }
+  .footer-links a{ color: rgba(254,249,225,0.75); font-size: 0.9rem; transition: var(--transition); }
+  .footer-links a:hover{ color: var(--cream); padding-left: 4px; }
+  .footer-contact-item{ display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; font-size: 0.88rem; color: rgba(254,249,225,0.85); }
+  .footer-bottom{ border-top: 1px solid rgba(254,249,225,0.15); margin-top: 40px; padding-top: 22px; text-align: center; font-size: 0.82rem; color: rgba(254,249,225,0.7); }
+
+  /* ==========================================================
+     RESPONSIVE
+  ========================================================== */
+  @media (max-width: 991.98px){
+    .filter-bar{ top: 0; }
+    .navbar-collapse{ background: var(--cream); border-radius: var(--radius-md); padding: 16px; margin-top: 12px; box-shadow: var(--shadow-soft); }
+  }
+  @media (max-width: 767.98px){
+    .menu-header h1{ font-size: 2rem; }
+    .floating-cart-btn{ width: 58px; height: 58px; font-size: 1.4rem; bottom: 20px; right: 20px; }
+    .toast-dk{ min-width: 220px; }
+    .toast-dk-wrap{ left: 12px; right: 12px; top: 84px; }
+    .toast-dk{ width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     LOADING SCREEN
+============================================================ -->
+<div id="loading-screen">
+  <div class="loader-logo">DK</div>
+  <div class="loader-text">DapurKost</div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- ============================================================
+     NAVBAR
+============================================================ -->
+<nav class="navbar navbar-expand-lg navbar-dapurkost" id="mainNavbar">
+  <div class="container">
+    <a class="navbar-brand navbar-brand-dk" href="home.html">
+      <img src="logo-dapurkost.png" alt="Logo DapurKost">
+      <span>DapurKost</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <i class="bi bi-list" style="font-size:1.8rem; color: var(--merah);"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link active" href="menu.html">Menu</a></li>
+        <li class="nav-item"><a class="nav-link" href="paket.html">Paket</a></li>
+        <li class="nav-item"><a class="nav-link" href="cara-order.html">Cara Order</a></li>
+      </ul>
+      <a href="#" class="btn btn-navbar-order btn-ripple" id="openCartFromNav">Pesan Sekarang</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================================================
+     MENU HEADER
+============================================================ -->
+<section class="menu-header">
+  <div class="container">
+    <span class="section-eyebrow"><i class="bi bi-egg-fried"></i> Menu Makanan</span>
+    <h1>Pilih Menu Favoritmu</h1>
+    <p>Beragam menu rumahan segar, dibuat setiap hari dengan bahan pilihan. Tinggal klik, tambahkan ke keranjang, dan pesan sekarang juga.</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEARCH & FILTER
+============================================================ -->
+<section class="menu-section" style="padding-top:0;">
+  <div class="container">
+    <div class="filter-bar">
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+        <input type="text" id="searchInput" placeholder="Cari menu, misalnya: nasi goreng...">
+      </div>
+      <div class="filter-pills" id="filterPills">
+        <button class="filter-pill active" data-category="semua">Semua</button>
+        <button class="filter-pill" data-category="sarapan">Sarapan</button>
+        <button class="filter-pill" data-category="makan-siang">Makan Siang</button>
+        <button class="filter-pill" data-category="makan-malam">Makan Malam</button>
+        <button class="filter-pill" data-category="minuman">Minuman</button>
+        <button class="filter-pill" data-category="snack">Snack</button>
+      </div>
+    </div>
+
+    <!-- MENU GRID -->
+    <div class="row g-4" id="menuGrid"></div>
+
+    <!-- EMPTY STATE -->
+    <div class="empty-state" id="emptyState">
+      <i class="bi bi-emoji-frown"></i>
+      <p>Menu tidak ditemukan. Coba kata kunci atau kategori lain ya.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FLOATING CART BUTTON
+============================================================ -->
+<button class="floating-cart-btn hidden-cart" id="floatingCartBtn" data-bs-toggle="offcanvas" data-bs-target="#sideCart">
+  <i class="bi bi-basket3-fill"></i>
+  <span class="floating-cart-badge" id="cartBadge">0</span>
+</button>
+
+<!-- ============================================================
+     OFFCANVAS SIDE CART
+============================================================ -->
+<div class="offcanvas offcanvas-end offcanvas-cart" tabindex="-1" id="sideCart">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title"><i class="bi bi-basket3-fill"></i> Keranjang Saya</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="cart-empty" id="cartEmptyState">
+      <i class="bi bi-basket3"></i>
+      <p>Keranjang masih kosong.<br>Yuk pilih menu favoritmu!</p>
+    </div>
+    <div class="cart-items" id="cartItemsWrap"></div>
+    <div class="cart-summary" id="cartSummary" style="display:none;">
+      <div class="cart-summary-row">
+        <span>Subtotal</span>
+        <span id="cartSubtotal">Rp 0</span>
+      </div>
+      <div class="cart-summary-row">
+        <span>Biaya Layanan</span>
+        <span id="cartService">Rp 0</span>
+      </div>
+      <div class="cart-summary-row total">
+        <span>Total</span>
+        <span id="cartTotal">Rp 0</span>
+      </div>
+      <button class="btn-checkout" id="lanjutOrderBtn">
+        <i class="bi bi-bag-check me-2"></i>Lanjut Order
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     TOAST NOTIFIKASI
+============================================================ -->
+<div class="toast-dk-wrap">
+  <div class="toast-dk" id="toastDk">
+    <div class="toast-dk-icon"><i class="bi bi-check-lg"></i></div>
+    <div>
+      <div class="toast-dk-text">Berhasil ditambahkan ke keranjang</div>
+      <div class="toast-dk-sub" id="toastSub"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer class="footer-dk">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div class="footer-brand">
+          <img src="logo-dapurkost.png" alt="Logo DapurKost">
+          <span>DapurKost</span>
+        </div>
+        <p class="footer-desc">Solusi makan harian untuk mahasiswa dan anak kost. Rasa rumahan, harga bersahabat, antar tepat waktu.</p>
+        <div class="footer-social">
+          <a href="#"><i class="bi bi-instagram"></i></a>
+          <a href="#"><i class="bi bi-whatsapp"></i></a>
+          <a href="#"><i class="bi bi-tiktok"></i></a>
+          <a href="#"><i class="bi bi-facebook"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-6">
+        <div class="footer-title">Navigasi</div>
+        <ul class="footer-links">
+          <li><a href="home.html">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="tentang.html">Tentang Kami</a></li>
+          <li><a href="cara-order.html">Cara Order</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-title">Layanan</div>
+        <ul class="footer-links">
+          <li><a href="#paket">Paket Hemat</a></li>
+          <li><a href="#paket">Paket Populer</a></li>
+          <li><a href="#paket">Paket Komplit</a></li>
+          <li><a href="#">Syarat &amp; Ketentuan</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-title">Kontak</div>
+        <div class="footer-contact-item"><i class="bi bi-geo-alt"></i><span>Jl. Sekeloa Dalam No. 12, Bandung</span></div>
+        <div class="footer-contact-item"><i class="bi bi-whatsapp"></i><span>0812-3456-7890</span></div>
+        <div class="footer-contact-item"><i class="bi bi-envelope"></i><span>halo@dapurkost.id</span></div>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 DapurKost. Seluruh hak cipta dilindungi.</div>
+  </div>
+</footer>
+
+<!-- Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/api.js"></script>
+
+<script>
+/* ==============================================================
+   0. DATA MENU (bukan paket, item per-satuan)
+============================================================== */
+let menuItems = [];
+
+/* Ambil menu asli dari backend PHP Native (GET /api/menu). */
+async function loadMenuFromBackend(){
+  try {
+    const res = await DapurKostAPI.getMenu();
+    menuItems = (res.data.menu || []).map(row => ({
+      id: Number(row.id),
+      name: row.nama,
+      category: row.kategori || "",
+      desc: row.deskripsi || "",
+      price: Number(row.harga),
+      img: row.foto || "https://placehold.co/500x375/E5D0AC/6D2323?font=poppins&text=" + encodeURIComponent(row.nama)
+    }));
+  } catch (err) {
+    menuItems = [];
+    if (typeof showToast === "function") {
+      showToast("Gagal memuat menu dari server.");
+    }
+  }
+  renderMenu();
+}
+
+const categoryLabel = {
+  "sarapan": "Sarapan",
+  "makan-siang": "Makan Siang",
+  "makan-malam": "Makan Malam",
+  "minuman": "Minuman",
+  "snack": "Snack"
+};
+
+/* ==============================================================
+   1. STATE
+============================================================== */
+let cart = JSON.parse(localStorage.getItem("dapurkost_cart") || "[]");
+let currentCategory = "semua";
+let currentSearch = "";
+const SERVICE_FEE = 2000;
+
+function formatRupiah(num){
+  return "Rp " + num.toLocaleString("id-ID");
+}
+
+function saveCart(){
+  localStorage.setItem("dapurkost_cart", JSON.stringify(cart));
+}
+
+/* ==============================================================
+   2. RENDER MENU GRID
+============================================================== */
+const menuGrid = document.getElementById("menuGrid");
+const emptyState = document.getElementById("emptyState");
+
+function renderMenu(){
+  const filtered = menuItems.filter(item => {
+    const matchCategory = currentCategory === "semua" || item.category === currentCategory;
+    const matchSearch = item.name.toLowerCase().includes(currentSearch.toLowerCase());
+    return matchCategory && matchSearch;
+  });
+
+  menuGrid.innerHTML = "";
+
+  if(filtered.length === 0){
+    emptyState.classList.add("show");
+  } else {
+    emptyState.classList.remove("show");
+  }
+
+  filtered.forEach((item, idx) => {
+    const col = document.createElement("div");
+    col.className = "col-lg-3 col-md-4 col-sm-6";
+    col.innerHTML = `
+      <div class="menu-card" style="animation-delay:${idx * 0.05}s">
+        <div class="menu-card-img-wrap">
+          <img src="${item.img}" alt="${item.name}" loading="lazy">
+          <span class="menu-card-badge">${categoryLabel[item.category]}</span>
+        </div>
+        <div class="menu-card-body">
+          <div class="menu-card-title">${item.name}</div>
+          <div class="menu-card-desc">${item.desc}</div>
+          <div class="menu-card-footer">
+            <div class="menu-card-price">${formatRupiah(item.price)}<small>per porsi</small></div>
+            <button class="btn-add" data-id="${item.id}" aria-label="Tambah ${item.name}">
+              <i class="bi bi-plus-lg"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+    menuGrid.appendChild(col);
+  });
+
+  // bind tombol tambah
+  document.querySelectorAll(".btn-add").forEach(btn => {
+    btn.addEventListener("click", function(e){
+      const id = parseInt(this.getAttribute("data-id"), 10);
+      addToCart(id, this, e);
+    });
+  });
+}
+
+/* ==============================================================
+   3. FILTER PILLS
+============================================================== */
+document.querySelectorAll(".filter-pill").forEach(pill => {
+  pill.addEventListener("click", function(){
+    document.querySelectorAll(".filter-pill").forEach(p => p.classList.remove("active"));
+    this.classList.add("active");
+    currentCategory = this.getAttribute("data-category");
+    renderMenu();
+  });
+});
+
+/* ==============================================================
+   4. SEARCH
+============================================================== */
+document.getElementById("searchInput").addEventListener("input", function(){
+  currentSearch = this.value;
+  renderMenu();
+});
+
+/* ==============================================================
+   5. CART LOGIC
+============================================================== */
+const floatingCartBtn = document.getElementById("floatingCartBtn");
+const cartBadge = document.getElementById("cartBadge");
+
+function addToCart(id, btnEl, event){
+  const item = menuItems.find(m => m.id === id);
+  if(!item) return;
+
+  const existing = cart.find(c => c.id === id);
+  if(existing){
+    existing.qty += 1;
+  } else {
+    cart.push({ id: item.id, name: item.name, price: item.price, img: item.img, qty: 1 });
+  }
+  saveCart();
+  updateCartUI();
+  animateAddToCart(btnEl);
+  showToast(item.name);
+
+  // pop animation tombol tambah
+  btnEl.classList.remove("added");
+  void btnEl.offsetWidth; // reflow trigger
+  btnEl.classList.add("added");
+}
+
+function changeQty(id, delta){
+  const item = cart.find(c => c.id === id);
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty <= 0){
+    cart = cart.filter(c => c.id !== id);
+  }
+  saveCart();
+  updateCartUI();
+}
+
+function removeFromCart(id){
+  cart = cart.filter(c => c.id !== id);
+  saveCart();
+  updateCartUI();
+}
+
+function getCartCount(){
+  return cart.reduce((sum, c) => sum + c.qty, 0);
+}
+
+function getSubtotal(){
+  return cart.reduce((sum, c) => sum + (c.price * c.qty), 0);
+}
+
+function updateCartUI(){
+  const count = getCartCount();
+  cartBadge.textContent = count;
+
+  if(count > 0){
+    floatingCartBtn.classList.remove("hidden-cart");
+  } else {
+    floatingCartBtn.classList.add("hidden-cart");
+  }
+
+  renderSideCart();
+}
+
+function renderSideCart(){
+  const wrap = document.getElementById("cartItemsWrap");
+  const emptyEl = document.getElementById("cartEmptyState");
+  const summaryEl = document.getElementById("cartSummary");
+
+  if(cart.length === 0){
+    wrap.innerHTML = "";
+    emptyEl.style.display = "block";
+    summaryEl.style.display = "none";
+    return;
+  }
+
+  emptyEl.style.display = "none";
+  summaryEl.style.display = "block";
+
+  wrap.innerHTML = cart.map(c => `
+    <div class="cart-item">
+      <img src="${c.img}" alt="${c.name}">
+      <div class="cart-item-info">
+        <div class="cart-item-name">${c.name}</div>
+        <div class="cart-item-price">${formatRupiah(c.price)}</div>
+        <div class="cart-item-controls">
+          <button class="qty-btn" onclick="changeQty(${c.id}, -1)"><i class="bi bi-dash"></i></button>
+          <span class="qty-value">${c.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${c.id}, 1)"><i class="bi bi-plus"></i></button>
+        </div>
+      </div>
+      <button class="cart-item-remove" onclick="removeFromCart(${c.id})" aria-label="Hapus ${c.name}">
+        <i class="bi bi-trash3"></i>
+      </button>
+    </div>
+  `).join("");
+
+  const subtotal = getSubtotal();
+  const total = subtotal + SERVICE_FEE;
+  document.getElementById("cartSubtotal").textContent = formatRupiah(subtotal);
+  document.getElementById("cartService").textContent = formatRupiah(SERVICE_FEE);
+  document.getElementById("cartTotal").textContent = formatRupiah(total);
+}
+
+/* ==============================================================
+   6. ANIMASI TAMBAH KE KERANJANG (fly to cart)
+============================================================== */
+function animateAddToCart(btnEl){
+  const btnRect = btnEl.getBoundingClientRect();
+  const cartRect = floatingCartBtn.getBoundingClientRect();
+
+  const flyEl = document.createElement("div");
+  flyEl.className = "fly-item";
+  const size = 18;
+  flyEl.style.width = size + "px";
+  flyEl.style.height = size + "px";
+  flyEl.style.left = (btnRect.left + btnRect.width / 2 - size / 2) + "px";
+  flyEl.style.top = (btnRect.top + btnRect.height / 2 - size / 2) + "px";
+  flyEl.style.transition = "all 0.7s cubic-bezier(0.55, 0, 0.85, 0.35)";
+  document.body.appendChild(flyEl);
+
+  requestAnimationFrame(() => {
+    flyEl.style.left = (cartRect.left + cartRect.width / 2 - size / 2) + "px";
+    flyEl.style.top = (cartRect.top + cartRect.height / 2 - size / 2) + "px";
+    flyEl.style.transform = "scale(0.3)";
+    flyEl.style.opacity = "0.4";
+  });
+
+  setTimeout(() => {
+    flyEl.remove();
+    floatingCartBtn.classList.remove("bump");
+    void floatingCartBtn.offsetWidth;
+    floatingCartBtn.classList.add("bump");
+  }, 700);
+}
+
+/* ==============================================================
+   7. TOAST NOTIFIKASI
+============================================================== */
+let toastTimeout;
+function showToast(itemName){
+  const toastEl = document.getElementById("toastDk");
+  document.getElementById("toastSub").textContent = itemName;
+  toastEl.classList.add("show-toast");
+
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => {
+    toastEl.classList.remove("show-toast");
+  }, 2600);
+}
+
+/* ==============================================================
+   8. LOGIN CHECK -> LANJUT ORDER
+============================================================== */
+document.getElementById("lanjutOrderBtn").addEventListener("click", function(){
+  const isLoggedIn = localStorage.getItem("dapurkost_logged_in") === "true";
+
+  if(!isLoggedIn){
+    // simpan tujuan redirect setelah login berhasil
+    localStorage.setItem("dapurkost_redirect_after_login", "checkout.html");
+    window.location.href = "login.html";
+    return;
+  }
+
+  window.location.href = "checkout.html";
+});
+
+document.getElementById("openCartFromNav").addEventListener("click", function(e){
+  e.preventDefault();
+  const offcanvas = new bootstrap.Offcanvas(document.getElementById("sideCart"));
+  offcanvas.show();
+});
+
+/* ==============================================================
+   9. NAVBAR SCROLL EFFECT
+============================================================== */
+const navbar = document.getElementById("mainNavbar");
+window.addEventListener("scroll", function(){
+  if(window.scrollY > 40){
+    navbar.classList.add("scrolled");
+  } else {
+    navbar.classList.remove("scrolled");
+  }
+});
+
+/* ==============================================================
+   10. RIPPLE EFFECT
+============================================================== */
+document.querySelectorAll(".btn-ripple").forEach(function(btn){
+  btn.addEventListener("click", function(e){
+    const rect = btn.getBoundingClientRect();
+    const ripple = document.createElement("span");
+    const size = Math.max(rect.width, rect.height);
+    const x = e.clientX - rect.left - size / 2;
+    const y = e.clientY - rect.top - size / 2;
+
+    ripple.className = "ripple-span";
+    ripple.style.width = ripple.style.height = size + "px";
+    ripple.style.left = x + "px";
+    ripple.style.top = y + "px";
+
+    btn.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+  });
+});
+
+/* ==============================================================
+   11. LOADING SCREEN
+============================================================== */
+window.addEventListener("load", function(){
+  const loader = document.getElementById("loading-screen");
+  setTimeout(() => loader.classList.add("hide"), 400);
+});
+
+/* ==============================================================
+   12. INIT
+============================================================== */
+loadMenuFromBackend();
+updateCartUI();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+# Rewrite semua request (kecuali file/folder yang benar-benar ada) ke index.php
+# supaya endpoint bisa diakses sebagai backend/public/api/auth/login
+# tanpa perlu menulis index.php di URL. Opsional -- kalau Apache mod_rewrite
+# tidak aktif, endpoint tetap bisa diakses lewat index.php/api/auth/login.
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]

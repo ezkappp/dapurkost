@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Kelola Pesanan | DapurKost</title>
+
+<!-- Google Font -->
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+<!-- Bootstrap -->
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<!-- Bootstrap Icons -->
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+rel="stylesheet">
+<link href="assets/css/admin.css" rel="stylesheet">
+
+<style>
+
+/* :root dipindah ke assets/css/admin.css */
+
+*{
+
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+
+}
+
+body{
+
+background:var(--cream);
+color:var(--text);
+
+}
+
+/* ==========================
+SIDEBAR
+========================== */
+
+.sidebar{
+
+position:fixed;
+
+top:0;
+left:0;
+
+width:230px;
+
+height:100vh;
+
+background:linear-gradient(
+180deg,
+var(--red),
+var(--dark));
+
+padding:18px 20px;
+
+color:white;
+
+display:flex;
+
+flex-direction:column;
+
+}
+
+.logo{
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+margin-bottom:18px;
+
+}
+
+.logo-icon{
+
+width: 48px;
+height: 48px;
+
+border-radius:15px;
+
+background:rgba(255,255,255,.15);
+
+display:flex;
+
+justify-content:center;
+align-items:center;
+
+font-size:24px;
+
+}
+
+.logo h3{
+
+margin:0;
+
+font-size:20px;
+
+font-weight:700;
+
+}
+
+.logo p{
+
+margin:0;
+
+opacity:.8;
+
+font-size:13px;
+
+}
+
+/* ==========================
+MENU
+========================== */
+
+.sidebar-menu{
+
+margin-top:0px;
+
+}
+
+.sidebar-menu a{
+
+display:flex;
+
+align-items:center;
+
+gap:14px;
+
+text-decoration:none;
+
+color:white;
+
+padding:15px 18px;
+
+border-radius:14px;
+
+margin-bottom:8px;
+
+transition:.25s;
+
+font-weight:500;
+
+}
+
+.sidebar-menu a:hover{
+
+background:rgba(255,255,255,.15);
+
+transform:translateX(5px);
+
+}
+
+.sidebar-menu .active{
+
+background:white;
+
+color:var(--red);
+
+font-weight:600;
+
+}
+
+.sidebar-menu i{
+
+font-size:16px;
+
+width:22px;
+
+}
+
+/* ==========================
+LOGOUT
+========================== */
+
+.logout{
+
+margin-top:auto;
+
+}
+
+.logout a{
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+text-decoration:none;
+
+padding:15px 18px;
+
+border-radius:16px;
+
+background:rgba(255,255,255,.12);
+
+color:white;
+
+transition:.3s;
+
+}
+
+.logout a:hover{
+
+background:white;
+
+color:var(--red);
+
+}
+
+/* ==========================
+CONTENT
+========================== */
+
+.main{
+
+margin-left:230px;
+
+padding:24px 28px;
+
+}
+
+/* ==========================
+TOPBAR
+========================== */
+
+.topbar{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:35px;
+
+}
+
+.topbar h2{
+
+font-weight:700;
+
+font-size:34px;
+
+color:var(--dark);
+
+margin-bottom:5px;
+
+}
+
+.topbar p{
+
+margin:0;
+
+font-size:16px;
+
+color:var(--gray);
+
+}
+
+.admin-info{
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+}
+
+.notification{
+
+position:relative;
+
+font-size:24px;
+
+cursor:pointer;
+
+}
+
+.badge-notif{
+
+position:absolute;
+
+top:-6px;
+right:-6px;
+
+background:#dc3545;
+
+color:white;
+
+font-size:11px;
+
+width:18px;
+height:18px;
+
+border-radius:50%;
+
+display:flex;
+
+justify-content:center;
+align-items:center;
+
+}
+
+.avatar{
+
+width:42px;
+height:42px;
+
+border-radius:50%;
+
+background:var(--gold);
+
+display:flex;
+
+justify-content:center;
+align-items:center;
+
+font-size:24px;
+
+}
+
+/* ==========================
+CARD
+========================== */
+
+.dashboard-card{
+
+background:white;
+
+border:none;
+
+border-radius:18px;
+
+padding:18px;
+
+box-shadow:var(--shadow);
+
+transition:.25s;
+
+height:100%;
+
+}
+
+.dashboard-card:hover{
+
+transform:translateY(-4px);
+
+}
+
+.card-icon{
+
+width:52px;
+height:52px;
+
+border-radius:18px;
+
+display:flex;
+
+justify-content:center;
+align-items:center;
+
+font-size:22px;
+
+margin-bottom:14px;
+
+color:white;
+
+}
+
+.bg-red{
+
+background:var(--red);
+
+}
+
+.bg-gold{
+
+background:#D4A017;
+
+}
+
+.bg-green{
+
+background:#2E8B57;
+
+}
+
+.bg-blue{
+
+background:#3B82F6;
+
+}
+
+.dashboard-card h3{
+
+font-size:28px;
+
+font-weight:700;
+
+margin:4px 0;
+
+}
+
+.dashboard-card p{
+
+font-size:15px;
+margin:0;
+
+color:var(--gray);
+
+}
+
+.dashboard-card small{
+
+font-size:13px;
+
+}
+
+.table-card,
+.quick-card{
+
+margin-top:30px;
+
+background:white;
+
+border-radius:18px;
+
+padding:20px;
+
+box-shadow:var(--shadow);
+
+}
+
+.table-card h4,
+.quick-card h4{
+
+font-weight:700;
+
+font-size:22px;
+color:var(--dark);
+
+margin-bottom:20px;
+
+}
+.table th,
+.table td{
+
+padding:12px;
+
+font-size:14px;
+
+vertical-align:middle;
+
+}
+
+.quick-card .btn{
+
+padding:10px;
+
+font-size:15px;
+
+border-radius:12px;
+
+}
+
+/* ==========================
+KELOLA PESANAN — TAMBAHAN
+========================== */
+
+.pesanan-toolbar{
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+gap:12px;
+
+margin-bottom:20px;
+
+flex-wrap:wrap;
+
+}
+
+.pesanan-search{
+
+position:relative;
+
+flex:1;
+
+min-width:220px;
+
+max-width:320px;
+
+}
+
+.pesanan-search i{
+
+position:absolute;
+
+top:50%;
+
+left:14px;
+
+transform:translateY(-50%);
+
+color:var(--gray);
+
+font-size:14px;
+
+}
+
+.pesanan-search input{
+
+border-radius:12px;
+
+padding:10px 14px 10px 38px;
+
+border:1.5px solid #eee;
+
+font-size:14px;
+
+width:100%;
+
+}
+
+.pesanan-search input:focus{
+
+outline:none;
+
+border-color:var(--red);
+
+box-shadow:0 0 0 3px rgba(163,29,29,.08);
+
+}
+
+.pesanan-filter select{
+
+border-radius:12px;
+
+padding:10px 14px;
+
+border:1.5px solid #eee;
+
+font-size:14px;
+
+background:white;
+
+min-width:190px;
+
+}
+
+.pesanan-filter select:focus{
+
+outline:none;
+
+border-color:var(--red);
+
+}
+
+/* QA-02: tingkatkan kontras badge status pesanan */
+#tabelPesanan .badge{ font-weight:600; }
+#tabelPesanan .badge.bg-warning.text-dark{ background-color:#B58900 !important; color:#fff !important; }
+#tabelPesanan .badge.bg-info.text-dark{ background-color:#0B7285 !important; color:#fff !important; }
+#tabelPesanan .badge.bg-primary{ background-color:#0B5ED7 !important; }
+#tabelPesanan .badge.bg-success{ background-color:#1E7E34 !important; }
+#tabelPesanan .badge.bg-danger{ background-color:#B02A37 !important; }
+
+.pesanan-id{
+
+font-weight:700;
+
+color:var(--red);
+
+}
+
+.pelanggan-cell{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+}
+
+.avatar-sm{
+
+width:38px;
+height:38px;
+
+border-radius:50%;
+
+background:var(--cream);
+
+border:1.5px solid var(--gold);
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:16px;
+
+font-weight:600;
+
+color:var(--dark);
+
+flex-shrink:0;
+
+}
+
+.pelanggan-cell-text strong{
+
+display:block;
+
+font-size:14px;
+
+color:var(--text);
+
+}
+
+.pelanggan-cell-text small{
+
+color:var(--gray);
+
+font-size:12px;
+
+}
+
+.total-cell{
+
+font-weight:700;
+
+color:var(--red);
+
+}
+
+.action-btns{
+
+display:flex;
+
+gap:6px;
+
+flex-wrap:nowrap;
+
+}
+
+.action-btns .btn{
+
+border-radius:10px;
+
+padding:6px 12px;
+
+font-size:13px;
+
+}
+
+/* MODAL */
+
+.modal-content{
+
+border-radius:20px;
+
+border:none;
+
+}
+
+.detail-row{
+
+display:flex;
+
+justify-content:space-between;
+
+padding:10px 0;
+
+border-bottom:1px dashed #eee;
+
+font-size:14px;
+
+}
+
+.detail-row:last-child{
+
+border-bottom:none;
+
+}
+
+.detail-row span:first-child{
+
+color:var(--gray);
+
+}
+
+.detail-row span:last-child{
+
+font-weight:600;
+
+color:var(--text);
+
+text-align:right;
+
+}
+
+.menu-pill{
+
+display:inline-block;
+
+background:var(--cream);
+
+border:1px solid var(--gold);
+
+color:var(--dark);
+
+padding:6px 14px;
+
+border-radius:50px;
+
+font-size:13px;
+
+margin:4px 4px 0 0;
+
+}
+
+.total-highlight{
+
+background:linear-gradient(135deg, var(--red), var(--dark));
+
+color:white;
+
+border-radius:14px;
+
+padding:16px 18px;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-top:14px;
+
+}
+
+.total-highlight span:last-child{
+
+font-size:20px;
+
+font-weight:700;
+
+}
+
+.status-option{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+padding:12px 14px;
+
+border:1.5px solid #eee;
+
+border-radius:14px;
+
+margin-bottom:10px;
+
+cursor:pointer;
+
+transition:.2s;
+
+}
+
+.status-option:hover{
+
+border-color:var(--red);
+
+}
+
+.status-option input[type="radio"]{
+
+accent-color:var(--red);
+
+width:16px;
+
+height:16px;
+
+}
+
+.status-option.selected{
+
+border-color:var(--red);
+
+background:#fff5f5;
+
+}
+
+/* ==========================
+RESPONSIVE
+========================== */
+
+/* @media(max-width:992px) sidebar-collapse dipindah ke assets/css/admin.css */
+
+@media(max-width:768px){
+
+.pesanan-toolbar{
+
+flex-direction:column;
+
+align-items:stretch;
+
+}
+
+.pesanan-search{
+
+max-width:100%;
+
+}
+
+.pesanan-filter select{
+
+width:100%;
+
+}
+
+}
+
+</style>
+
+
+</head>
+
+<body>
+
+<!-- TOAST NOTIFIKASI -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:1080;">
+  <div id="appToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="appToastBody">Berhasil.</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<div class="sidebar">
+
+    <!-- LOGO -->
+
+    <div class="logo">
+
+        <div class="logo-icon">
+
+            <img src="assets/img/logo.png" alt="Logo DapurKost" class="logo-img">
+
+        </div>
+
+        <div>
+
+            <h3>DapurKost</h3>
+
+            <p>Admin Panel</p>
+
+        </div>
+
+    </div>
+
+    <!-- MENU -->
+
+    <div class="sidebar-menu">
+
+        <a href="dashboard-admin.html">
+
+            <i class="bi bi-grid-fill"></i>
+
+            <span>Dashboard</span>
+
+        </a>
+
+        <a href="kelola-menu.html">
+
+            <i class="bi bi-cup-hot"></i>
+
+            <span>Kelola Menu</span>
+
+        </a>
+
+        <a href="kelola-paket.html">
+
+            <i class="bi bi-box-seam"></i>
+
+            <span>Kelola Paket</span>
+
+        </a>
+
+        <a href="pesanan-admin.html" class="active">
+
+            <i class="bi bi-bag-check"></i>
+
+            <span>Pesanan</span>
+
+        </a>
+
+        <a href="pelanggan-admin.html">
+
+            <i class="bi bi-people-fill"></i>
+
+            <span>Pelanggan</span>
+
+        </a>
+
+        <a href="pembayaran-admin.html">
+
+            <i class="bi bi-credit-card-2-front"></i>
+
+            <span>Pembayaran</span>
+
+        </a>
+
+        <a href="laporan-admin.html">
+
+            <i class="bi bi-bar-chart-line"></i>
+
+            <span>Laporan</span>
+
+        </a>
+
+        <a href="ai-assistant.html">
+
+            <i class="bi bi-stars"></i>
+
+            <span>AI Assistant</span>
+
+        </a>
+
+    </div>
+
+    </div>
+
+    <!-- LOGOUT -->
+
+    <div class="logout">
+
+        <a href="login-admin.html" data-bs-toggle="modal" data-bs-target="#logoutModal">
+
+            <i class="bi bi-box-arrow-right"></i>
+
+            <span>Logout</span>
+
+        </a>
+
+    </div>
+
+</div>
+
+<!-- ===========================
+MAIN CONTENT
+=========================== -->
+
+<div class="main">
+
+    <!-- TOPBAR -->
+
+    <div class="topbar">
+
+        <div>
+
+            <h2>
+
+                Kelola Pesanan
+
+            </h2>
+
+            <p>
+
+                Pantau, tinjau, dan perbarui status seluruh pesanan pelanggan DapurKost.
+
+            </p>
+
+        </div>
+
+        <div class="admin-info">
+
+            <div class="dropdown">
+                <div class="notification" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                    <i class="bi bi-bell"></i>
+                    <span class="badge-notif">5</span>
+                </div>
+                <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-2" style="width:330px; border-radius:16px;">
+                    <li class="d-flex justify-content-between align-items-center px-2 py-1">
+                        <span class="fw-semibold" style="color:var(--dark);">Notifikasi</span>
+                        <span class="badge bg-danger rounded-pill">5 Baru</span>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item rounded-3 py-2 mb-1" href="#">
+                            <div class="d-flex gap-2">
+                                <i class="bi bi-bag-plus text-danger mt-1"></i>
+                                <div>
+                                    <div class="small fw-semibold">Pesanan baru #DK109</div>
+                                    <div class="small text-muted">Salsa Billa Aurilia memesan Paket Mingguan</div>
+                                    <div class="text-muted" style="font-size:11px;">5 menit lalu</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item rounded-3 py-2 mb-1" href="#">
+                            <div class="d-flex gap-2">
+                                <i class="bi bi-truck text-danger mt-1"></i>
+                                <div>
+                                    <div class="small fw-semibold">Pesanan #DK102 siap dikirim</div>
+                                    <div class="small text-muted">Restu Nevia Iriani - Paket Bulanan</div>
+                                    <div class="text-muted" style="font-size:11px;">25 menit lalu</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item rounded-3 py-2" href="#">
+                            <div class="d-flex gap-2">
+                                <i class="bi bi-hourglass-split text-danger mt-1"></i>
+                                <div>
+                                    <div class="small fw-semibold">Pesanan #DK105 menunggu lama</div>
+                                    <div class="small text-muted">Fadila Putri Hartanto belum dikonfirmasi 2 jam</div>
+                                    <div class="text-muted" style="font-size:11px;">2 jam lalu</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-center small fw-semibold text-danger rounded-3" href="notifikasi-admin.html">Lihat Semua Notifikasi</a></li>
+                </ul>
+            </div>
+
+            <!-- PROFIL DROPDOWN (QA-02) -->
+            <div class="profile-wrap">
+                <div class="avatar" id="profileTrigger">👨🏻‍🍳</div>
+
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="profile-header">
+                        <div class="avatar" style="width:44px;height:44px;font-size:20px;">👨🏻‍🍳</div>
+                        <div>
+                            <strong>Admin DapurKost</strong>
+                            <small>Super Admin</small>
+                        </div>
+                    </div>
+
+                    <div class="profile-menu">
+                        <button type="button" class="profile-item" data-bs-toggle="modal" data-bs-target="#profilModal">
+                            <i class="bi bi-person-circle"></i> Profil Saya
+                        </button>
+                        <button type="button" class="profile-item" data-bs-toggle="modal" data-bs-target="#passwordModal">
+                            <i class="bi bi-shield-lock"></i> Ubah Password
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- CARD RINGKASAN PESANAN -->
+
+    <div class="row g-4">
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <div class="card-icon bg-red">
+
+                    <i class="bi bi-cart-check-fill"></i>
+
+                </div>
+
+                <p>Total Pesanan</p>
+
+                <h3>152</h3>
+
+                <small class="text-muted">
+
+                    Sepanjang Waktu
+
+                </small>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <div class="card-icon bg-gold">
+
+                    <i class="bi bi-hourglass-split"></i>
+
+                </div>
+
+                <p>Menunggu Konfirmasi</p>
+
+                <h3>9</h3>
+
+                <small class="text-muted">
+
+                    Perlu Ditinjau
+
+                </small>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <div class="card-icon bg-blue">
+
+                    <i class="bi bi-truck"></i>
+
+                </div>
+
+                <p>Sedang Dikirim</p>
+
+                <h3>14</h3>
+
+                <small class="text-muted">
+
+                    Dalam Pengiriman
+
+                </small>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <div class="card-icon bg-green">
+
+                    <i class="bi bi-check-circle-fill"></i>
+
+                </div>
+
+                <p>Pesanan Selesai</p>
+
+                <h3>129</h3>
+
+                <small class="text-muted">
+
+                    Bulan Ini
+
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- =======================
+    TABEL DAFTAR PESANAN
+    ======================== -->
+
+    <div class="row mt-4">
+
+        <div class="col-12">
+
+            <div class="table-card">
+
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+
+                    <h4 class="mb-0">Daftar Pesanan</h4>
+
+                </div>
+
+                <!-- TOOLBAR: SEARCH + FILTER -->
+
+                <div class="pesanan-toolbar">
+
+                    <div class="pesanan-search">
+
+                        <i class="bi bi-search"></i>
+
+                        <input type="text" id="searchPesanan" placeholder="Cari ID pesanan atau nama pelanggan...">
+
+                    </div>
+
+                    <div class="pesanan-filter">
+
+                        <select id="filterStatus">
+
+                            <option value="semua">Semua Status</option>
+
+                            <option value="menunggu">Menunggu Pembayaran</option>
+
+                            <option value="dibayar">Dibayar</option>
+
+                            <option value="diproses">Diproses</option>
+
+                            <option value="selesai">Selesai</option>
+
+                            <option value="dibatalkan">Dibatalkan</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle" id="tabelPesanan">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>ID Pesanan</th>
+                                <th>Pelanggan</th>
+                                <th>Paket</th>
+                                <th>Tanggal</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div id="emptyState" class="text-center py-4 text-muted d-none">
+
+                    <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+
+                    Tidak ada pesanan yang cocok dengan pencarian/filter.
+
+                </div>
+
+                <!-- PAGINASI -->
+
+                <nav class="mt-3">
+
+                    <ul class="pagination pagination-sm justify-content-end mb-0">
+
+                        <li class="page-item disabled">
+
+                            <a class="page-link" href="#">Sebelumnya</a>
+
+                        </li>
+
+                        <li class="page-item active">
+
+                            <a class="page-link" href="#">1</a>
+
+                        </li>
+
+                        <li class="page-item">
+
+                            <a class="page-link" href="#">2</a>
+
+                        </li>
+
+                        <li class="page-item">
+
+                            <a class="page-link" href="#">Berikutnya</a>
+
+                        </li>
+
+                    </ul>
+
+                </nav>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- =======================
+    FOOTER
+    ======================== -->
+
+    <footer class="text-center mt-5 text-muted">
+
+        © 2026 DapurKost Admin Panel
+
+    </footer>
+
+</div>
+
+<!-- ===========================
+MODAL DETAIL PESANAN
+=========================== -->
+
+<div class="modal fade" id="detailModal" tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header border-0 pb-0">
+
+                <h5 class="mb-0">Detail Pesanan <span id="detailId" class="text-danger"></span></h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+            </div>
+
+            <div class="modal-body pt-2">
+
+                <div class="detail-row">
+                    <span>Nama Pelanggan</span>
+                    <span id="detailNama">-</span>
+                </div>
+
+                <div class="detail-row">
+                    <span>Paket</span>
+                    <span id="detailPaket">-</span>
+                </div>
+
+                <div class="detail-row">
+                    <span>Tanggal Pesan</span>
+                    <span id="detailTanggal">-</span>
+                </div>
+
+                <div class="detail-row">
+                    <span>No. HP</span>
+                    <span id="detailHp">-</span>
+                </div>
+
+                <div class="detail-row">
+                    <span>Alamat Antar</span>
+                    <span id="detailAlamat">-</span>
+                </div>
+
+                <div class="detail-row" id="detailCatatanRow" style="display:none;">
+                    <span>Catatan Admin</span>
+                    <span id="detailCatatan">-</span>
+                </div>
+
+                <div class="mt-3">
+
+                    <p class="mb-2 text-muted" style="font-size:14px;">Menu Dipesan</p>
+
+                    <div id="detailMenu"></div>
+
+                </div>
+
+                <div class="total-highlight">
+                    <span>Total Pembayaran</span>
+                    <span id="detailTotal">Rp 0</span>
+                </div>
+
+            </div>
+
+            <div class="modal-footer border-0 pt-0">
+
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===========================
+MODAL UPDATE STATUS
+=========================== -->
+
+<div class="modal fade" id="statusModal" tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header border-0 pb-0">
+
+                <h5 class="mb-0">Update Status <span id="statusId" class="text-danger"></span></h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+            </div>
+
+            <div class="modal-body pt-2">
+
+                <p class="text-muted mb-3" style="font-size:14px;">
+                    Pilih status terbaru untuk pesanan atas nama <strong id="statusNama">-</strong>.
+                </p>
+
+                <label class="status-option" data-value="menunggu">
+                    <input type="radio" name="statusBaru" value="menunggu">
+                    <div>
+                        <strong>Menunggu Pembayaran</strong>
+                        <div class="text-muted" style="font-size:12px;">Pesanan baru masuk, belum dibayar.</div>
+                    </div>
+                </label>
+
+                <label class="status-option" data-value="dibayar">
+                    <input type="radio" name="statusBaru" value="dibayar">
+                    <div>
+                        <strong>Dibayar</strong>
+                        <div class="text-muted" style="font-size:12px;">Pembayaran sudah terverifikasi (biasanya otomatis dari menu Pembayaran).</div>
+                    </div>
+                </label>
+
+                <label class="status-option" data-value="diproses">
+                    <input type="radio" name="statusBaru" value="diproses">
+                    <div>
+                        <strong>Diproses</strong>
+                        <div class="text-muted" style="font-size:12px;">Pesanan sedang disiapkan di dapur.</div>
+                    </div>
+                </label>
+
+                <label class="status-option" data-value="selesai">
+                    <input type="radio" name="statusBaru" value="selesai">
+                    <div>
+                        <strong>Selesai</strong>
+                        <div class="text-muted" style="font-size:12px;">Pesanan telah diterima pelanggan.</div>
+                    </div>
+                </label>
+
+                <label class="status-option" data-value="dibatalkan">
+                    <input type="radio" name="statusBaru" value="dibatalkan">
+                    <div>
+                        <strong>Dibatalkan</strong>
+                        <div class="text-muted" style="font-size:12px;">Pesanan dibatalkan, tidak dilanjutkan.</div>
+                    </div>
+                </label>
+
+
+                <div class="mt-3">
+
+                    <label class="form-label text-muted" style="font-size:13px;">Catatan (opsional)</label>
+
+                    <textarea class="form-control" id="statusCatatan" rows="2" placeholder="Contoh: pengiriman tertunda 15 menit"></textarea>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer border-0 pt-0">
+
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+
+                <button type="button" class="btn btn-danger" onclick="simpanStatus()">Simpan Perubahan</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- MODAL PROFIL SAYA (QA-02) -->
+<div class="modal fade" id="profilModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" style="border-radius:18px;">
+      <form id="profilForm">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-person-circle me-2"></i>Profil Saya</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Nama</label>
+            <input type="text" class="form-control" value="Admin DapurKost" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" value="admin@dapurkost.id" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Nomor HP</label>
+            <input type="text" class="form-control" value="0812-3456-7890" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-danger">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL UBAH PASSWORD (QA-02) -->
+<div class="modal fade" id="passwordModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" style="border-radius:18px;">
+      <form id="passwordForm">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-shield-lock me-2"></i>Ubah Password</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Password Lama</label>
+            <input type="password" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Password Baru</label>
+            <input type="password" class="form-control" id="passBaru" required minlength="6">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Konfirmasi Password Baru</label>
+            <input type="password" class="form-control" id="passKonfirmasi" required minlength="6">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-danger">Simpan Password</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL KONFIRMASI AKSI (QA-02: dipakai untuk konfirmasi pembatalan pesanan) -->
+<div class="modal fade" id="confirmModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius:18px;">
+      <div class="modal-body text-center p-4">
+        <i class="bi bi-question-circle text-danger" style="font-size:42px;"></i>
+        <h5 class="mt-3 mb-1">Konfirmasi Aksi</h5>
+        <p class="text-muted mb-4" id="confirmModalBody">Apakah Anda yakin?</p>
+        <div class="d-flex gap-2 justify-content-center">
+          <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Batal</button>
+          <button type="button" id="confirmModalBtn" class="btn btn-danger px-4">Ya, Lanjutkan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL KONFIRMASI LOGOUT -->
+<div class="modal fade" id="logoutModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius:18px;">
+      <div class="modal-body text-center p-4">
+        <i class="bi bi-box-arrow-right text-danger" style="font-size:42px;"></i>
+        <h5 class="mt-3 mb-1">Keluar dari Admin Panel?</h5>
+        <p class="text-muted mb-4">Anda perlu login kembali untuk mengakses dashboard.</p>
+        <div class="d-flex gap-2 justify-content-center">
+          <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Batal</button>
+          <a href="login-admin.html" class="btn btn-danger px-4">Ya, Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/admin.js"></script>
+<script src="../assets/js/api.js"></script>
+
+<script>
+
+
+/* ==================== PROFIL DROPDOWN (QA-02) ==================== */
+const profileTrigger = document.getElementById("profileTrigger");
+const profileDropdown = document.getElementById("profileDropdown");
+
+profileTrigger.addEventListener("click", function(e){
+    e.stopPropagation();
+    profileDropdown.classList.toggle("show");
+});
+
+document.addEventListener("click", function(e){
+    if(!profileDropdown.contains(e.target) && e.target !== profileTrigger){
+        profileDropdown.classList.remove("show");
+    }
+});
+
+document.querySelectorAll("#profileDropdown .profile-item").forEach(function(item){
+    item.addEventListener("click", function(){
+        profileDropdown.classList.remove("show");
+    });
+});
+
+document.getElementById("profilForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    bootstrap.Modal.getInstance(document.getElementById("profilModal")).hide();
+    tampilkanToast("Profil berhasil diperbarui!", "success");
+});
+
+document.getElementById("passwordForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const baru = document.getElementById("passBaru").value;
+    const konfirmasi = document.getElementById("passKonfirmasi").value;
+
+    if(baru !== konfirmasi){
+        tampilkanToast("Password baru dan konfirmasi tidak sama!", "danger");
+        return;
+    }
+
+    document.getElementById("passwordForm").reset();
+    bootstrap.Modal.getInstance(document.getElementById("passwordModal")).hide();
+    tampilkanToast("Password berhasil diubah!", "success");
+});
+
+// Data pesanan dimuat dari backend (GET /api/pesanan, admin lihat semua)
+let pesananList = [];
+
+const searchInput = document.getElementById("searchPesanan");
+const filterStatus = document.getElementById("filterStatus");
+const tabel = document.getElementById("tabelPesanan");
+const emptyState = document.getElementById("emptyState");
+
+// Mapping status UI (singkat) <-> enum backend (tabel `pesanan`)
+const statusUiToBackend = {
+    menunggu: "menunggu_pembayaran",
+    dibayar: "dibayar",
+    diproses: "diproses",
+    selesai: "selesai",
+    dibatalkan: "dibatalkan"
+};
+const statusBackendToUi = {
+    menunggu_pembayaran: "menunggu",
+    dibayar: "dibayar",
+    diproses: "diproses",
+    selesai: "selesai",
+    dibatalkan: "dibatalkan"
+};
+
+const statusInfo = {
+    menunggu:   { label: "Menunggu Bayar", kelas: "bg-warning text-dark" },
+    dibayar:    { label: "Dibayar",        kelas: "bg-info text-dark" },
+    diproses:   { label: "Diproses",       kelas: "bg-primary" },
+    selesai:    { label: "Selesai",        kelas: "bg-success" },
+    dibatalkan: { label: "Dibatalkan",     kelas: "bg-danger" }
+};
+
+function formatTanggalPesan(tanggalStr){
+    if(!tanggalStr) return "-";
+    const d = new Date(tanggalStr);
+    return d.toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" });
+}
+
+/* ==================== MUAT DATA DARI BACKEND ==================== */
+async function loadPesanan(){
+    try {
+        const res = await DapurKostAPI.getPesanan();
+        pesananList = (res.data.pesanan || []).map(function(row){
+            return {
+                id: row.id,
+                statusKey: statusBackendToUi[row.status] || "menunggu",
+                nama: row.nama_pelanggan || "-",
+                hp: row.no_hp || "-",
+                alamat: row.alamat || "-",
+                paket: row.nama_paket || "-",
+                menu: row.nama_menu || "",
+                tanggal: formatTanggalPesan(row.tanggal_pesan),
+                total: Number(row.total_harga)
+            };
+        });
+        renderTabel();
+    } catch (err) {
+        tampilkanToast(err.message || "Gagal memuat data pesanan dari server.", "danger");
+    }
+}
+
+/* ==================== RENDER TABEL ==================== */
+function renderTabel(){
+    const tbody = tabel.querySelector("tbody");
+
+    tbody.innerHTML = pesananList.map(function(p){
+        const info = statusInfo[p.statusKey] || statusInfo.menunggu;
+        const inisial = (p.nama || "-").charAt(0).toUpperCase();
+
+        return `
+        <tr data-status="${p.statusKey}"
+            data-id="${p.id}"
+            data-nama="${p.nama}"
+            data-hp="${p.hp}"
+            data-alamat="${p.alamat}"
+            data-paket="${p.paket}"
+            data-tanggal="${p.tanggal}"
+            data-menu="${p.menu}"
+            data-total="${p.total}">
+
+            <td><span class="pesanan-id">#DK${String(p.id).padStart(4, '0')}</span></td>
+            <td>
+                <div class="pelanggan-cell">
+                    <div class="avatar-sm">${inisial}</div>
+                    <div class="pelanggan-cell-text">
+                        <strong>${p.nama}</strong>
+                    </div>
+                </div>
+            </td>
+            <td>${p.paket}</td>
+            <td>${p.tanggal}</td>
+            <td class="total-cell">${formatRupiah(p.total)}</td>
+            <td><span class="badge ${info.kelas}">${info.label}</span></td>
+            <td>
+                <div class="action-btns">
+                    <button class="btn btn-outline-dark" title="Detail" data-bs-toggle="modal" data-bs-target="#detailModal" onclick="tampilkanDetail(this)">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-danger" title="Update Status" data-bs-toggle="modal" data-bs-target="#statusModal" onclick="bukaUpdateStatus(this)">
+                        <i class="bi bi-arrow-repeat"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>`;
+    }).join("");
+
+    terapkanFilter();
+}
+
+function terapkanFilter(){
+
+    const kataKunci = searchInput.value.toLowerCase().trim();
+    const status = filterStatus.value;
+    const baris = tabel.querySelectorAll("tbody tr");
+    let jumlahTampil = 0;
+
+    baris.forEach(function(tr){
+
+        const teks = tr.innerText.toLowerCase();
+        const statusBaris = tr.dataset.status;
+
+        const cocokKataKunci = teks.includes(kataKunci);
+        const cocokStatus = (status === "semua") || (status === statusBaris);
+
+        if(cocokKataKunci && cocokStatus){
+
+            tr.style.display = "";
+            jumlahTampil++;
+
+        } else {
+
+            tr.style.display = "none";
+
+        }
+
+    });
+
+    emptyState.classList.toggle("d-none", jumlahTampil !== 0);
+
+}
+
+searchInput.addEventListener("input", terapkanFilter);
+filterStatus.addEventListener("change", terapkanFilter);
+
+// MODAL DETAIL
+let barisAktif = null;
+
+function tampilkanDetail(btn){
+
+    const tr = btn.closest("tr");
+
+    document.getElementById("detailId").innerText = "#" + tr.dataset.id;
+    document.getElementById("detailNama").innerText = tr.dataset.nama;
+    document.getElementById("detailPaket").innerText = tr.dataset.paket;
+    document.getElementById("detailTanggal").innerText = tr.dataset.tanggal;
+    document.getElementById("detailHp").innerText = tr.dataset.hp;
+    document.getElementById("detailAlamat").innerText = tr.dataset.alamat;
+    document.getElementById("detailTotal").innerText = formatRupiah(tr.dataset.total);
+
+    const catatanRow = document.getElementById("detailCatatanRow");
+    if(tr.dataset.catatan && tr.dataset.catatan.trim() !== ""){
+        document.getElementById("detailCatatan").innerText = tr.dataset.catatan;
+        catatanRow.style.display = "";
+    } else {
+        catatanRow.style.display = "none";
+    }
+
+    const menuWrap = document.getElementById("detailMenu");
+    menuWrap.innerHTML = "";
+
+    if(tr.dataset.menu && tr.dataset.menu.trim() !== ""){
+        tr.dataset.menu.split(",").forEach(function(item){
+            const pill = document.createElement("span");
+            pill.className = "menu-pill";
+            pill.innerText = item.trim();
+            menuWrap.appendChild(pill);
+        });
+    } else {
+        const pill = document.createElement("span");
+        pill.className = "menu-pill";
+        pill.innerText = tr.dataset.paket + " (paket berlangganan)";
+        menuWrap.appendChild(pill);
+    }
+
+}
+
+// MODAL UPDATE STATUS
+function bukaUpdateStatus(btn){
+
+    const tr = btn.closest("tr");
+    barisAktif = tr;
+
+    document.getElementById("statusId").innerText = "#" + tr.dataset.id;
+    document.getElementById("statusNama").innerText = tr.dataset.nama;
+    document.getElementById("statusCatatan").value = tr.dataset.catatan || "";
+
+    document.querySelectorAll(".status-option").forEach(function(opt){
+        opt.classList.remove("selected");
+        const radio = opt.querySelector("input[type='radio']");
+        radio.checked = (opt.dataset.value === tr.dataset.status);
+        if(radio.checked){
+            opt.classList.add("selected");
+        }
+    });
+
+}
+
+document.querySelectorAll(".status-option").forEach(function(opt){
+
+    opt.addEventListener("click", function(){
+        document.querySelectorAll(".status-option").forEach(o => o.classList.remove("selected"));
+        opt.classList.add("selected");
+        opt.querySelector("input[type='radio']").checked = true;
+    });
+
+});
+
+function simpanStatus(){
+
+    if(!barisAktif){
+        return;
+    }
+
+    const dipilih = document.querySelector(".status-option input[name='statusBaru']:checked");
+
+    if(!dipilih){
+        tampilkanToast("Silakan pilih status terlebih dahulu.", "warning");
+        return;
+    }
+
+    const statusBaruUi = dipilih.value;
+    const statusBaruBackend = statusUiToBackend[statusBaruUi];
+    const baris = barisAktif;
+    const pesananId = baris.dataset.id;
+
+    async function terapkanStatus(){
+        try {
+            await DapurKostAPI.updatePesananStatus(pesananId, statusBaruBackend);
+            tampilkanToast(`Status pesanan berhasil diperbarui menjadi "${statusInfo[statusBaruUi].label}"!`, "success");
+            await loadPesanan();
+        } catch (err) {
+            tampilkanToast(err.message || "Gagal memperbarui status pesanan.", "danger");
+        }
+    }
+
+    const modalEl = document.getElementById("statusModal");
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+
+    // QA-02: pembatalan pesanan butuh konfirmasi tambahan sebelum diterapkan
+    if(statusBaruUi === "dibatalkan"){
+        if(modalInstance){ modalInstance.hide(); }
+        konfirmasiAksi(
+            `Yakin ingin membatalkan pesanan #${baris.dataset.id} atas nama ${baris.dataset.nama}? Tindakan ini tidak dapat dibatalkan.`,
+            terapkanStatus,
+            { btnLabel: "Ya, Batalkan", btnClass: "btn-danger" }
+        );
+    } else {
+        if(modalInstance){ modalInstance.hide(); }
+        terapkanStatus();
+    }
+
+}
+
+/* ==================== INIT ==================== */
+loadPesanan();
+
+
+</script>
+
+</body>
+
+</html>

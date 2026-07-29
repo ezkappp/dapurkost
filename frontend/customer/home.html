@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DapurKost - Rasa Rumahan, Sampai ke Pintu Kostmu</title>
+
+<!-- Bootstrap 5 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<!-- Google Fonts - Poppins -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  /* ==========================================================
+     ROOT VARIABLES
+  ========================================================== */
+  :root{
+    --cream: #FEF9E1;
+    --beige: #E5D0AC;
+    --merah: #A31D1D;
+    --dark-red: #6D2323;
+    --white: #ffffff;
+    --gradient-primary: linear-gradient(135deg, var(--merah) 0%, var(--dark-red) 100%);
+    --shadow-soft: 0 10px 30px rgba(109, 35, 35, 0.12);
+    --shadow-soft-lg: 0 20px 50px rgba(109, 35, 35, 0.18);
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 10px;
+    --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  *{ box-sizing: border-box; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--cream);
+    color: var(--dark-red);
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+
+  h1,h2,h3,h4,h5,h6{ font-family: 'Poppins', sans-serif; font-weight: 700; }
+
+  a{ text-decoration: none; }
+
+  ::selection{ background: var(--merah); color: var(--cream); }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar{ width: 10px; }
+  ::-webkit-scrollbar-track{ background: var(--cream); }
+  ::-webkit-scrollbar-thumb{ background: var(--merah); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover{ background: var(--dark-red); }
+
+  /* ==========================================================
+     LOADING SCREEN
+  ========================================================== */
+  #loading-screen{
+    position: fixed;
+    inset: 0;
+    background: var(--gradient-primary);
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+  #loading-screen.hide{
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .loader-logo{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--cream);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800;
+    font-size: 1.8rem;
+    color: var(--merah);
+    margin-bottom: 20px;
+    animation: pulseLogo 1.4s ease-in-out infinite;
+    box-shadow: 0 0 0 0 rgba(254,249,225,0.6);
+  }
+  @keyframes pulseLogo{
+    0%{ transform: scale(1); box-shadow: 0 0 0 0 rgba(254,249,225,0.5); }
+    70%{ transform: scale(1.08); box-shadow: 0 0 0 20px rgba(254,249,225,0); }
+    100%{ transform: scale(1); box-shadow: 0 0 0 0 rgba(254,249,225,0); }
+  }
+  .loader-text{
+    color: var(--cream);
+    font-weight: 500;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    opacity: 0.9;
+  }
+  .loader-bar{
+    width: 160px;
+    height: 4px;
+    background: rgba(254,249,225,0.25);
+    border-radius: 10px;
+    margin-top: 16px;
+    overflow: hidden;
+  }
+  .loader-bar::after{
+    content:'';
+    display:block;
+    width: 40%;
+    height: 100%;
+    background: var(--cream);
+    border-radius: 10px;
+    animation: loaderMove 1.2s ease-in-out infinite;
+  }
+  @keyframes loaderMove{
+    0%{ margin-left: -40%; }
+    100%{ margin-left: 100%; }
+  }
+
+  /* ==========================================================
+     NAVBAR
+  ========================================================== */
+  .navbar-dapurkost{
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 18px 0;
+    background: rgba(254, 249, 225, 0.65);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border-bottom: 1px solid rgba(163, 29, 29, 0.08);
+    transition: var(--transition);
+  }
+  .navbar-dapurkost.scrolled{
+    padding: 10px 0;
+    background: rgba(254, 249, 225, 0.9);
+    box-shadow: var(--shadow-soft);
+  }
+  .navbar-brand-dk{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: var(--merah) !important;
+  }
+  .navbar-brand-dk img{
+    height: 42px;
+    width: 42px;
+    object-fit: contain;
+    border-radius: 50%;
+    transition: var(--transition);
+  }
+  .navbar-brand-dk span{
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .navbar-nav .nav-link{
+    font-weight: 500;
+    color: var(--dark-red) !important;
+    margin: 0 12px;
+    position: relative;
+    padding: 6px 2px !important;
+    transition: var(--transition);
+  }
+  .navbar-nav .nav-link::after{
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0%;
+    height: 2px;
+    background: var(--gradient-primary);
+    border-radius: 10px;
+    transition: width 0.3s ease;
+  }
+  .navbar-nav .nav-link:hover::after,
+  .navbar-nav .nav-link.active::after{
+    width: 100%;
+  }
+  .navbar-nav .nav-link:hover{
+    color: var(--merah) !important;
+  }
+  .btn-navbar-order{
+    background: var(--gradient-primary);
+    color: var(--cream) !important;
+    padding: 10px 26px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    box-shadow: var(--shadow-soft);
+    border: none;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-navbar-order:hover{
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-soft-lg);
+    color: var(--cream) !important;
+  }
+  .navbar-toggler{ border: none; box-shadow: none !important; }
+
+  /* ==========================================================
+     BUTTONS - RIPPLE
+  ========================================================== */
+  .btn-ripple{
+    position: relative;
+    overflow: hidden;
+  }
+  .ripple-span{
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.55);
+    transform: scale(0);
+    animation: rippleAnim 0.6s linear;
+    pointer-events: none;
+  }
+  @keyframes rippleAnim{
+    to{ transform: scale(3); opacity: 0; }
+  }
+
+  .btn-primary-dk{
+    background: var(--gradient-primary);
+    color: var(--cream);
+    border: none;
+    padding: 14px 34px;
+    border-radius: 50px;
+    font-weight: 600;
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition);
+  }
+  .btn-primary-dk:hover{
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-soft-lg);
+    color: var(--cream);
+  }
+  .btn-outline-dk{
+    background: transparent;
+    color: var(--merah);
+    border: 2px solid var(--merah);
+    padding: 12px 32px;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: var(--transition);
+  }
+  .btn-outline-dk:hover{
+    background: var(--merah);
+    color: var(--cream);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-soft);
+  }
+
+  /* ==========================================================
+     SECTION GENERAL
+  ========================================================== */
+  section{ padding: 100px 0; position: relative; }
+  .section-eyebrow{
+    color: var(--merah);
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+  }
+  .section-title{
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--dark-red);
+    margin-top: 8px;
+  }
+  .section-desc{
+    color: #7a4a4a;
+    font-size: 1.02rem;
+    max-width: 620px;
+  }
+
+  /* Scroll reveal */
+  .reveal{
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.show{
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1.show{ transition-delay: 0.1s; }
+  .reveal-delay-2.show{ transition-delay: 0.2s; }
+  .reveal-delay-3.show{ transition-delay: 0.3s; }
+  .reveal-delay-4.show{ transition-delay: 0.4s; }
+
+  /* ==========================================================
+     HERO SECTION
+  ========================================================== */
+  .hero-section{
+    padding-top: 70px;
+    padding-bottom: 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-section::before{
+    content:'';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: var(--beige);
+    border-radius: 50%;
+    top: -200px;
+    right: -150px;
+    opacity: 0.5;
+    filter: blur(10px);
+    z-index: 0;
+  }
+  .hero-badge{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(163, 29, 29, 0.08);
+    border: 1px solid rgba(163, 29, 29, 0.15);
+    color: var(--merah);
+    padding: 8px 18px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 22px;
+  }
+  .hero-title{
+    font-size: 3.2rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--dark-red);
+    margin-bottom: 22px;
+  }
+  .hero-title .highlight{
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero-desc{
+    font-size: 1.08rem;
+    color: #7a4a4a;
+    margin-bottom: 34px;
+    max-width: 520px;
+  }
+  .hero-btn-group{
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+  .hero-stats{
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .hero-stat-number{
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--merah);
+  }
+  .hero-stat-label{
+    font-size: 0.85rem;
+    color: #8a5a5a;
+    font-weight: 500;
+  }
+  .hero-image-wrap{
+    position: relative;
+    z-index: 1;
+  }
+  .hero-image-main{
+    width: 80%;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft-lg);
+    object-fit: cover;
+    aspect-ratio: 4/4.4;
+    animation: floatImage 5s ease-in-out infinite;
+  }
+  @keyframes floatImage{
+    0%,100%{ transform: translateY(0px); }
+    50%{ transform: translateY(-18px); }
+  }
+  .hero-float-card{
+    position: absolute;
+    background: rgba(255,255,255,0.65);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    box-shadow: var(--shadow-soft-lg);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: floatImage 4.5s ease-in-out infinite;
+    animation-delay: 0.3s;
+  }
+  .hero-float-card-1{ top: 10%; left: -8%; }
+  .hero-float-card-2{ bottom: 8%; right: -6%; }
+  .hero-float-icon{
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cream);
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+  .hero-float-title{ font-weight: 700; font-size: 0.95rem; color: var(--dark-red); }
+  .hero-float-sub{ font-size: 0.78rem; color: #8a5a5a; }
+
+  /* ==========================================================
+     WHY US - FEATURE CARDS
+  ========================================================== */
+  .why-section{ background: var(--white); }
+  .feature-card{
+    background: var(--cream);
+    border-radius: var(--radius-lg);
+    padding: 36px 28px;
+    height: 100%;
+    text-align: center;
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition);
+    border: 1px solid transparent;
+  }
+  .feature-card:hover{
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-soft-lg);
+    border-color: rgba(163,29,29,0.15);
+  }
+  .feature-icon{
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 22px;
+    border-radius: 20px;
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: var(--cream);
+    transition: var(--transition);
+  }
+  .feature-card:hover .feature-icon{
+    transform: rotate(-8deg) scale(1.08);
+  }
+  .feature-title{
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--dark-red);
+    margin-bottom: 10px;
+  }
+  .feature-desc{
+    font-size: 0.92rem;
+    color: #8a5a5a;
+  }
+
+  /* Counter stats strip */
+  .counter-strip{
+    background: var(--gradient-primary);
+    border-radius: var(--radius-lg);
+    padding: 46px 20px;
+    margin-top: 70px;
+    box-shadow: var(--shadow-soft-lg);
+  }
+  .counter-number{
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: var(--cream);
+  }
+  .counter-label{
+    color: rgba(254,249,225,0.85);
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+
+  /* ==========================================================
+     PRICING / PAKET
+  ========================================================== */
+  .pricing-section{ background: var(--cream); }
+  .pricing-card{
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: var(--radius-lg);
+    padding: 40px 32px;
+    height: 100%;
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+  .pricing-card:hover{
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-soft-lg);
+  }
+  .pricing-card.popular{
+    background: var(--gradient-primary);
+    color: var(--cream);
+    transform: scale(1.05);
+    z-index: 2;
+  }
+  .pricing-card.popular:hover{ transform: scale(1.05) translateY(-10px); }
+  .pricing-badge{
+    position: absolute;
+    top: 20px;
+    right: -34px;
+    background: var(--dark-red);
+    color: var(--cream);
+    padding: 5px 40px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    transform: rotate(45deg);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  }
+  .pricing-name{ font-size: 1.3rem; font-weight: 700; margin-bottom: 6px; }
+  .pricing-card.popular .pricing-name{ color: var(--cream); }
+  .pricing-card:not(.popular) .pricing-name{ color: var(--dark-red); }
+  .pricing-price{
+    font-size: 2.4rem;
+    font-weight: 800;
+    margin: 18px 0 4px;
+  }
+  .pricing-card:not(.popular) .pricing-price{ color: var(--merah); }
+  .pricing-period{ font-size: 0.85rem; opacity: 0.75; margin-bottom: 24px; display:block; }
+  .pricing-list{ list-style: none; padding: 0; margin: 0 0 30px; }
+  .pricing-list li{
+    padding: 9px 0;
+    font-size: 0.92rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px dashed rgba(163,29,29,0.15);
+  }
+  .pricing-card.popular .pricing-list li{ border-bottom: 1px dashed rgba(254,249,225,0.25); }
+  .pricing-list li i{ color: inherit; }
+  .btn-pricing{
+    width: 100%;
+    padding: 13px;
+    border-radius: 50px;
+    font-weight: 600;
+    border: none;
+    transition: var(--transition);
+  }
+  .pricing-card:not(.popular) .btn-pricing{
+    background: var(--gradient-primary);
+    color: var(--cream);
+  }
+  .pricing-card.popular .btn-pricing{
+    background: var(--cream);
+    color: var(--merah);
+  }
+  .btn-pricing:hover{ transform: translateY(-3px); box-shadow: var(--shadow-soft); }
+
+  /* ==========================================================
+     TESTIMONIALS
+  ========================================================== */
+  .testimoni-section{ background: var(--white); }
+  .testimoni-card{
+    background: var(--cream);
+    border-radius: var(--radius-lg);
+    padding: 32px 28px;
+    height: 100%;
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition);
+    position: relative;
+  }
+  .testimoni-card:hover{
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-soft-lg);
+  }
+  .testimoni-quote-icon{
+    font-size: 2.2rem;
+    color: var(--beige);
+    position: absolute;
+    top: 20px;
+    right: 24px;
+  }
+  .testimoni-text{
+    font-size: 0.95rem;
+    color: #6a4444;
+    margin-bottom: 22px;
+    font-style: italic;
+  }
+  .testimoni-stars{ color: var(--merah); margin-bottom: 14px; font-size: 0.9rem; }
+  .testimoni-profile{ display: flex; align-items: center; gap: 12px; }
+  .testimoni-avatar{
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    color: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  .testimoni-name{ font-weight: 700; color: var(--dark-red); font-size: 0.95rem; }
+  .testimoni-role{ font-size: 0.78rem; color: #8a5a5a; }
+
+  /* ==========================================================
+     FAQ ACCORDION
+  ========================================================== */
+  .faq-section{ background: var(--cream); }
+  .accordion-item-dk{
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: var(--radius-md) !important;
+    margin-bottom: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+  }
+  .accordion-button-dk{
+    background: transparent;
+    font-weight: 600;
+    color: var(--dark-red);
+    font-size: 1rem;
+    padding: 22px 26px;
+    box-shadow: none !important;
+  }
+  .accordion-button-dk:not(.collapsed){
+    background: var(--gradient-primary);
+    color: var(--cream);
+  }
+  .accordion-button-dk::after{
+    filter: none;
+  }
+  .accordion-button-dk:focus{ box-shadow: none; }
+  .accordion-body-dk{
+    padding: 22px 26px;
+    color: #7a4a4a;
+    font-size: 0.93rem;
+    background: rgba(255,255,255,0.4);
+  }
+
+  /* ==========================================================
+     CTA SECTION
+  ========================================================== */
+  .cta-section{
+    background: var(--gradient-primary);
+    border-radius: var(--radius-lg);
+    margin: 0 auto 0;
+    max-width: 1200px;
+    padding: 70px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-section::before, .cta-section::after{
+    content:'';
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(254,249,225,0.08);
+  }
+  .cta-section::before{ width: 250px; height: 250px; top: -100px; left: -80px; }
+  .cta-section::after{ width: 320px; height: 320px; bottom: -140px; right: -100px; }
+  .cta-title{
+    color: var(--cream);
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+  }
+  .cta-desc{
+    color: rgba(254,249,225,0.85);
+    max-width: 560px;
+    margin: 0 auto 34px;
+    position: relative;
+    z-index: 1;
+  }
+  .btn-cta{
+    background: var(--cream);
+    color: var(--merah);
+    padding: 15px 40px;
+    border-radius: 50px;
+    font-weight: 700;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    position: relative;
+    z-index: 1;
+    transition: var(--transition);
+  }
+  .btn-cta:hover{
+    transform: translateY(-4px);
+    color: var(--merah);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+  }
+
+  /* ==========================================================
+     FOOTER
+  ========================================================== */
+  .footer-dk{
+    background: var(--dark-red);
+    color: rgba(254,249,225,0.85);
+    padding: 80px 0 0;
+    margin-top: 100px;
+  }
+  .footer-brand{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .footer-brand img{
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: contain;
+  }
+  .footer-brand span{
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--cream);
+  }
+  .footer-desc{ font-size: 0.9rem; opacity: 0.85; max-width: 320px; }
+  .footer-title{
+    color: var(--cream);
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 22px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .footer-links{ list-style: none; padding: 0; margin: 0; }
+  .footer-links li{ margin-bottom: 12px; }
+  .footer-links a{
+    color: rgba(254,249,225,0.75);
+    font-size: 0.9rem;
+    transition: var(--transition);
+  }
+  .footer-links a:hover{
+    color: var(--cream);
+    padding-left: 6px;
+  }
+  .footer-contact-item{
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+    align-items: flex-start;
+  }
+  .footer-contact-item i{ color: var(--beige); margin-top: 3px; }
+  .footer-social{
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;
+  }
+  .footer-social a{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(254,249,225,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cream);
+    transition: var(--transition);
+  }
+  .footer-social a:hover{
+    background: var(--beige);
+    color: var(--dark-red);
+    transform: translateY(-4px);
+  }
+  .footer-bottom{
+    border-top: 1px solid rgba(254,249,225,0.15);
+    margin-top: 50px;
+    padding: 22px 0;
+    text-align: center;
+    font-size: 0.85rem;
+    opacity: 0.75;
+  }
+
+  /* ==========================================================
+     BACK TO TOP
+  ========================================================== */
+  #backToTop{
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    color: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    border: none;
+    box-shadow: var(--shadow-soft-lg);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: var(--transition);
+    z-index: 999;
+  }
+  #backToTop.visible{
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  #backToTop:hover{ transform: translateY(-6px); }
+
+  /* ==========================================================
+     RESPONSIVE
+  ========================================================== */
+  @media (max-width: 991px){
+    .hero-title{ font-size: 2.3rem; }
+    .hero-section{ text-align: center; }
+    .hero-btn-group, .hero-stats{ justify-content: center; }
+    .hero-desc{ margin-left: auto; margin-right: auto; }
+    .hero-image-wrap{ margin-top: 50px; }
+    .pricing-card.popular{ transform: scale(1); margin-bottom: 20px; }
+    .pricing-card.popular:hover{ transform: translateY(-10px); }
+    section{ padding: 70px 0; }
+  }
+  @media (max-width: 767px){
+    .section-title{ font-size: 1.9rem; }
+    .hero-title{ font-size: 1.9rem; }
+    .hero-float-card{ display: none; }
+    .cta-title{ font-size: 1.6rem; }
+    .counter-number{ font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     LOADING SCREEN
+============================================================ -->
+<div id="loading-screen">
+  <div class="loader-logo">DK</div>
+  <div class="loader-text">DapurKost</div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- ============================================================
+     NAVBAR
+============================================================ -->
+<nav class="navbar navbar-expand-lg navbar-dapurkost" id="mainNavbar">
+  <div class="container">
+    <a class="navbar-brand navbar-brand-dk" href="home.html">
+      <img src="logo-dapurkost.png" alt="Logo DapurKost">
+      <span>DapurKost</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <i class="bi bi-list" style="font-size:1.8rem; color: var(--merah);"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link active" href="home.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="menu.html">Menu</a></li>
+        <li class="nav-item"><a class="nav-link" href="paket.html">Paket</a></li>
+        <li class="nav-item"><a class="nav-link" href="cara-order.html">Cara Order</a></li>
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+<!-- ============================================================
+     HERO SECTION
+============================================================ -->
+<section class="hero-section">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 reveal" id="heroText">
+        <span class="hero-badge"><i class="bi bi-stars"></i> Catering Favorit Anak Kost</span>
+        <h1 class="hero-title">Rasa Rumahan,<br><span class="highlight">Sampai ke Pintu Kostmu</span></h1>
+        <p class="hero-desc">
+          Capek mikirin menu makan tiap hari? DapurKost siap mengantarkan makanan rumahan yang sehat,
+          hangat, dan pas di kantong mahasiswa. Tinggal pesan, kami yang antar sampai depan kost kamu.
+        </p>
+        <div class="hero-btn-group">
+          <a href="#paket" class="btn btn-primary-dk btn-ripple"><i class="bi bi-bag-check me-2"></i>Mulai Berlangganan</a>
+          <a href="menu.html" class="btn btn-outline-dk btn-ripple"><i class="bi bi-book me-2"></i>Lihat Menu</a>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <div class="hero-stat-number"><span class="counter" data-target="1200">0</span>+</div>
+            <div class="hero-stat-label">Mahasiswa Berlangganan</div>
+          </div>
+          <div>
+            <div class="hero-stat-number"><span class="counter" data-target="35">0</span>+</div>
+            <div class="hero-stat-label">Menu Pilihan</div>
+          </div>
+          <div>
+            <div class="hero-stat-number"><span class="counter" data-target="15">0</span></div>
+            <div class="hero-stat-label">Area Kost Terjangkau</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 mt-5 mt-lg-0 reveal reveal-delay-2" id="heroImage">
+        <div class="hero-image-wrap">
+          <img src="hero-food.png" alt="Makanan DapurKost" class="hero-image-main">
+          <div class="hero-float-card hero-float-card-1">
+            <div class="hero-float-icon"><i class="bi bi-truck"></i></div>
+            <div>
+              <div class="hero-float-title">Antar Tepat Waktu</div>
+              <div class="hero-float-sub">Sebelum jam makan tiba</div>
+            </div>
+          </div>
+          <div class="hero-float-card hero-float-card-2">
+            <div class="hero-float-icon"><i class="bi bi-emoji-smile"></i></div>
+            <div>
+              <div class="hero-float-title">4.9 / 5.0</div>
+              <div class="hero-float-sub">Rating dari pelanggan</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     KENAPA DAPURKOST
+============================================================ -->
+<section class="why-section" id="tentang">
+  <div class="container">
+    <div class="text-center mb-5 reveal">
+      <span class="section-eyebrow">Kenapa Pilih Kami</span>
+      <h2 class="section-title">Kenapa DapurKost</h2>
+      <p class="section-desc mx-auto">
+        Bukan cuma antar makanan, kami memastikan setiap porsi terasa seperti masakan rumah sendiri.
+      </p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3 reveal reveal-delay-1">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="bi bi-shield-check"></i></div>
+          <div class="feature-title">Higienis &amp; Sehat</div>
+          <p class="feature-desc">Diolah dengan bahan segar setiap hari dan proses masak yang terjaga kebersihannya.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3 reveal reveal-delay-2">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="bi bi-wallet2"></i></div>
+          <div class="feature-title">Harga Mahasiswa</div>
+          <p class="feature-desc">Paket berlangganan dirancang khusus supaya tetap ramah di kantong anak kost.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3 reveal reveal-delay-3">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="bi bi-truck"></i></div>
+          <div class="feature-title">Antar Tepat Waktu</div>
+          <p class="feature-desc">Makanan sampai sebelum jam makan, jadi kamu nggak perlu menunggu lama.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3 reveal reveal-delay-4">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="bi bi-cup-hot"></i></div>
+          <div class="feature-title">Menu Variatif</div>
+          <p class="feature-desc">Menu berganti tiap hari supaya kamu nggak bosan makan itu-itu saja.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="counter-strip reveal">
+      <div class="row text-center g-4">
+        <div class="col-6 col-md-3">
+          <div class="counter-number"><span class="counter" data-target="1200">0</span>+</div>
+          <div class="counter-label">Pelanggan Aktif</div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="counter-number"><span class="counter" data-target="50000">0</span>+</div>
+          <div class="counter-label">Porsi Terkirim</div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="counter-number"><span class="counter" data-target="15">0</span></div>
+          <div class="counter-label">Area Kost</div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="counter-number"><span class="counter" data-target="98">0</span>%</div>
+          <div class="counter-label">Pelanggan Puas</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PILIHAN PAKET
+============================================================ -->
+<section class="pricing-section" id="paket">
+  <div class="container">
+    <div class="text-center mb-5 reveal">
+      <span class="section-eyebrow">Langganan Fleksibel</span>
+      <h2 class="section-title">Pilihan Paket</h2>
+      <p class="section-desc mx-auto">Pilih paket yang paling sesuai dengan kebutuhan dan jadwal makanmu.</p>
+    </div>
+    <div class="row g-4 justify-content-center">
+      <div class="col-lg-4 col-md-6 reveal reveal-delay-1">
+        <div class="pricing-card">
+          <div class="pricing-name">Paket Harian</div>
+          <span class="pricing-price">Rp60.000</span>
+          <span class="pricing-period">/ sekali makan</span>
+          <ul class="pricing-list">
+            <li><i class="bi bi-check-circle-fill"></i> 3x makan per hari</li>
+            <li><i class="bi bi-check-circle-fill"></i> Menu harian standar</li>
+            <li><i class="bi bi-check-circle-fill"></i> Tanpa kontrak jangka panjang</li>
+          </ul>
+          <a href="#" class="btn btn-pricing btn-ripple">Pilih Paket</a>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 reveal reveal-delay-2">
+        <div class="pricing-card popular">
+          <div class="pricing-badge">Best Seller</div>
+          <div class="pricing-name">Paket Mingguan</div>
+          <span class="pricing-price">Rp315.000</span>
+          <span class="pricing-period">/ bulan (2x makan)</span>
+          <ul class="pricing-list">
+            <li><i class="bi bi-check-circle-fill"></i> 3x makan per hari</li>
+            <li><i class="bi bi-check-circle-fill"></i> Pilihan menu lebih banyak</li>
+            <li><i class="bi bi-check-circle-fill"></i> Gratis ongkir semua area</li>
+            <li><i class="bi bi-check-circle-fill"></i> Bisa ganti menu 2x/minggu</li>
+          </ul>
+          <a href="#" class="btn btn-pricing btn-ripple">Pilih Paket</a>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 reveal reveal-delay-3">
+        <div class="pricing-card">
+          <div class="pricing-name">Paket Bulanan</div>
+          <span class="pricing-price">Rp1.260.000</span>
+          <span class="pricing-period">/ bulan (3x makan)</span>
+          <ul class="pricing-list">
+            <li><i class="bi bi-check-circle-fill"></i> 3x makan per hari</li>
+            <li><i class="bi bi-check-circle-fill"></i> Semua menu dapat dipilih bebas</li>
+            <li><i class="bi bi-check-circle-fill"></i> Gratis ongkir semua area</li>
+            <li><i class="bi bi-check-circle-fill"></i> Prioritas jadwal antar</li>
+          </ul>
+          <a href="#" class="btn btn-pricing btn-ripple">Pilih Paket</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TESTIMONI
+============================================================ -->
+<section class="testimoni-section">
+  <div class="container">
+    <div class="text-center mb-5 reveal">
+      <span class="section-eyebrow">Kata Mereka</span>
+      <h2 class="section-title">Testimoni Pelanggan</h2>
+      <p class="section-desc mx-auto">Cerita nyata dari mahasiswa yang sudah berlangganan DapurKost.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-lg-4 reveal reveal-delay-1">
+        <div class="testimoni-card">
+          <i class="bi bi-quote testimoni-quote-icon"></i>
+          <div class="testimoni-stars">
+            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+          </div>
+          <p class="testimoni-text">"Sejak langganan DapurKost, aku jadi nggak pernah telat makan lagi. Rasanya juga enak, mirip masakan ibu di rumah."</p>
+          <div class="testimoni-profile">
+            <div class="testimoni-avatar">R</div>
+            <div>
+              <div class="testimoni-name">Rani Anjani</div>
+              <div class="testimoni-role">Mahasiswa, Kost Dago</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 reveal reveal-delay-2">
+        <div class="testimoni-card">
+          <i class="bi bi-quote testimoni-quote-icon"></i>
+          <div class="testimoni-stars">
+            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+          </div>
+          <p class="testimoni-text">"Harganya cocok banget buat kantong mahasiswa, tapi porsinya tetap kenyang dan menunya ganti-ganti terus."</p>
+          <div class="testimoni-profile">
+            <div class="testimoni-avatar">F</div>
+            <div>
+              <div class="testimoni-name">Fajar Ramadhan</div>
+              <div class="testimoni-role">Mahasiswa, Kost Sekeloa</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 reveal reveal-delay-3">
+        <div class="testimoni-card">
+          <i class="bi bi-quote testimoni-quote-icon"></i>
+          <div class="testimoni-stars">
+            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+          </div>
+          <p class="testimoni-text">"Pengantarannya selalu tepat waktu, jadi aku bisa atur jadwal kuliah tanpa khawatir soal makan."</p>
+          <div class="testimoni-profile">
+            <div class="testimoni-avatar">S</div>
+            <div>
+              <div class="testimoni-name">Sinta Maharani</div>
+              <div class="testimoni-role">Mahasiswa, Kost Sriwijaya</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FAQ ACCORDION
+============================================================ -->
+<section class="faq-section">
+  <div class="container">
+    <div class="text-center mb-5 reveal">
+      <span class="section-eyebrow">Punya Pertanyaan?</span>
+      <h2 class="section-title">FAQ</h2>
+      <p class="section-desc mx-auto">Beberapa pertanyaan yang paling sering ditanyakan pelanggan kami.</p>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+        <div class="accordion reveal" id="faqAccordion">
+
+          <div class="accordion-item accordion-item-dk">
+            <h2 class="accordion-header">
+              <button class="accordion-button accordion-button-dk" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                Bagaimana cara memesan catering di DapurKost?
+              </button>
+            </h2>
+            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+              <div class="accordion-body accordion-body-dk">
+                Kamu cukup pilih paket berlangganan yang diinginkan, isi data pengiriman, lalu lakukan pembayaran.
+                Setelah itu, tim kami akan mengonfirmasi jadwal pengantaran pertama melalui WhatsApp.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item accordion-item-dk">
+            <h2 class="accordion-header">
+              <button class="accordion-button accordion-button-dk collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                Area mana saja yang bisa dijangkau layanan antar?
+              </button>
+            </h2>
+            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body accordion-body-dk">
+                Saat ini kami melayani area sekitar kampus dan kost-kostan dalam radius yang telah ditentukan.
+                Silakan cek ketersediaan area pada halaman Cara Order sebelum berlangganan.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item accordion-item-dk">
+            <h2 class="accordion-header">
+              <button class="accordion-button accordion-button-dk collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                Metode pembayaran apa saja yang tersedia?
+              </button>
+            </h2>
+            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body accordion-body-dk">
+                Kami menerima pembayaran melalui transfer bank, e-wallet, dan QRIS agar prosesnya lebih mudah dan cepat.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item accordion-item-dk">
+            <h2 class="accordion-header">
+              <button class="accordion-button accordion-button-dk collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                Apakah bisa request menu sesuai selera?
+              </button>
+            </h2>
+            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body accordion-body-dk">
+                Bisa. Untuk paket Komplit, kamu bahkan bisa berkonsultasi langsung dengan tim dapur mengenai preferensi menu mingguan.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item accordion-item-dk">
+            <h2 class="accordion-header">
+              <button class="accordion-button accordion-button-dk collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                Apakah ada minimal durasi berlangganan?
+              </button>
+            </h2>
+            <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body accordion-body-dk">
+                Tidak ada kontrak jangka panjang. Kamu bisa mencoba paket harian terlebih dahulu sebelum memutuskan berlangganan bulanan.
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CTA SECTION
+============================================================ -->
+<section id="pesan">
+  <div class="container">
+    <div class="cta-section reveal">
+      <h2 class="cta-title">Siap Makan Enak Tanpa Ribet?</h2>
+      <p class="cta-desc">Gabung sekarang dan rasakan kemudahan makan rumahan yang diantar langsung ke kostmu setiap hari.</p>
+      <a href="#" class="btn btn-cta btn-ripple"><i class="bi bi-whatsapp me-2"></i>Mulai Berlangganan Sekarang</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer class="footer-dk">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div class="footer-brand">
+          <img src="logo-dapurkost.png" alt="Logo DapurKost">
+          <span>DapurKost</span>
+        </div>
+        <p class="footer-desc">Solusi makan harian untuk mahasiswa dan anak kost. Rasa rumahan, harga bersahabat, antar tepat waktu.</p>
+        <div class="footer-social">
+          <a href="#"><i class="bi bi-instagram"></i></a>
+          <a href="#"><i class="bi bi-whatsapp"></i></a>
+          <a href="#"><i class="bi bi-tiktok"></i></a>
+          <a href="#"><i class="bi bi-facebook"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-6">
+        <div class="footer-title">Navigasi</div>
+        <ul class="footer-links">
+          <li><a href="home.html">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="tentang.html">Tentang Kami</a></li>
+          <li><a href="cara-order.html">Cara Order</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-title">Layanan</div>
+        <ul class="footer-links">
+          <li><a href="#paket">Paket Hemat</a></li>
+          <li><a href="#paket">Paket Populer</a></li>
+          <li><a href="#paket">Paket Komplit</a></li>
+          <li><a href="#">Syarat &amp; Ketentuan</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-title">Kontak</div>
+        <div class="footer-contact-item"><i class="bi bi-geo-alt"></i><span>Jl. Sekeloa Dalam No. 12, Bandung</span></div>
+        <div class="footer-contact-item"><i class="bi bi-whatsapp"></i><span>0812-3456-7890</span></div>
+        <div class="footer-contact-item"><i class="bi bi-envelope"></i><span>halo@dapurkost.id</span></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 DapurKost. Seluruh hak cipta dilindungi.
+    </div>
+  </div>
+</footer>
+
+<!-- Back to Top Button -->
+<button id="backToTop"><i class="bi bi-arrow-up"></i></button>
+
+<!-- Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  /* ==========================================================
+     1. LOADING SCREEN
+  ========================================================== */
+  window.addEventListener('load', function(){
+    const loader = document.getElementById('loading-screen');
+    setTimeout(function(){
+      loader.classList.add('hide');
+    }, 500);
+  });
+
+  /* ==========================================================
+     2. NAVBAR SCROLL EFFECT
+  ========================================================== */
+  const navbar = document.getElementById('mainNavbar');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 40){
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+
+    // Back to top visibility
+    const backToTop = document.getElementById('backToTop');
+    if(window.scrollY > 400){
+      backToTop.classList.add('visible');
+    } else {
+      backToTop.classList.remove('visible');
+    }
+  });
+
+  /* ==========================================================
+     3. SMOOTH SCROLL UNTUK ANCHOR LINK
+  ========================================================== */
+  document.querySelectorAll('a[href^="#"]').forEach(function(anchor){
+    anchor.addEventListener('click', function(e){
+      const targetId = this.getAttribute('href');
+      if(targetId.length > 1){
+        const targetEl = document.querySelector(targetId);
+        if(targetEl){
+          e.preventDefault();
+          const offset = 80;
+          const top = targetEl.getBoundingClientRect().top + window.pageYOffset - offset;
+          window.scrollTo({ top: top, behavior: 'smooth' });
+
+          // Tutup navbar mobile jika terbuka
+          const navCollapse = document.getElementById('navbarNav');
+          if(navCollapse.classList.contains('show')){
+            new bootstrap.Collapse(navCollapse).hide();
+          }
+        }
+      }
+    });
+  });
+
+  /* ==========================================================
+     4. BACK TO TOP CLICK
+  ========================================================== */
+  document.getElementById('backToTop').addEventListener('click', function(){
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* ==========================================================
+     5. SCROLL REVEAL - INTERSECTION OBSERVER
+  ========================================================== */
+  const revealElements = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add('show');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  revealElements.forEach(function(el){
+    revealObserver.observe(el);
+  });
+
+  /* ==========================================================
+     6. COUNTER ANIMATION - INTERSECTION OBSERVER
+  ========================================================== */
+  const counters = document.querySelectorAll('.counter');
+  const counterObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        animateCounter(entry.target);
+        counterObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  counters.forEach(function(counter){
+    counterObserver.observe(counter);
+  });
+
+  function animateCounter(el){
+    const target = parseInt(el.getAttribute('data-target'), 10);
+    const duration = 1600;
+    const startTime = performance.now();
+
+    function update(currentTime){
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const easedProgress = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+      const currentValue = Math.floor(easedProgress * target);
+      el.textContent = currentValue.toLocaleString('id-ID');
+
+      if(progress < 1){
+        requestAnimationFrame(update);
+      } else {
+        el.textContent = target.toLocaleString('id-ID');
+      }
+    }
+    requestAnimationFrame(update);
+  }
+
+  /* ==========================================================
+     7. BUTTON RIPPLE EFFECT
+  ========================================================== */
+  document.querySelectorAll('.btn-ripple').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      const rect = btn.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      const size = Math.max(rect.width, rect.height);
+      const x = e.clientX - rect.left - size / 2;
+      const y = e.clientY - rect.top - size / 2;
+
+      ripple.className = 'ripple-span';
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = x + 'px';
+      ripple.style.top = y + 'px';
+
+      btn.appendChild(ripple);
+
+      setTimeout(function(){
+        ripple.remove();
+      }, 600);
+    });
+  });
+
+  /* ==========================================================
+     8. ACCORDION ICON STATE (opsional, bootstrap sudah handle)
+  ========================================================== */
+  document.querySelectorAll('.accordion-button-dk').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      // Bootstrap collapse sudah menangani buka/tutup,
+      // baris ini disiapkan jika ingin menambah efek tambahan di masa depan.
+    });
+  });
+</script>
+
+</body>
+</html>

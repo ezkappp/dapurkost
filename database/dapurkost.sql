@@ -1,0 +1,87 @@
+CREATE DATABASE IF NOT EXISTS dapurkost_db;
+USE dapurkost_db;
+
+CREATE TABLE IF NOT EXISTS admin (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nama VARCHAR(100) NOT NULL,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    role ENUM('super_admin', 'admin') NOT NULL DEFAULT 'admin',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS pelanggan (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nama VARCHAR(100) NOT NULL,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    no_hp VARCHAR(20) DEFAULT NULL,
+    alamat TEXT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS menu (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nama VARCHAR(100) NOT NULL,
+    deskripsi TEXT DEFAULT NULL,
+    harga DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    kategori VARCHAR(50) DEFAULT NULL,
+    foto VARCHAR(255) DEFAULT NULL,
+    status ENUM('aktif', 'nonaktif') NOT NULL DEFAULT 'aktif',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS paket (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nama VARCHAR(100) NOT NULL,
+    deskripsi TEXT DEFAULT NULL,
+    harga_paket DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    status ENUM('aktif', 'nonaktif') NOT NULL DEFAULT 'aktif',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS paket_menu (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    paket_id INT NOT NULL,
+    menu_id INT NOT NULL,
+    jumlah INT NOT NULL DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_paket_menu_paket FOREIGN KEY (paket_id) REFERENCES paket(id) ON DELETE CASCADE,
+    CONSTRAINT fk_paket_menu_menu FOREIGN KEY (menu_id) REFERENCES menu(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_paket_menu (paket_id, menu_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS pesanan (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pelanggan_id INT NOT NULL,
+    paket_id INT NOT NULL,
+    menu_id INT DEFAULT NULL,
+    jumlah INT NOT NULL DEFAULT 1,
+    total_harga DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    status ENUM('menunggu_pembayaran', 'dibayar', 'diproses', 'selesai', 'dibatalkan') NOT NULL DEFAULT 'menunggu_pembayaran',
+    tanggal_pesan DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_pesanan_pelanggan FOREIGN KEY (pelanggan_id) REFERENCES pelanggan(id) ON DELETE CASCADE,
+    CONSTRAINT fk_pesanan_paket FOREIGN KEY (paket_id) REFERENCES paket(id) ON DELETE RESTRICT,
+    CONSTRAINT fk_pesanan_menu FOREIGN KEY (menu_id) REFERENCES menu(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS pembayaran (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pesanan_id INT NOT NULL UNIQUE,
+    metode_pembayaran ENUM('transfer', 'cash') NOT NULL DEFAULT 'transfer',
+    nominal DECIMAL(10,2) NOT NULL,
+    bukti_transfer VARCHAR(255) DEFAULT NULL,
+    status ENUM('pending', 'terverifikasi', 'ditolak') NOT NULL DEFAULT 'pending',
+    tanggal_bayar DATE DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_pembayaran_pesanan FOREIGN KEY (pesanan_id) REFERENCES pesanan(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

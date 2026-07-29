@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Kelola Pelanggan | DapurKost</title>
+
+<!-- Google Font -->
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+<!-- Bootstrap -->
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<!-- Bootstrap Icons -->
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+rel="stylesheet">
+<link href="assets/css/admin.css" rel="stylesheet">
+
+<style>
+
+/* :root dipindah ke assets/css/admin.css */
+
+*{
+
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+
+}
+
+body{
+
+background:var(--cream);
+color:var(--text);
+
+}
+
+/* ==========================
+SIDEBAR
+========================== */
+
+.sidebar{
+
+position:fixed;
+
+top:0;
+left:0;
+
+width:230px;
+
+height:100vh;
+
+background:linear-gradient(
+180deg,
+var(--red),
+var(--dark));
+
+padding:18px 20px;
+
+color:white;
+
+display:flex;
+
+flex-direction:column;
+
+}
+
+.logo{
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+margin-bottom:18px;
+
+}
+
+.logo-icon{
+
+width: 48px;
+height: 48px;
+
+border-radius:15px;
+
+background:rgba(255,255,255,.15);
+
+display:flex;
+
+justify-content:center;
+align-items:center;
+
+font-size:24px;
+
+}
+
+.logo h3{
+
+margin:0;
+
+font-size:20px;
+
+font-weight:700;
+
+}
+
+.logo p{
+
+margin:0;
+
+opacity:.8;
+
+font-size:13px;
+
+}
+
+/* ==========================
+MENU
+========================== */
+
+.sidebar-menu{
+
+margin-top:0px;
+
+}
+
+.sidebar-menu a{
+
+display:flex;
+
+align-items:center;
+
+gap:14px;
+
+text-decoration:none;
+
+color:white;
+
+padding:15px 18px;
+
+border-radius:14px;
+
+margin-bottom:8px;
+
+transition:.25s;
+
+font-weight:500;
+
+}
+
+.sidebar-menu a:hover{
+
+background:rgba(255,255,255,.15);
+
+transform:translateX(5px);
+
+}
+
+.sidebar-menu .active{
+
+background:white;
+
+color:var(--red);
+
+font-weight:600;
+
+}
+
+.sidebar-menu i{
+
+font-size:16px;
+
+width:22px;
+
+}
+
+/* ==========================
+LOGOUT
+========================== */
+
+.logout{
+
+margin-top:auto;
+
+}
+
+.logout a{
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+text-decoration:none;
+
+padding:15px 18px;
+
+border-radius:16px;
+
+background:rgba(255,255,255,.12);
+
+color:white;
+
+transition:.3s;
+
+}
+
+.logout a:hover{
+
+background:white;
+
+color:var(--red);
+
+}
+
+/* ==========================
+CONTENT
+========================== */
+
+.main{
+
+margin-left:230px;
+
+padding:24px 28px;
+
+}
+
+/* ==========================
+TOPBAR
+========================== */
+
+.topbar{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:35px;
+
+}
+
+.topbar h2{
+
+font-weight:700;
+
+font-size:34px;
+
+color:var(--dark);
+
+margin-bottom:5px;
+
+}
+
+.topbar p{
+
+margin:0;
+
+font-size:16px;
+
+color:var(--gray);
+
+}
+
+.admin-info{
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+}
+
+.notification{
+
+position:relative;
+
+font-size:24px;
+
+cursor:pointer;
+
+}
+
+.badge-notif{
+
+position:absolute;
+
+top:-6px;
+right:-6px;
+
+background:#dc3545;
+
+color:white;
+
+font-size:11px;
+
+width:18px;
+height:18px;
+
+border-radius:50%;
+
+display:flex;
+
+justify-content:center;
+align-items:center;
+
+}
+
+.avatar{
+
+width:42px;
+height:42px;
+
+border-radius:50%;
+
+background:var(--gold);
+
+display:flex;
+
+justify-content:center;
+align-items:center;
+
+font-size:24px;
+
+}
+
+/* ==========================
+CARD
+========================== */
+
+.dashboard-card{
+
+background:white;
+
+border:none;
+
+border-radius:18px;
+
+padding:18px;
+
+box-shadow:var(--shadow);
+
+transition:.25s;
+
+height:100%;
+
+}
+
+.dashboard-card:hover{
+
+transform:translateY(-4px);
+
+}
+
+.card-icon{
+
+width:52px;
+height:52px;
+
+border-radius:18px;
+
+display:flex;
+
+justify-content:center;
+align-items:center;
+
+font-size:22px;
+
+margin-bottom:14px;
+
+color:white;
+
+}
+
+.bg-red{
+
+background:var(--red);
+
+}
+
+.bg-gold{
+
+background:#D4A017;
+
+}
+
+.bg-green{
+
+background:#2E8B57;
+
+}
+
+.bg-blue{
+
+background:#3B82F6;
+
+}
+
+.dashboard-card h3{
+
+font-size:28px;
+
+font-weight:700;
+
+margin:4px 0;
+
+}
+
+.dashboard-card p{
+
+font-size:15px;
+margin:0;
+
+color:var(--gray);
+
+}
+
+.dashboard-card small{
+
+font-size:13px;
+
+}
+
+.table-card,
+.quick-card{
+
+margin-top:30px;
+
+background:white;
+
+border-radius:18px;
+
+padding:20px;
+
+box-shadow:var(--shadow);
+
+}
+
+.table-card h4,
+.quick-card h4{
+
+font-weight:700;
+
+font-size:22px;
+color:var(--dark);
+
+margin-bottom:20px;
+
+}
+.table th,
+.table td{
+
+padding:12px;
+
+font-size:14px;
+
+vertical-align:middle;
+
+}
+
+.quick-card .btn{
+
+padding:10px;
+
+font-size:15px;
+
+border-radius:12px;
+
+}
+
+/* ==========================
+KELOLA PELANGGAN — TAMBAHAN
+========================== */
+
+.pelanggan-toolbar{
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+gap:12px;
+
+margin-bottom:20px;
+
+flex-wrap:wrap;
+
+}
+
+.pelanggan-search{
+
+position:relative;
+
+flex:1;
+
+min-width:220px;
+
+max-width:320px;
+
+}
+
+.pelanggan-search i{
+
+position:absolute;
+
+top:50%;
+
+left:14px;
+
+transform:translateY(-50%);
+
+color:var(--gray);
+
+font-size:14px;
+
+}
+
+.pelanggan-search input{
+
+border-radius:12px;
+
+padding:10px 14px 10px 38px;
+
+border:1.5px solid #eee;
+
+font-size:14px;
+
+width:100%;
+
+}
+
+.pelanggan-search input:focus{
+
+outline:none;
+
+border-color:var(--red);
+
+box-shadow:0 0 0 3px rgba(163,29,29,.08);
+
+}
+
+.pelanggan-filter select{
+
+border-radius:12px;
+
+padding:10px 14px;
+
+border:1.5px solid #eee;
+
+font-size:14px;
+
+background:white;
+
+}
+
+.pelanggan-filter select:focus{
+
+outline:none;
+
+border-color:var(--red);
+
+}
+
+.avatar-sm{
+
+width:38px;
+height:38px;
+
+border-radius:50%;
+
+background:var(--cream);
+
+border:1.5px solid var(--gold);
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:16px;
+
+font-weight:600;
+
+color:var(--dark);
+
+flex-shrink:0;
+
+}
+
+/* QA-02: tingkatkan kontras badge status Aktif/Nonaktif (tabel & modal detail) */
+#tabelPelanggan .badge, #detailModal .badge{ font-weight:600; }
+#tabelPelanggan .badge.bg-success, #detailModal .badge.bg-success{ background-color:#1E7E34 !important; }
+#tabelPelanggan .badge.bg-secondary, #detailModal .badge.bg-secondary{ background-color:#495057 !important; }
+
+.pelanggan-nama{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+}
+
+.pelanggan-nama-text strong{
+
+display:block;
+
+font-size:14px;
+
+color:var(--text);
+
+}
+
+.pelanggan-nama-text small{
+
+color:var(--gray);
+
+font-size:12px;
+
+}
+
+.action-btns{
+
+display:flex;
+
+gap:6px;
+
+flex-wrap:nowrap;
+
+}
+
+.action-btns .btn{
+
+border-radius:10px;
+
+padding:6px 10px;
+
+font-size:13px;
+
+}
+
+/* ==========================
+RESPONSIVE
+========================== */
+
+/* @media(max-width:992px) sidebar-collapse dipindah ke assets/css/admin.css */
+
+@media(max-width:768px){
+
+.pelanggan-toolbar{
+
+flex-direction:column;
+
+align-items:stretch;
+
+}
+
+.pelanggan-search{
+
+max-width:100%;
+
+}
+
+}
+
+</style>
+
+
+</head>
+
+<body>
+
+<!-- TOAST NOTIFIKASI -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:1080;">
+  <div id="appToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="appToastBody">Berhasil.</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<div class="sidebar">
+
+    <!-- LOGO -->
+
+    <div class="logo">
+
+        <div class="logo-icon">
+
+            <img src="assets/img/Logo.png" alt="Logo DapurKost">
+
+        </div>
+
+        <div>
+
+            <h3>DapurKost</h3>
+
+            <p>Admin Panel</p>
+
+        </div>
+
+    </div>
+
+    <!-- MENU -->
+
+    <div class="sidebar-menu">
+
+        <a href="dashboard-admin.html">
+
+            <i class="bi bi-grid-fill"></i>
+
+            <span>Dashboard</span>
+
+        </a>
+
+        <a href="kelola-menu.html">
+
+            <i class="bi bi-cup-hot"></i>
+
+            <span>Kelola Menu</span>
+
+        </a>
+
+        <a href="kelola-paket.html">
+
+            <i class="bi bi-box-seam"></i>
+
+            <span>Kelola Paket</span>
+
+        </a>
+
+        <a href="pesanan-admin.html">
+
+            <i class="bi bi-bag-check"></i>
+
+            <span>Pesanan</span>
+
+        </a>
+
+        <a href="pelanggan-admin.html" class="active">
+
+            <i class="bi bi-people-fill"></i>
+
+            <span>Pelanggan</span>
+
+        </a>
+
+        <a href="pembayaran-admin.html">
+
+            <i class="bi bi-credit-card-2-front"></i>
+
+            <span>Pembayaran</span>
+
+        </a>
+
+        <a href="laporan-admin.html">
+
+            <i class="bi bi-bar-chart-line"></i>
+
+            <span>Laporan</span>
+
+        </a>
+
+        <a href="ai-assistant.html">
+
+            <i class="bi bi-stars"></i>
+
+            <span>AI Assistant</span>
+
+        </a>
+
+    </div>
+
+    <!-- LOGOUT -->
+
+    <div class="logout">
+
+        <a href="login-admin.html" data-bs-toggle="modal" data-bs-target="#logoutModal">
+
+            <i class="bi bi-box-arrow-right"></i>
+
+            <span>Logout</span>
+
+        </a>
+
+    </div>
+
+</div>
+
+<!-- ===========================
+MAIN CONTENT
+=========================== -->
+
+<div class="main">
+
+    <!-- TOPBAR -->
+
+    <div class="topbar">
+
+        <div>
+
+            <h2>
+
+                Kelola Pelanggan
+
+            </h2>
+
+            <p>
+
+                Data mahasiswa yang terdaftar sebagai pelanggan DapurKost.
+
+            </p>
+
+        </div>
+
+        <div class="admin-info">
+
+            <div class="dropdown">
+                <div class="notification" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                    <i class="bi bi-bell"></i>
+                    <span class="badge-notif">3</span>
+                </div>
+                <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-2" style="width:330px; border-radius:16px;">
+                    <li class="d-flex justify-content-between align-items-center px-2 py-1">
+                        <span class="fw-semibold" style="color:var(--dark);">Notifikasi</span>
+                        <span class="badge bg-danger rounded-pill">3 Baru</span>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item rounded-3 py-2 mb-1" href="#">
+                            <div class="d-flex gap-2">
+                                <i class="bi bi-person-plus text-danger mt-1"></i>
+                                <div>
+                                    <div class="small fw-semibold">Pelanggan baru mendaftar</div>
+                                    <div class="small text-muted">Ervina Riszan bergabung sebagai pelanggan</div>
+                                    <div class="text-muted" style="font-size:11px;">30 menit lalu</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item rounded-3 py-2 mb-1" href="#">
+                            <div class="d-flex gap-2">
+                                <i class="bi bi-geo-alt text-danger mt-1"></i>
+                                <div>
+                                    <div class="small fw-semibold">Alamat diperbarui</div>
+                                    <div class="small text-muted">Fadila Putri Hartanto mengubah alamat kost</div>
+                                    <div class="text-muted" style="font-size:11px;">2 jam lalu</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item rounded-3 py-2" href="#">
+                            <div class="d-flex gap-2">
+                                <i class="bi bi-person-dash text-danger mt-1"></i>
+                                <div>
+                                    <div class="small fw-semibold">Pelanggan nonaktif</div>
+                                    <div class="small text-muted">2 pelanggan tidak ada pesanan lebih dari 30 hari</div>
+                                    <div class="text-muted" style="font-size:11px;">1 hari lalu</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-center small fw-semibold text-danger rounded-3" href="#">Lihat Semua Notifikasi</a></li>
+                </ul>
+            </div>
+
+            <!-- PROFIL DROPDOWN (QA-02) -->
+            <div class="profile-wrap">
+                <div class="avatar" id="profileTrigger">👨🏻‍🍳</div>
+
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="profile-header">
+                        <div class="avatar" style="width:44px;height:44px;font-size:20px;">👨🏻‍🍳</div>
+                        <div>
+                            <strong>Admin DapurKost</strong>
+                            <small>Super Admin</small>
+                        </div>
+                    </div>
+
+                    <div class="profile-menu">
+                        <button type="button" class="profile-item" data-bs-toggle="modal" data-bs-target="#profilModal">
+                            <i class="bi bi-person-circle"></i> Profil Saya
+                        </button>
+                        <button type="button" class="profile-item" data-bs-toggle="modal" data-bs-target="#passwordModal">
+                            <i class="bi bi-shield-lock"></i> Ubah Password
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- CARD RINGKASAN PELANGGAN -->
+
+    <div class="row g-4">
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <div class="card-icon bg-red">
+
+                    <i class="bi bi-people-fill"></i>
+
+                </div>
+
+                <p>Total Pelanggan</p>
+
+                <h3>58</h3>
+
+                <small class="text-muted">
+
+                    Terdaftar
+
+                </small>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <div class="card-icon bg-green">
+
+                    <i class="bi bi-person-check-fill"></i>
+
+                </div>
+
+                <p>Pelanggan Aktif</p>
+
+                <h3>52</h3>
+
+                <small class="text-muted">
+
+                    Masih Berlangganan
+
+                </small>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <div class="card-icon bg-gold">
+
+                    <i class="bi bi-person-plus-fill"></i>
+
+                </div>
+
+                <p>Pelanggan Baru</p>
+
+                <h3>6</h3>
+
+                <small class="text-muted">
+
+                    Bulan Ini
+
+                </small>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <div class="card-icon bg-blue">
+
+                    <i class="bi bi-person-dash-fill"></i>
+
+                </div>
+
+                <p>Pelanggan Nonaktif</p>
+
+                <h3>6</h3>
+
+                <small class="text-muted">
+
+                    Tidak Ada Pesanan Aktif
+
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- =======================
+    TABEL DAFTAR PELANGGAN
+    ======================== -->
+
+    <div class="row mt-4">
+
+        <div class="col-12">
+
+            <div class="table-card">
+
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+
+                    <h4 class="mb-0">Daftar Pelanggan</h4>
+
+                </div>
+
+                <!-- TOOLBAR: SEARCH + FILTER -->
+
+                <div class="pelanggan-toolbar">
+
+                    <div class="pelanggan-search">
+
+                        <i class="bi bi-search"></i>
+
+                        <input type="text" id="searchPelanggan" placeholder="Cari nama, email, atau nomor HP...">
+
+                    </div>
+
+                    <div class="pelanggan-filter">
+
+                        <select id="filterStatus">
+
+                            <option value="semua">Semua Status</option>
+
+                            <option value="aktif">Aktif</option>
+
+                            <option value="nonaktif">Nonaktif</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle" id="tabelPelanggan">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>ID</th>
+                                <th>Nama</th>
+                                <th>Email</th>
+                                <th>Nomor HP</th>
+                                <th>Alamat</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div id="emptyState" class="text-center py-4 text-muted d-none">
+
+                    <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+
+                    Tidak ada pelanggan yang cocok dengan pencarian.
+
+                </div>
+
+                <!-- PAGINASI -->
+
+                <nav class="mt-3">
+
+                    <ul class="pagination pagination-sm justify-content-end mb-0">
+
+                        <li class="page-item disabled">
+
+                            <a class="page-link" href="#">Sebelumnya</a>
+
+                        </li>
+
+                        <li class="page-item active">
+
+                            <a class="page-link" href="#">1</a>
+
+                        </li>
+
+                        <li class="page-item">
+
+                            <a class="page-link" href="#">2</a>
+
+                        </li>
+
+                        <li class="page-item">
+
+                            <a class="page-link" href="#">Berikutnya</a>
+
+                        </li>
+
+                    </ul>
+
+                </nav>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- =======================
+    FOOTER
+    ======================== -->
+
+    <footer class="text-center mt-5 text-muted">
+
+        © 2026 DapurKost Admin Panel
+
+    </footer>
+
+</div>
+
+<!-- MODAL DETAIL PELANGGAN -->
+<div class="modal fade" id="detailModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" style="border-radius:18px;">
+      <div class="modal-header">
+        <h5 class="modal-title">Detail Pelanggan</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <div class="avatar-sm" id="detailAvatar" style="width:50px;height:50px;font-size:20px;"></div>
+          <div>
+            <h6 class="mb-0" id="detailNama"></h6>
+            <small class="text-muted" id="detailJoin"></small>
+          </div>
+        </div>
+        <table class="table table-borderless mb-0">
+          <tr><td class="text-muted" style="width:120px;">ID</td><td id="detailId"></td></tr>
+          <tr><td class="text-muted">Email</td><td id="detailEmail"></td></tr>
+          <tr><td class="text-muted">Nomor HP</td><td id="detailHp"></td></tr>
+          <tr><td class="text-muted">Alamat</td><td id="detailAlamat"></td></tr>
+          <tr><td class="text-muted">Status</td><td id="detailStatus"></td></tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDIT PELANGGAN -->
+<div class="modal fade" id="editModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" style="border-radius:18px;">
+      <form id="editForm">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Pelanggan</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="editRowIndex">
+          <div class="mb-3">
+            <label class="form-label">Nama</label>
+            <input type="text" class="form-control" id="editNama" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" id="editEmail" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Nomor HP</label>
+            <input type="text" class="form-control" id="editHp" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Alamat</label>
+            <input type="text" class="form-control" id="editAlamat" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Status</label>
+            <select class="form-select" id="editStatus">
+              <option value="aktif">Aktif</option>
+              <option value="nonaktif">Nonaktif</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-danger">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PROFIL SAYA (QA-02) -->
+<div class="modal fade" id="profilModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" style="border-radius:18px;">
+      <form id="profilForm">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-person-circle me-2"></i>Profil Saya</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Nama</label>
+            <input type="text" class="form-control" value="Admin DapurKost" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" value="admin@dapurkost.id" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Nomor HP</label>
+            <input type="text" class="form-control" value="0812-3456-7890" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-danger">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL UBAH PASSWORD (QA-02) -->
+<div class="modal fade" id="passwordModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" style="border-radius:18px;">
+      <form id="passwordForm">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-shield-lock me-2"></i>Ubah Password</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Password Lama</label>
+            <input type="password" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Password Baru</label>
+            <input type="password" class="form-control" id="passBaru" required minlength="6">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Konfirmasi Password Baru</label>
+            <input type="password" class="form-control" id="passKonfirmasi" required minlength="6">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-danger">Simpan Password</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL KONFIRMASI LOGOUT -->
+<div class="modal fade" id="logoutModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius:18px;">
+      <div class="modal-body text-center p-4">
+        <i class="bi bi-box-arrow-right text-danger" style="font-size:42px;"></i>
+        <h5 class="mt-3 mb-1">Keluar dari Admin Panel?</h5>
+        <p class="text-muted mb-4">Anda perlu login kembali untuk mengakses dashboard.</p>
+        <div class="d-flex gap-2 justify-content-center">
+          <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Batal</button>
+          <a href="login-admin.html" class="btn btn-danger px-4">Ya, Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL KONFIRMASI AKSI -->
+<div class="modal fade" id="confirmModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius:18px;">
+      <div class="modal-body text-center p-4">
+        <i class="bi bi-question-circle text-danger" style="font-size:42px;"></i>
+        <h5 class="mt-3 mb-1">Konfirmasi Aksi</h5>
+        <p class="text-muted mb-4" id="confirmModalBody">Apakah Anda yakin?</p>
+        <div class="d-flex gap-2 justify-content-center">
+          <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Batal</button>
+          <button type="button" id="confirmModalBtn" class="btn btn-danger px-4">Ya, Lanjutkan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/admin.js"></script>
+<script src="../assets/js/api.js"></script>
+
+<script>
+
+
+/* ==================== PROFIL DROPDOWN (QA-02) ==================== */
+const profileTrigger = document.getElementById("profileTrigger");
+const profileDropdown = document.getElementById("profileDropdown");
+
+profileTrigger.addEventListener("click", function(e){
+    e.stopPropagation();
+    profileDropdown.classList.toggle("show");
+});
+
+document.addEventListener("click", function(e){
+    if(!profileDropdown.contains(e.target) && e.target !== profileTrigger){
+        profileDropdown.classList.remove("show");
+    }
+});
+
+document.querySelectorAll("#profileDropdown .profile-item").forEach(function(item){
+    item.addEventListener("click", function(){
+        profileDropdown.classList.remove("show");
+    });
+});
+
+document.getElementById("profilForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    bootstrap.Modal.getInstance(document.getElementById("profilModal")).hide();
+    tampilkanToast("Profil berhasil diperbarui!", "success");
+});
+
+document.getElementById("passwordForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const baru = document.getElementById("passBaru").value;
+    const konfirmasi = document.getElementById("passKonfirmasi").value;
+
+    if(baru !== konfirmasi){
+        tampilkanToast("Password baru dan konfirmasi tidak sama!", "danger");
+        return;
+    }
+
+    document.getElementById("passwordForm").reset();
+    bootstrap.Modal.getInstance(document.getElementById("passwordModal")).hide();
+    tampilkanToast("Password berhasil diubah!", "success");
+});
+
+// Data pelanggan dimuat dari backend (GET /api/pelanggan)
+let pelangganList = [];
+
+const searchInput = document.getElementById("searchPelanggan");
+const filterStatus = document.getElementById("filterStatus");
+const tabel = document.getElementById("tabelPelanggan");
+const emptyState = document.getElementById("emptyState");
+
+function formatTanggalJoin(tanggalStr){
+    if(!tanggalStr) return "-";
+    const d = new Date(tanggalStr.replace(" ", "T"));
+    return "Bergabung " + d.toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
+}
+
+/* ==================== MUAT DATA DARI BACKEND ==================== */
+async function loadPelanggan(){
+    try {
+        const res = await DapurKostAPI.getPelanggan();
+        pelangganList = (res.data.pelanggan || []).map(function(p){
+            return {
+                id: p.id,
+                nama: p.nama,
+                email: p.email,
+                hp: p.no_hp || "-",
+                alamat: p.alamat || "-",
+                join: formatTanggalJoin(p.created_at),
+                status: "aktif" // catatan: tabel `pelanggan` belum punya kolom status di database,
+                                 // jadi status di sini murni tampilan (tidak dikirim/disimpan ke server)
+            };
+        });
+        renderTabel();
+    } catch (err) {
+        tampilkanToast(err.message || "Gagal memuat data pelanggan dari server.", "danger");
+    }
+}
+
+/* ==================== RENDER TABEL ==================== */
+function renderTabel(){
+    const tbody = tabel.querySelector("tbody");
+    tbody.innerHTML = pelangganList.map(function(p){
+        const statusBadge = p.status === "aktif"
+            ? '<span class="badge bg-success">Aktif</span>'
+            : '<span class="badge bg-secondary">Nonaktif</span>';
+
+        return `
+        <tr data-status="${p.status}" data-id="${p.id}">
+            <td>#PL${String(p.id).padStart(3, '0')}</td>
+            <td>
+                <div class="pelanggan-nama">
+                    <div class="avatar-sm">${p.nama.charAt(0).toUpperCase()}</div>
+                    <div class="pelanggan-nama-text">
+                        <strong>${p.nama}</strong>
+                        <small>${p.join}</small>
+                    </div>
+                </div>
+            </td>
+            <td>${p.email}</td>
+            <td>${p.hp}</td>
+            <td>${p.alamat}</td>
+            <td>${statusBadge}</td>
+            <td>
+                <div class="action-btns">
+                    <button class="btn btn-outline-dark" title="Detail"><i class="bi bi-eye"></i></button>
+                    <button class="btn btn-outline-primary" title="Edit"><i class="bi bi-pencil"></i></button>
+                    <button class="btn btn-danger" title="Hapus"><i class="bi bi-trash"></i></button>
+                </div>
+            </td>
+        </tr>`;
+    }).join("");
+
+    terapkanFilter();
+}
+
+function terapkanFilter(){
+    const kataKunci = searchInput.value.toLowerCase().trim();
+    const status = filterStatus.value;
+    const baris = tabel.querySelectorAll("tbody tr");
+    let jumlahTampil = 0;
+
+    baris.forEach(function(tr){
+        const teks = tr.innerText.toLowerCase();
+        const statusBaris = tr.dataset.status;
+        const cocokKataKunci = teks.includes(kataKunci);
+        const cocokStatus = (status === "semua") || (status === statusBaris);
+
+        if(cocokKataKunci && cocokStatus){
+            tr.style.display = "";
+            jumlahTampil++;
+        } else {
+            tr.style.display = "none";
+        }
+    });
+
+    emptyState.classList.toggle("d-none", jumlahTampil !== 0);
+}
+
+searchInput.addEventListener("input", terapkanFilter);
+filterStatus.addEventListener("change", terapkanFilter);
+
+/* ==================== AMBIL DATA DARI BARIS ==================== */
+function ambilDataBaris(tr){
+    const id = Number(tr.dataset.id);
+    return pelangganList.find(function(p){ return p.id === id; });
+}
+
+/* ==================== DETAIL (ICON MATA) ==================== */
+const detailModal = new bootstrap.Modal(document.getElementById("detailModal"));
+
+tabel.addEventListener("click", function(e){
+    const btnDetail = e.target.closest('[title="Detail"]');
+    if(!btnDetail) return;
+
+    const tr = btnDetail.closest("tr");
+    const data = ambilDataBaris(tr);
+    if(!data) return;
+
+    document.getElementById("detailAvatar").textContent = data.nama.charAt(0).toUpperCase();
+    document.getElementById("detailNama").textContent = data.nama;
+    document.getElementById("detailJoin").textContent = data.join;
+    document.getElementById("detailId").textContent = "#PL" + String(data.id).padStart(3, '0');
+    document.getElementById("detailEmail").textContent = data.email;
+    document.getElementById("detailHp").textContent = data.hp;
+    document.getElementById("detailAlamat").textContent = data.alamat;
+    document.getElementById("detailStatus").innerHTML = data.status === "aktif"
+        ? '<span class="badge bg-success">Aktif</span>'
+        : '<span class="badge bg-secondary">Nonaktif</span>';
+
+    detailModal.show();
+});
+
+/* ==================== EDIT ==================== */
+const editModal = new bootstrap.Modal(document.getElementById("editModal"));
+let editingId = null;
+
+tabel.addEventListener("click", function(e){
+    const btnEdit = e.target.closest('[title="Edit"]');
+    if(!btnEdit) return;
+
+    const tr = btnEdit.closest("tr");
+    const data = ambilDataBaris(tr);
+    if(!data) return;
+
+    editingId = data.id;
+
+    document.getElementById("editNama").value = data.nama;
+    document.getElementById("editEmail").value = data.email;
+    document.getElementById("editEmail").setAttribute("readonly", "readonly"); // backend belum support ganti email
+    document.getElementById("editHp").value = data.hp === "-" ? "" : data.hp;
+    document.getElementById("editAlamat").value = data.alamat === "-" ? "" : data.alamat;
+    document.getElementById("editStatus").value = data.status;
+
+    editModal.show();
+});
+
+document.getElementById("editForm").addEventListener("submit", async function(e){
+    e.preventDefault();
+    if(editingId === null) return;
+
+    const namaBaru = document.getElementById("editNama").value.trim();
+    const hpBaru = document.getElementById("editHp").value.trim();
+    const alamatBaru = document.getElementById("editAlamat").value.trim();
+    const statusBaru = document.getElementById("editStatus").value;
+    const data = pelangganList.find(function(p){ return p.id === editingId; });
+    const statusLama = data ? data.status : "aktif";
+
+    async function terapkanEdit(){
+        try {
+            await DapurKostAPI.updatePelanggan(editingId, {
+                nama: namaBaru,
+                no_hp: hpBaru,
+                alamat: alamatBaru
+            });
+
+            editModal.hide();
+            editingId = null;
+            tampilkanToast("Data pelanggan berhasil diperbarui!", "success");
+            await loadPelanggan();
+        } catch (err) {
+            tampilkanToast(err.message || "Gagal memperbarui data pelanggan.", "danger");
+        }
+    }
+
+    // QA-02: konfirmasi tambahan sebelum menonaktifkan pelanggan (kosmetik saja,
+    // karena tabel `pelanggan` belum punya kolom status di database)
+    if(statusLama === "aktif" && statusBaru === "nonaktif"){
+        editModal.hide();
+        konfirmasiAksi(
+            `Yakin ingin menonaktifkan pelanggan "${namaBaru}"? Pelanggan tidak akan bisa memesan sampai diaktifkan kembali.`,
+            terapkanEdit,
+            { btnLabel: "Ya, Nonaktifkan", btnClass: "btn-danger" }
+        );
+    } else {
+        terapkanEdit();
+    }
+});
+
+/* ==================== HAPUS ==================== */
+tabel.addEventListener("click", function(e){
+    const btnHapus = e.target.closest(".btn-danger[title='Hapus']");
+    if(!btnHapus) return;
+
+    const tr = btnHapus.closest("tr");
+    const data = ambilDataBaris(tr);
+    if(!data) return;
+
+    konfirmasiAksi(`Yakin ingin menghapus pelanggan "${data.nama}"?`, async function(){
+        try {
+            await DapurKostAPI.deletePelanggan(data.id);
+            tampilkanToast("Pelanggan berhasil dihapus!", "danger");
+            await loadPelanggan();
+        } catch (err) {
+            tampilkanToast(err.message || "Gagal menghapus pelanggan.", "danger");
+        }
+    });
+});
+
+/* ==================== INIT ==================== */
+loadPelanggan();
+</script>
+
+</body>
+
+</html>

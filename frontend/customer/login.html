@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - DapurKost</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  /* ==========================================================
+     ROOT VARIABLES (konsisten dengan halaman lain)
+  ========================================================== */
+  :root{
+    --cream: #FEF9E1;
+    --beige: #E5D0AC;
+    --merah: #A31D1D;
+    --dark-red: #6D2323;
+    --white: #ffffff;
+    --gradient-primary: linear-gradient(135deg, var(--merah) 0%, var(--dark-red) 100%);
+    --shadow-soft: 0 10px 30px rgba(109, 35, 35, 0.12);
+    --shadow-soft-lg: 0 20px 50px rgba(109, 35, 35, 0.18);
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 10px;
+    --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  *{ box-sizing: border-box; }
+  html, body{ height: 100%; }
+  body{
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--cream);
+    color: var(--dark-red);
+    overflow-x: hidden;
+    margin: 0;
+  }
+  h1,h2,h3,h4,h5,h6{ font-family: 'Poppins', sans-serif; font-weight: 700; }
+  a{ text-decoration: none; }
+  ::selection{ background: var(--merah); color: var(--cream); }
+  ::-webkit-scrollbar{ width: 10px; }
+  ::-webkit-scrollbar-track{ background: var(--cream); }
+  ::-webkit-scrollbar-thumb{ background: var(--merah); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover{ background: var(--dark-red); }
+
+  /* ==========================================================
+     LOADING SCREEN AWAL
+  ========================================================== */
+  #loading-screen{
+    position: fixed; inset: 0; background: var(--gradient-primary); z-index: 99999;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+  #loading-screen.hide{ opacity: 0; visibility: hidden; pointer-events: none; }
+  .loader-logo{
+    width: 80px; height: 80px; border-radius: 50%; background: var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size: 1.8rem; color: var(--merah);
+    margin-bottom: 20px; animation: pulseLogo 1.4s ease-in-out infinite;
+  }
+  @keyframes pulseLogo{
+    0%{ transform: scale(1); box-shadow: 0 0 0 0 rgba(254,249,225,0.5); }
+    70%{ transform: scale(1.08); box-shadow: 0 0 0 20px rgba(254,249,225,0); }
+    100%{ transform: scale(1); box-shadow: 0 0 0 0 rgba(254,249,225,0); }
+  }
+  .loader-text{ color: var(--cream); font-weight: 500; letter-spacing: 2px; font-size: 0.9rem; text-transform: uppercase; opacity: 0.9; }
+  .loader-bar{ width: 160px; height: 4px; background: rgba(254,249,225,0.25); border-radius: 10px; margin-top: 16px; overflow: hidden; }
+  .loader-bar::after{
+    content:''; display:block; width: 40%; height: 100%; background: var(--cream); border-radius: 10px;
+    animation: loaderMove 1.2s ease-in-out infinite;
+  }
+  @keyframes loaderMove{ 0%{ margin-left: -40%; } 100%{ margin-left: 100%; } }
+
+  /* ==========================================================
+     RIPPLE BUTTON
+  ========================================================== */
+  .btn-ripple{ position: relative; overflow: hidden; }
+  .ripple-span{
+    position: absolute; border-radius: 50%; background: rgba(255,255,255,0.55);
+    transform: scale(0); animation: rippleAnim 0.6s linear; pointer-events: none;
+  }
+  @keyframes rippleAnim{ to{ transform: scale(3); opacity: 0; } }
+
+  /* ==========================================================
+     SPLIT SCREEN LAYOUT
+  ========================================================== */
+  .login-wrapper{
+    min-height: 100vh;
+    display: flex;
+  }
+
+  /* --- KIRI: ILUSTRASI --- */
+  .login-illustration{
+    flex: 1;
+    background: var(--gradient-primary);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 50px;
+    overflow: hidden;
+  }
+  .login-illustration::before{
+    content:'';
+    position: absolute;
+    width: 400px; height: 400px;
+    background: rgba(254,249,225,0.08);
+    border-radius: 50%;
+    top: -150px; left: -120px;
+  }
+  .login-illustration::after{
+    content:'';
+    position: absolute;
+    width: 320px; height: 320px;
+    background: rgba(254,249,225,0.08);
+    border-radius: 50%;
+    bottom: -140px; right: -100px;
+  }
+  .illustration-brand{
+    position: absolute;
+    top: 40px; left: 50px;
+    display: flex; align-items: center; gap: 10px;
+    z-index: 2;
+  }
+  .illustration-brand img{ height: 40px; width: 40px; border-radius: 50%; object-fit: contain; }
+  .illustration-brand span{ color: var(--cream); font-weight: 800; font-size: 1.25rem; }
+
+  .illustration-content{
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 420px;
+  }
+  .illustration-img-circle{
+    width: 260px; height: 260px;
+    margin: 0 auto 40px;
+    border-radius: 50%;
+    background: rgba(254,249,225,0.12);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    animation: floatIllustration 4.5s ease-in-out infinite;
+  }
+  @keyframes floatIllustration{
+    0%,100%{ transform: translateY(0); }
+    50%{ transform: translateY(-16px); }
+  }
+  .illustration-img-circle img{
+    width: 78%; height: 78%; object-fit: contain;
+    border-radius: 50%;
+  }
+  .illustration-food-icon{
+    position: absolute;
+    width: 56px; height: 56px;
+    background: var(--cream);
+    color: var(--merah);
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    box-shadow: var(--shadow-soft-lg);
+  }
+  .icon-pos-1{ top: -10px; right: -6px; animation: floatIllustration 3.6s ease-in-out infinite; }
+  .icon-pos-2{ bottom: 6px; left: -22px; animation: floatIllustration 4.2s ease-in-out infinite reverse; }
+  .icon-pos-3{ top: 40%; right: -34px; animation: floatIllustration 3.9s ease-in-out infinite; }
+
+  .illustration-title{
+    color: var(--cream);
+    font-size: 1.9rem;
+    font-weight: 800;
+    margin-bottom: 14px;
+  }
+  .illustration-desc{
+    color: rgba(254,249,225,0.85);
+    font-size: 0.98rem;
+    line-height: 1.7;
+  }
+  .illustration-dots{
+    display: flex; gap: 8px; justify-content: center; margin-top: 34px; position: relative; z-index: 2;
+  }
+  .illustration-dots span{
+    width: 8px; height: 8px; border-radius: 50%; background: rgba(254,249,225,0.35);
+  }
+  .illustration-dots span.active{ width: 24px; border-radius: 10px; background: var(--cream); }
+
+  /* --- KANAN: FORM LOGIN --- */
+  .login-form-panel{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    background: var(--cream);
+    position: relative;
+  }
+  .login-form-box{
+    width: 100%;
+    max-width: 420px;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: fadeUpForm 0.9s ease forwards;
+    animation-delay: 0.2s;
+  }
+  @keyframes fadeUpForm{
+    to{ opacity: 1; transform: translateY(0); }
+  }
+
+  .login-form-back{
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--merah); font-size: 0.88rem; font-weight: 600;
+    margin-bottom: 30px; transition: var(--transition);
+  }
+  .login-form-back:hover{ color: var(--dark-red); gap: 10px; }
+
+  .login-form-title{ font-size: 2rem; font-weight: 800; color: var(--dark-red); margin-bottom: 8px; }
+  .login-form-subtitle{ color: #8a5a5a; font-size: 0.95rem; margin-bottom: 34px; }
+
+  .form-group-dk{ margin-bottom: 22px; position: relative; }
+  .form-label-dk{
+    display: block; font-size: 0.86rem; font-weight: 600; color: var(--dark-red); margin-bottom: 8px;
+  }
+  .input-icon-wrap{ position: relative; }
+  .input-icon-wrap i.input-icon-left{
+    position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
+    color: var(--merah); font-size: 1.05rem; opacity: 0.7;
+  }
+  .form-control-dk{
+    width: 100%;
+    padding: 14px 18px 14px 48px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid rgba(163,29,29,0.15);
+    background: rgba(255,255,255,0.7);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.94rem;
+    color: var(--dark-red);
+    transition: var(--transition);
+  }
+  .form-control-dk:focus{
+    outline: none;
+    border-color: var(--merah);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(163,29,29,0.08);
+  }
+  .form-control-dk::placeholder{ color: #c99; }
+  .form-control-dk.is-invalid{ border-color: #d9534f; background: rgba(217,83,79,0.04); }
+
+  .toggle-password{
+    position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; color: var(--merah); font-size: 1.05rem;
+    cursor: pointer; opacity: 0.7; transition: var(--transition);
+  }
+  .toggle-password:hover{ opacity: 1; }
+
+  .error-message{
+    color: #d9534f;
+    font-size: 0.78rem;
+    margin-top: 6px;
+    display: none;
+    align-items: center;
+    gap: 5px;
+  }
+  .error-message.show{ display: flex; }
+
+  .form-options-row{
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 28px; flex-wrap: wrap; gap: 10px;
+  }
+  .remember-me-wrap{ display: flex; align-items: center; gap: 8px; }
+  .remember-me-wrap input[type="checkbox"]{
+    width: 18px; height: 18px; accent-color: var(--merah); cursor: pointer;
+  }
+  .remember-me-wrap label{ font-size: 0.86rem; color: #7a4a4a; cursor: pointer; margin: 0; }
+  .forgot-password-link{ font-size: 0.86rem; font-weight: 600; color: var(--merah); transition: var(--transition); }
+  .forgot-password-link:hover{ color: var(--dark-red); text-decoration: underline; }
+
+  .btn-login-dk{
+    width: 100%;
+    padding: 15px;
+    border-radius: 50px;
+    border: none;
+    background: var(--gradient-primary);
+    color: var(--cream);
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition);
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    position: relative;
+  }
+  .btn-login-dk:hover{ transform: translateY(-3px); box-shadow: var(--shadow-soft-lg); }
+  .btn-login-dk:disabled{ opacity: 0.85; cursor: not-allowed; transform: none; }
+
+  .spinner-dk{
+    width: 18px; height: 18px;
+    border: 2.5px solid rgba(254,249,225,0.4);
+    border-top-color: var(--cream);
+    border-radius: 50%;
+    animation: spinDK 0.7s linear infinite;
+    display: none;
+  }
+  .spinner-dk.show{ display: inline-block; }
+  @keyframes spinDK{ to{ transform: rotate(360deg); } }
+
+  .divider-or{
+    display: flex; align-items: center; gap: 14px;
+    margin: 28px 0; color: #b98787; font-size: 0.82rem;
+  }
+  .divider-or::before, .divider-or::after{
+    content: ''; flex: 1; height: 1px; background: rgba(163,29,29,0.15);
+  }
+
+  .btn-google-dk{
+    width: 100%;
+    padding: 13px;
+    border-radius: 50px;
+    border: 1.5px solid rgba(163,29,29,0.15);
+    background: var(--white);
+    color: var(--dark-red);
+    font-weight: 600;
+    font-size: 0.92rem;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    transition: var(--transition);
+  }
+  .btn-google-dk:hover{
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-soft);
+    border-color: rgba(163,29,29,0.3);
+  }
+  .btn-google-dk img{ width: 20px; height: 20px; }
+
+  .register-link-wrap{
+    text-align: center; margin-top: 30px;
+    font-size: 0.9rem; color: #7a4a4a;
+  }
+  .register-link-wrap a{ color: var(--merah); font-weight: 700; transition: var(--transition); }
+  .register-link-wrap a:hover{ color: var(--dark-red); text-decoration: underline; }
+
+  /* Success Toast */
+  .toast-dk{
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+    background: var(--gradient-primary); color: var(--cream); padding: 16px 28px; border-radius: 50px;
+    box-shadow: var(--shadow-soft-lg); display: flex; align-items: center; gap: 10px;
+    font-weight: 600; font-size: 0.9rem; z-index: 9999; opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4,0,0.2,1); pointer-events: none;
+  }
+  .toast-dk.show{ transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* ==========================================================
+     RESPONSIVE
+  ========================================================== */
+  @media (max-width: 991px){
+    .login-illustration{ display: none; }
+    .login-form-panel{ padding: 30px 24px; }
+  }
+  @media (max-width: 480px){
+    .login-form-title{ font-size: 1.6rem; }
+    .form-options-row{ flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loading-screen">
+  <div class="loader-logo">DK</div>
+  <div class="loader-text">DapurKost</div>
+  <div class="loader-bar"></div>
+</div>
+
+<div class="login-wrapper">
+
+  <!-- ============================================================
+       KIRI - ILUSTRASI
+  ============================================================ -->
+  <div class="login-illustration">
+    <a href="home.html" class="illustration-brand">
+      <img src="logo-dapurkost.png" alt="Logo DapurKost">
+      <span>DapurKost</span>
+    </a>
+
+    <div class="illustration-content">
+      <div class="illustration-img-circle">
+        <img src="hero-food.png" alt="Ilustrasi Makanan DapurKost">
+        <div class="illustration-food-icon icon-pos-1"><i class="bi bi-egg-fried"></i></div>
+        <div class="illustration-food-icon icon-pos-2"><i class="bi bi-cup-hot"></i></div>
+        <div class="illustration-food-icon icon-pos-3"><i class="bi bi-basket"></i></div>
+      </div>
+      <h2 class="illustration-title">Rasa Rumahan Menunggumu</h2>
+      <p class="illustration-desc">
+        Masuk ke akunmu untuk melanjutkan langganan, memantau pesanan, dan menikmati makanan hangat setiap hari tanpa ribet.
+      </p>
+      <div class="illustration-dots">
+        <span class="active"></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       KANAN - FORM LOGIN
+  ============================================================ -->
+  <div class="login-form-panel">
+    <div class="login-form-box">
+      <a href="home.html" class="login-form-back"><i class="bi bi-arrow-left"></i> Kembali ke Beranda</a>
+
+      <h1 class="login-form-title">Selamat Datang Kembali</h1>
+      <p class="login-form-subtitle">Masuk untuk melanjutkan pesanan catering harianmu.</p>
+
+      <form id="loginForm" novalidate>
+
+        <div class="form-group-dk">
+          <label class="form-label-dk" for="emailInput">Email</label>
+          <div class="input-icon-wrap">
+            <i class="bi bi-envelope input-icon-left"></i>
+            <input type="email" id="emailInput" class="form-control-dk" placeholder="nama@email.com" autocomplete="email">
+          </div>
+          <div class="error-message" id="emailError"><i class="bi bi-exclamation-circle"></i> <span>Masukkan alamat email yang valid.</span></div>
+        </div>
+
+        <div class="form-group-dk">
+          <label class="form-label-dk" for="passwordInput">Password</label>
+          <div class="input-icon-wrap">
+            <i class="bi bi-lock input-icon-left"></i>
+            <input type="password" id="passwordInput" class="form-control-dk" placeholder="Masukkan password" autocomplete="current-password" style="padding-right:48px;">
+            <button type="button" class="toggle-password" id="togglePassword"><i class="bi bi-eye"></i></button>
+          </div>
+          <div class="error-message" id="passwordError"><i class="bi bi-exclamation-circle"></i> <span>Password minimal 6 karakter.</span></div>
+        </div>
+
+        <div class="form-options-row">
+          <div class="remember-me-wrap">
+            <input type="checkbox" id="rememberMe">
+            <label for="rememberMe">Ingat saya</label>
+          </div>
+          <a href="#" class="forgot-password-link">Lupa Password?</a>
+        </div>
+
+        <button type="submit" class="btn-login-dk btn-ripple" id="loginBtn">
+          <span class="spinner-dk" id="loginSpinner"></span>
+          <span id="loginBtnText">Login</span>
+        </button>
+
+        <div class="divider-or">atau</div>
+
+        <button type="button" class="btn-google-dk btn-ripple" id="googleLoginBtn">
+          <img src="https://www.google.com/favicon.ico" alt="Google">
+          Masuk dengan Google
+        </button>
+
+        <div class="register-link-wrap">
+          Belum punya akun? <a href="register.html">Daftar Sekarang</a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast-dk" id="toastDK">
+  <i class="bi bi-check-circle-fill"></i>
+  <span id="toastMessage">Login berhasil</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/api.js"></script>
+
+<script>
+  /* ==========================================================
+     1. LOADING SCREEN
+  ========================================================== */
+  window.addEventListener('load', function(){
+    const loader = document.getElementById('loading-screen');
+    setTimeout(function(){ loader.classList.add('hide'); }, 500);
+  });
+
+  /* ==========================================================
+     2. RIPPLE BUTTON
+  ========================================================== */
+  document.addEventListener('click', function(e){
+    const btn = e.target.closest('.btn-ripple');
+    if(!btn) return;
+    const rect = btn.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    const size = Math.max(rect.width, rect.height);
+    ripple.className = 'ripple-span';
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+    ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+    btn.appendChild(ripple);
+    setTimeout(function(){ ripple.remove(); }, 600);
+  });
+
+  /* ==========================================================
+     3. SHOW / HIDE PASSWORD
+  ========================================================== */
+  const togglePassword = document.getElementById('togglePassword');
+  const passwordInput = document.getElementById('passwordInput');
+  togglePassword.addEventListener('click', function(){
+    const isHidden = passwordInput.type === 'password';
+    passwordInput.type = isHidden ? 'text' : 'password';
+    this.innerHTML = isHidden ? '<i class="bi bi-eye-slash"></i>' : '<i class="bi bi-eye"></i>';
+  });
+
+  /* ==========================================================
+     4. VALIDASI FORM
+  ========================================================== */
+  const emailInput = document.getElementById('emailInput');
+  const emailError = document.getElementById('emailError');
+  const passwordError = document.getElementById('passwordError');
+  const loginForm = document.getElementById('loginForm');
+  const loginBtn = document.getElementById('loginBtn');
+  const loginBtnText = document.getElementById('loginBtnText');
+  const loginSpinner = document.getElementById('loginSpinner');
+
+  function isValidEmail(value){
+    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return pattern.test(value);
+  }
+
+  function validateEmail(){
+    const value = emailInput.value.trim();
+    if(!isValidEmail(value)){
+      emailInput.classList.add('is-invalid');
+      emailError.classList.add('show');
+      return false;
+    }
+    emailInput.classList.remove('is-invalid');
+    emailError.classList.remove('show');
+    return true;
+  }
+
+  function validatePassword(){
+    const value = passwordInput.value;
+    if(value.length < 6){
+      passwordInput.classList.add('is-invalid');
+      passwordError.classList.add('show');
+      return false;
+    }
+    passwordInput.classList.remove('is-invalid');
+    passwordError.classList.remove('show');
+    return true;
+  }
+
+  emailInput.addEventListener('input', validateEmail);
+  passwordInput.addEventListener('input', validatePassword);
+
+  /* ==========================================================
+     5. SUBMIT LOGIN - terhubung ke backend PHP Native (POST /api/auth/login)
+  ========================================================== */
+  loginForm.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    const emailValid = validateEmail();
+    const passwordValid = validatePassword();
+
+    if(!emailValid || !passwordValid){
+      loginForm.classList.add('shake-anim');
+      setTimeout(function(){ loginForm.classList.remove('shake-anim'); }, 400);
+      return;
+    }
+
+    // Set loading state
+    loginBtn.disabled = true;
+    loginSpinner.classList.add('show');
+    loginBtnText.textContent = 'Memproses...';
+
+    DapurKostAPI.login(emailInput.value.trim(), passwordInput.value, 'pelanggan')
+      .then(function(res){
+        showToast('Login berhasil! Mengalihkan ke beranda...');
+        setTimeout(function(){
+          window.location.href = 'checkout.html';
+        }, 1200);
+      })
+      .catch(function(err){
+        showToast(err.message || 'Email atau password salah.');
+      })
+      .finally(function(){
+        loginSpinner.classList.remove('show');
+        loginBtnText.textContent = 'Login';
+        loginBtn.disabled = false;
+      });
+  });
+
+  /* ==========================================================
+     6. GOOGLE LOGIN (DUMMY)
+  ========================================================== */
+  document.getElementById('googleLoginBtn').addEventListener('click', function(){
+    showToast('Fitur login Google akan segera tersedia');
+  });
+
+  /* ==========================================================
+     7. TOAST NOTIFIKASI
+  ========================================================== */
+  let toastTimeout;
+  function showToast(message){
+    const toast = document.getElementById('toastDK');
+    document.getElementById('toastMessage').textContent = message;
+    toast.classList.add('show');
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(function(){ toast.classList.remove('show'); }, 2800);
+  }
+</script>
+
+</body>
+</html>

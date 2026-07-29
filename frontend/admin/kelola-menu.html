@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kelola Menu | DapurKost</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+<link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body>
+
+<!-- TOAST NOTIFIKASI -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:1080;">
+  <div id="appToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="appToastBody">Berhasil.</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-icon"><img src="../assets/images/logo.png" alt="Logo DapurKost" class="logo-img"></div>
+    <div>
+      <h3>DapurKost</h3>
+      <p>Admin Panel</p>
+    </div>
+  </div>
+
+  <div class="sidebar-menu">
+    <a href="dashboard-admin.html"><i class="bi bi-grid-fill"></i><span>Dashboard</span></a>
+    <a href="#" class="active"><i class="bi bi-cup-hot"></i><span>Kelola Menu</span></a>
+    <a href="kelola-paket.html"><i class="bi bi-box-seam"></i><span>Kelola Paket</span></a>
+    <a href="pesanan-admin.html"><i class="bi bi-bag-check"></i><span>Pesanan</span></a>
+    <a href="pelanggan-admin.html"><i class="bi bi-people-fill"></i><span>Pelanggan</span></a>
+    <a href="pembayaran-admin.html"><i class="bi bi-credit-card-2-front"></i><span>Pembayaran</span></a>
+    <a href="laporan-admin.html"><i class="bi bi-bar-chart-line"></i><span>Laporan</span></a>
+    <a href="ai-assistant.html"><i class="bi bi-stars"></i><span>AI Assistant</span></a>
+  </div>
+
+  <div class="logout">
+    <a href="login-admin.html" data-bs-toggle="modal" data-bs-target="#logoutModal"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="topbar">
+    <div>
+      <h2>Kelola Menu 🍜</h2>
+      <p>Atur daftar menu makanan &amp; minuman DapurKost.</p>
+    </div>
+    <div class="admin-info">
+      <div class="dropdown">
+        <div class="notification" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+          <i class="bi bi-bell"></i>
+          <span class="badge-notif">3</span>
+        </div>
+        <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-2" style="width:330px; border-radius:16px;">
+          <li class="d-flex justify-content-between align-items-center px-2 py-1">
+            <span class="fw-semibold" style="color:var(--dark);">Notifikasi</span>
+            <span class="badge bg-danger rounded-pill">3 Baru</span>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item rounded-3 py-2 mb-1" href="laporan-admin.html">
+              <div class="d-flex gap-2">
+                <i class="bi bi-graph-up-arrow text-danger mt-1"></i>
+                <div>
+                  <div class="small fw-semibold">Nasi Padang Rendang laris</div>
+                  <div class="small text-muted">Menu ini terjual 18 porsi hari ini</div>
+                  <div class="text-muted" style="font-size:11px;">Baru saja</div>
+                </div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item rounded-3 py-2 mb-1" href="#">
+              <div class="d-flex gap-2">
+                <i class="bi bi-exclamation-triangle text-danger mt-1"></i>
+                <div>
+                  <div class="small fw-semibold">Kategori Snack belum diperbarui</div>
+                  <div class="small text-muted">Sudah lebih dari seminggu tidak ada menu baru</div>
+                  <div class="text-muted" style="font-size:11px;">3 jam lalu</div>
+                </div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item rounded-3 py-2" href="pelanggan-admin.html">
+              <div class="d-flex gap-2">
+                <i class="bi bi-chat-left-text text-danger mt-1"></i>
+                <div>
+                  <div class="small fw-semibold">Permintaan menu vegetarian</div>
+                  <div class="small text-muted">Diajukan oleh Salsa Billa Aurilia</div>
+                  <div class="text-muted" style="font-size:11px;">1 hari lalu</div>
+                </div>
+              </div>
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item text-center small fw-semibold text-danger rounded-3" href="notifikasi-admin.html">Lihat Semua Notifikasi</a></li>
+        </ul>
+      </div>
+      <div class="avatar">👨🏻‍🍳</div>
+    </div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar-card">
+    <div class="filter-tabs" id="filterTabs"></div>
+    <div style="display:flex; gap:10px; align-items:center;">
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+        <input type="text" id="searchInput" placeholder="Cari menu...">
+      </div>
+      <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#menuModal" onclick="openAddModal()">
+        <i class="bi bi-plus-circle me-1"></i> Tambah Menu
+      </button>
+    </div>
+  </div>
+
+  <!-- GRID MENU -->
+  <div class="row g-4" id="menuGrid"></div>
+
+</div>
+
+<!-- MODAL TAMBAH / EDIT -->
+<div class="modal fade" id="menuModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" style="border-radius:18px;">
+      <form id="menuForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitle">Tambah Menu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="menuId">
+
+          <div class="mb-3">
+            <label class="form-label">Nama Menu</label>
+            <input type="text" class="form-control" id="menuName" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Kategori</label>
+            <select class="form-select" id="menuCategory" required>
+              <option value="sarapan">Sarapan</option>
+              <option value="makan-siang">Makan Siang</option>
+              <option value="makan-malam">Makan Malam</option>
+              <option value="minuman">Minuman</option>
+              <option value="snack">Snack</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Deskripsi</label>
+            <textarea class="form-control" id="menuDesc" rows="2" required></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Harga (Rp)</label>
+            <input type="number" class="form-control" id="menuPrice" placeholder="Contoh: 25000 (akan tampil sebagai Rp25.000)" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Upload Foto Menu</label>
+            <div class="upload-preview-box" id="uploadBox" onclick="document.getElementById('menuImgFile').click()">
+              <img id="uploadPreviewImg" src="" alt="Preview" style="display:none;">
+              <div id="uploadPlaceholder">
+                <i class="bi bi-cloud-arrow-up fs-2 text-danger"></i>
+                <p class="mb-0 small text-muted mt-1">Klik untuk pilih foto menu (dummy, belum tersimpan ke server)</p>
+              </div>
+            </div>
+            <!-- TODO Backend: kirim file ini via multipart/form-data ke endpoint upload,
+                 mis. POST /api/admin/menu/upload, lalu simpan URL hasil upload ke field foto -->
+            <input type="file" id="menuImgFile" accept="image/*" class="d-none">
+            <input type="hidden" id="menuImg">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-danger">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL KONFIRMASI HAPUS MENU -->
+<div class="modal fade" id="deleteMenuModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius:18px;">
+      <div class="modal-body text-center p-4">
+        <i class="bi bi-trash3 text-danger" style="font-size:42px;"></i>
+        <h5 class="mt-3 mb-1">Yakin hapus menu <span id="deleteMenuName" class="text-danger">ini</span>?</h5>
+        <p class="text-muted mb-4">Data yang sudah dihapus tidak dapat dikembalikan.</p>
+        <div class="d-flex gap-2 justify-content-center">
+          <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Batal</button>
+          <button type="button" class="btn btn-danger px-4" id="confirmDeleteMenuBtn">Ya, Hapus</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL KONFIRMASI LOGOUT -->
+<div class="modal fade" id="logoutModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius:18px;">
+      <div class="modal-body text-center p-4">
+        <i class="bi bi-box-arrow-right text-danger" style="font-size:42px;"></i>
+        <h5 class="mt-3 mb-1">Keluar dari Admin Panel?</h5>
+        <p class="text-muted mb-4">Anda perlu login kembali untuk mengakses dashboard.</p>
+        <div class="d-flex gap-2 justify-content-center">
+          <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Batal</button>
+          <a href="login-admin.html" class="btn btn-danger px-4">Ya, Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="../assets/js/admin.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/menu.js"></script>
+
+</body>
+</html>

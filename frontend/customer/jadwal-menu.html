@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jadwal Menu - DapurKost</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  /* ==========================================================
+     ROOT VARIABLES (konsisten dengan halaman lain)
+  ========================================================== */
+  :root{
+    --cream: #FEF9E1;
+    --beige: #E5D0AC;
+    --merah: #A31D1D;
+    --dark-red: #6D2323;
+    --white: #ffffff;
+    --gradient-primary: linear-gradient(135deg, var(--merah) 0%, var(--dark-red) 100%);
+    --shadow-soft: 0 10px 30px rgba(109, 35, 35, 0.12);
+    --shadow-soft-lg: 0 20px 50px rgba(109, 35, 35, 0.18);
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 10px;
+    --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--cream);
+    color: var(--dark-red);
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+  h1,h2,h3,h4,h5,h6{ font-family: 'Poppins', sans-serif; font-weight: 700; }
+  a{ text-decoration: none; }
+  ::selection{ background: var(--merah); color: var(--cream); }
+  ::-webkit-scrollbar{ width: 10px; }
+  ::-webkit-scrollbar-track{ background: var(--cream); }
+  ::-webkit-scrollbar-thumb{ background: var(--merah); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover{ background: var(--dark-red); }
+
+  /* ==========================================================
+     LOADING SCREEN
+  ========================================================== */
+  #loading-screen{
+    position: fixed; inset: 0; background: var(--gradient-primary); z-index: 99999;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+  #loading-screen.hide{ opacity: 0; visibility: hidden; pointer-events: none; }
+  .loader-logo{
+    width: 80px; height: 80px; border-radius: 50%; background: var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size: 1.8rem; color: var(--merah);
+    margin-bottom: 20px; animation: pulseLogo 1.4s ease-in-out infinite;
+  }
+  @keyframes pulseLogo{
+    0%{ transform: scale(1); box-shadow: 0 0 0 0 rgba(254,249,225,0.5); }
+    70%{ transform: scale(1.08); box-shadow: 0 0 0 20px rgba(254,249,225,0); }
+    100%{ transform: scale(1); box-shadow: 0 0 0 0 rgba(254,249,225,0); }
+  }
+  .loader-text{ color: var(--cream); font-weight: 500; letter-spacing: 2px; font-size: 0.9rem; text-transform: uppercase; opacity: 0.9; }
+  .loader-bar{ width: 160px; height: 4px; background: rgba(254,249,225,0.25); border-radius: 10px; margin-top: 16px; overflow: hidden; }
+  .loader-bar::after{
+    content:''; display:block; width: 40%; height: 100%; background: var(--cream); border-radius: 10px;
+    animation: loaderMove 1.2s ease-in-out infinite;
+  }
+  @keyframes loaderMove{ 0%{ margin-left: -40%; } 100%{ margin-left: 100%; } }
+
+  /* ==========================================================
+     NAVBAR (identik)
+  ========================================================== */
+  .navbar-dapurkost{
+    position: sticky; top: 0; z-index: 1000; padding: 18px 0;
+    background: rgba(254, 249, 225, 0.65);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border-bottom: 1px solid rgba(163, 29, 29, 0.08);
+    transition: var(--transition);
+  }
+  .navbar-dapurkost.scrolled{ padding: 10px 0; background: rgba(254, 249, 225, 0.9); box-shadow: var(--shadow-soft); }
+  .navbar-brand-dk{ display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.4rem; color: var(--merah) !important; }
+  .navbar-brand-dk img{ height: 42px; width: 42px; object-fit: contain; border-radius: 50%; transition: var(--transition); }
+  .navbar-brand-dk span{ background: var(--gradient-primary); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .navbar-nav .nav-link{
+    font-weight: 500; color: var(--dark-red) !important; margin: 0 12px;
+    position: relative; padding: 6px 2px !important; transition: var(--transition);
+  }
+  .navbar-nav .nav-link::after{
+    content: ''; position: absolute; left: 0; bottom: 0; width: 0%; height: 2px;
+    background: var(--gradient-primary); border-radius: 10px; transition: width 0.3s ease;
+  }
+  .navbar-nav .nav-link:hover::after, .navbar-nav .nav-link.active::after{ width: 100%; }
+  .navbar-nav .nav-link:hover{ color: var(--merah) !important; }
+  .btn-navbar-order{
+    background: var(--gradient-primary); color: var(--cream) !important; padding: 10px 26px;
+    border-radius: 50px; font-weight: 600; font-size: 0.92rem; box-shadow: var(--shadow-soft);
+    border: none; transition: var(--transition); position: relative; overflow: hidden;
+  }
+  .btn-navbar-order:hover{ transform: translateY(-3px); box-shadow: var(--shadow-soft-lg); color: var(--cream) !important; }
+  .navbar-toggler{ border: none; box-shadow: none !important; }
+
+  /* ==========================================================
+     RIPPLE BUTTON
+  ========================================================== */
+  .btn-ripple{ position: relative; overflow: hidden; }
+  .ripple-span{
+    position: absolute; border-radius: 50%; background: rgba(255,255,255,0.55);
+    transform: scale(0); animation: rippleAnim 0.6s linear; pointer-events: none;
+  }
+  @keyframes rippleAnim{ to{ transform: scale(3); opacity: 0; } }
+
+  /* ==========================================================
+     HEADER
+  ========================================================== */
+  .jadwal-header{ padding: 50px 0 10px; text-align: center; position: relative; overflow: hidden; }
+  .jadwal-header::before{
+    content:''; position: absolute; width: 420px; height: 420px; background: var(--beige);
+    border-radius: 50%; top: -220px; right: -150px; opacity: 0.4; z-index: 0;
+  }
+  .jadwal-header .container{ position: relative; z-index: 1; }
+  .jadwal-title{ font-size: 2.2rem; font-weight: 800; color: var(--dark-red); margin-bottom: 10px; }
+  .jadwal-subtitle{ color: #8a5a5a; font-size: 0.98rem; max-width: 600px; margin: 0 auto; }
+
+  .paket-type-badge{
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--gradient-primary); color: var(--cream);
+    padding: 9px 22px; border-radius: 50px; font-weight: 700; font-size: 0.85rem;
+    margin-top: 18px; box-shadow: var(--shadow-soft);
+  }
+
+  /* ==========================================================
+     TOGGLE PAKET TYPE
+  ========================================================== */
+  .paket-switch-wrap{
+    display: flex; justify-content: center; gap: 10px; margin: 28px 0 10px; flex-wrap: wrap;
+  }
+  .paket-switch-btn{
+    padding: 10px 24px; border-radius: 50px; border: 1.5px solid rgba(163,29,29,0.18);
+    background: rgba(255,255,255,0.6); color: var(--dark-red); font-weight: 600; font-size: 0.85rem;
+    transition: var(--transition); cursor: pointer;
+  }
+  .paket-switch-btn.active{ background: var(--gradient-primary); color: var(--cream); border-color: transparent; box-shadow: var(--shadow-soft); }
+
+  /* ==========================================================
+     WEEK NAVIGATOR (UNTUK MINGGUAN)
+  ========================================================== */
+  .week-navigator{
+    display: flex; align-items: center; justify-content: center; gap: 20px;
+    margin: 34px 0 10px; flex-wrap: wrap;
+  }
+  .week-nav-btn{
+    width: 42px; height: 42px; border-radius: 50%; border: none;
+    background: rgba(255,255,255,0.7); color: var(--merah);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; box-shadow: var(--shadow-soft); transition: var(--transition);
+  }
+  .week-nav-btn:hover{ background: var(--gradient-primary); color: var(--cream); transform: translateY(-2px); }
+  .week-nav-btn:disabled{ opacity: 0.4; cursor: not-allowed; }
+  .week-nav-btn:disabled:hover{ background: rgba(255,255,255,0.7); color: var(--merah); transform: none; }
+
+  .week-range-label{
+    text-align: center;
+  }
+  .week-range-title{ font-size: 1.1rem; font-weight: 800; color: var(--dark-red); }
+  .week-range-sub{ font-size: 0.78rem; color: #8a5a5a; }
+
+  /* ==========================================================
+     TABS BULANAN
+  ========================================================== */
+  .month-tabs-wrap{
+    display: flex; justify-content: center; gap: 10px; margin: 30px 0 10px; flex-wrap: wrap;
+  }
+  .month-tab-btn{
+    padding: 10px 22px; border-radius: 50px; border: 1.5px solid rgba(163,29,29,0.18);
+    background: rgba(255,255,255,0.6); color: var(--dark-red); font-weight: 600; font-size: 0.84rem;
+    transition: var(--transition); cursor: pointer;
+  }
+  .month-tab-btn.active{ background: var(--gradient-primary); color: var(--cream); border-color: transparent; box-shadow: var(--shadow-soft); }
+
+  /* ==========================================================
+     JADWAL GRID
+  ========================================================== */
+  .jadwal-main{ padding: 30px 0 100px; }
+
+  .jadwal-grid{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .day-card{
+    background: rgba(255,255,255,0.65);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-md);
+    padding: 18px 14px;
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition);
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  .day-card.show{ opacity: 1; transform: translateY(0); }
+  .day-card:hover{ transform: translateY(-8px); box-shadow: var(--shadow-soft-lg); }
+  .day-card.is-today{ border: 2px solid var(--merah); }
+
+  .day-card-header{ text-align: center; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px dashed rgba(163,29,29,0.15); }
+  .day-name{ font-weight: 800; font-size: 0.92rem; color: var(--dark-red); }
+  .day-date{ font-size: 0.72rem; color: #8a5a5a; }
+  .day-today-badge{
+    display: inline-block; margin-top: 4px; background: var(--gradient-primary); color: var(--cream);
+    font-size: 0.62rem; font-weight: 700; padding: 2px 10px; border-radius: 50px;
+  }
+
+  .meal-slot{ margin-bottom: 14px; }
+  .meal-slot:last-child{ margin-bottom: 0; }
+  .meal-slot-label{
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.68rem; font-weight: 700; color: var(--merah); text-transform: uppercase;
+    letter-spacing: 0.5px; margin-bottom: 4px;
+  }
+  .meal-slot-menu{ font-size: 0.78rem; font-weight: 600; color: var(--dark-red); line-height: 1.4; }
+
+  /* --- MOBILE: SCROLL HORIZONTAL --- */
+  .jadwal-scroll-wrap{ overflow-x: auto; padding-bottom: 10px; -webkit-overflow-scrolling: touch; }
+
+  /* ==========================================================
+     LEGEND
+  ========================================================== */
+  .legend-wrap{
+    display: flex; justify-content: center; gap: 24px; margin-top: 30px; flex-wrap: wrap;
+  }
+  .legend-item{ display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: #8a5a5a; }
+  .legend-icon{
+    width: 26px; height: 26px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    color: var(--cream); font-size: 0.8rem;
+  }
+  .legend-icon.pagi{ background: linear-gradient(135deg, #f6b93b, #e67e22); }
+  .legend-icon.siang{ background: linear-gradient(135deg, #f0932b, #c0392b); }
+  .legend-icon.malam{ background: linear-gradient(135deg, #4834d4, #30336b); }
+
+  /* ==========================================================
+     INFO ROTASI
+  ========================================================== */
+  .rotation-info{
+    background: rgba(229,208,172,0.35);
+    border-radius: var(--radius-md);
+    padding: 18px 22px;
+    display: flex; gap: 14px; align-items: flex-start;
+    margin-top: 34px;
+    font-size: 0.86rem; color: #7a4a4a;
+  }
+  .rotation-info i{ color: var(--merah); font-size: 1.2rem; margin-top: 2px; }
+
+  /* ==========================================================
+     CTA BAWAH
+  ========================================================== */
+  .cta-jadwal{
+    background: var(--gradient-primary); border-radius: var(--radius-lg);
+    padding: 44px 30px; text-align: center; margin-top: 50px;
+    box-shadow: var(--shadow-soft-lg); position: relative; overflow: hidden;
+  }
+  .cta-jadwal::before{ content:''; position:absolute; width:220px; height:220px; background:rgba(254,249,225,0.08); border-radius:50%; top:-100px; right:-70px; }
+  .cta-jadwal-title{ color: var(--cream); font-size: 1.5rem; font-weight: 800; margin-bottom: 10px; position: relative; z-index: 1; }
+  .cta-jadwal-desc{ color: rgba(254,249,225,0.85); font-size: 0.9rem; margin-bottom: 24px; position: relative; z-index: 1; }
+  .btn-cta-jadwal{
+    background: var(--cream); color: var(--merah); padding: 14px 36px; border-radius: 50px;
+    font-weight: 700; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: var(--transition);
+    position: relative; z-index: 1;
+  }
+  .btn-cta-jadwal:hover{ transform: translateY(-3px); box-shadow: 0 15px 40px rgba(0,0,0,0.2); color: var(--merah); }
+
+  /* ==========================================================
+     FOOTER (identik)
+  ========================================================== */
+  .footer-dk{ background: var(--dark-red); color: rgba(254,249,225,0.85); padding: 70px 0 0; margin-top: 40px; }
+  .footer-brand{ display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+  .footer-brand img{ height: 40px; width: 40px; border-radius: 50%; object-fit: contain; }
+  .footer-brand span{ font-size: 1.3rem; font-weight: 800; color: var(--cream); }
+  .footer-desc{ font-size: 0.9rem; opacity: 0.85; max-width: 320px; }
+  .footer-title{ color: var(--cream); font-weight: 700; font-size: 1rem; margin-bottom: 22px; text-transform: uppercase; letter-spacing: 1px; }
+  .footer-links{ list-style: none; padding: 0; margin: 0; }
+  .footer-links li{ margin-bottom: 12px; }
+  .footer-links a{ color: rgba(254,249,225,0.75); font-size: 0.9rem; transition: var(--transition); }
+  .footer-links a:hover{ color: var(--cream); padding-left: 6px; }
+  .footer-contact-item{ display: flex; gap: 12px; margin-bottom: 16px; font-size: 0.9rem; align-items: flex-start; }
+  .footer-contact-item i{ color: var(--beige); margin-top: 3px; }
+  .footer-social{ display: flex; gap: 12px; margin-top: 18px; }
+  .footer-social a{
+    width: 40px; height: 40px; border-radius: 50%; background: rgba(254,249,225,0.1);
+    display: flex; align-items: center; justify-content: center; color: var(--cream); transition: var(--transition);
+  }
+  .footer-social a:hover{ background: var(--beige); color: var(--dark-red); transform: translateY(-4px); }
+  .footer-bottom{ border-top: 1px solid rgba(254,249,225,0.15); margin-top: 50px; padding: 22px 0; text-align: center; font-size: 0.85rem; opacity: 0.75; }
+
+  #backToTop{
+    position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; border-radius: 50%;
+    background: var(--gradient-primary); color: var(--cream); display: flex; align-items: center;
+    justify-content: center; font-size: 1.2rem; border: none; box-shadow: var(--shadow-soft-lg);
+    opacity: 0; visibility: hidden; transform: translateY(20px); transition: var(--transition); z-index: 999;
+  }
+  #backToTop.visible{ opacity: 1; visibility: visible; transform: translateY(0); }
+  #backToTop:hover{ transform: translateY(-6px); }
+
+  .toast-dk{
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+    background: var(--gradient-primary); color: var(--cream); padding: 16px 28px; border-radius: 50px;
+    box-shadow: var(--shadow-soft-lg); display: flex; align-items: center; gap: 10px;
+    font-weight: 600; font-size: 0.9rem; z-index: 9999; opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4,0,0.2,1); pointer-events: none;
+  }
+  .toast-dk.show{ transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* ==========================================================
+     RESPONSIVE
+  ========================================================== */
+  @media (max-width: 991px){
+    .jadwal-grid{ grid-template-columns: repeat(7, 200px); min-width: max-content; }
+  }
+  @media (max-width: 767px){
+    .jadwal-title{ font-size: 1.7rem; }
+    .week-navigator{ gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loading-screen">
+  <div class="loader-logo">DK</div>
+  <div class="loader-text">DapurKost</div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dapurkost" id="mainNavbar">
+  <div class="container">
+    <a class="navbar-brand navbar-brand-dk" href="home.html">
+      <img src="logo-dapurkost.png" alt="Logo DapurKost">
+      <span>DapurKost</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <i class="bi bi-list" style="font-size:1.8rem; color: var(--merah);"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="menu.html">Menu</a></li>
+        <li class="nav-item"><a class="nav-link" href="paket.html">Paket</a></li>
+        <li class="nav-item"><a class="nav-link" href="cara-order.html">Cara Order</a></li>
+      </ul>
+      <a href="paket.html" class="btn btn-navbar-order btn-ripple">Lihat Paket</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<div class="jadwal-header">
+  <div class="container">
+    <span class="section-eyebrow" style="color:var(--merah); font-weight:600; letter-spacing:2px; text-transform:uppercase; font-size:0.85rem;">Rencana Makan Mingguan</span>
+    <h1 class="jadwal-title">Jadwal Menu Paket</h1>
+    <p class="jadwal-subtitle">Lihat menu Pagi, Siang, dan Malam untuk setiap hari. Menu dirotasi otomatis tiap minggu supaya kamu nggak bosan makan itu-itu saja.</p>
+    <div class="paket-type-badge" id="paketTypeBadge"><i class="bi bi-calendar-week"></i> <span id="paketTypeLabel">Paket Mingguan</span></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="jadwal-main">
+  <div class="container">
+
+    <!-- TOGGLE JENIS PAKET -->
+    <div class="paket-switch-wrap">
+      <button class="paket-switch-btn active" data-paket="mingguan"><i class="bi bi-calendar-week me-1"></i> Paket Mingguan</button>
+      <button class="paket-switch-btn" data-paket="bulanan"><i class="bi bi-calendar-month me-1"></i> Paket Bulanan</button>
+    </div>
+
+    <!-- WEEK NAVIGATOR (MINGGUAN) -->
+    <div class="week-navigator" id="weekNavigator">
+      <button class="week-nav-btn" id="prevWeekBtn"><i class="bi bi-chevron-left"></i></button>
+      <div class="week-range-label">
+        <div class="week-range-title" id="weekRangeTitle">Minggu Ini</div>
+        <div class="week-range-sub" id="weekRangeSub">8 - 14 Juli 2026</div>
+      </div>
+      <button class="week-nav-btn" id="nextWeekBtn"><i class="bi bi-chevron-right"></i></button>
+    </div>
+
+    <!-- TABS BULAN (BULANAN) -->
+    <div class="month-tabs-wrap" id="monthTabsWrap" style="display:none;">
+      <button class="month-tab-btn active" data-week="0">Minggu 1</button>
+      <button class="month-tab-btn" data-week="1">Minggu 2</button>
+      <button class="month-tab-btn" data-week="2">Minggu 3</button>
+      <button class="month-tab-btn" data-week="3">Minggu 4</button>
+    </div>
+
+    <!-- LEGEND -->
+    <div class="legend-wrap">
+      <div class="legend-item"><div class="legend-icon pagi"><i class="bi bi-sunrise"></i></div> Sarapan Pagi</div>
+      <div class="legend-item"><div class="legend-icon siang"><i class="bi bi-sun"></i></div> Makan Siang</div>
+      <div class="legend-item"><div class="legend-icon malam"><i class="bi bi-moon-stars"></i></div> Makan Malam</div>
+    </div>
+
+    <!-- JADWAL GRID -->
+    <div class="jadwal-scroll-wrap">
+      <div class="jadwal-grid" id="jadwalGrid"></div>
+    </div>
+
+    <!-- INFO ROTASI -->
+    <div class="rotation-info">
+      <i class="bi bi-info-circle"></i>
+      <span>Menu di atas dirotasi otomatis setiap minggu — susunan menunya sama, tapi penempatan harinya bergeser supaya kamu tetap merasakan variasi menu meskipun berlangganan dalam waktu lama.</span>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-jadwal">
+      <h3 class="cta-jadwal-title">Sudah Cocok dengan Jadwalnya?</h3>
+      <p class="cta-jadwal-desc">Langsung pilih paket dan mulai berlangganan makan enak setiap hari.</p>
+      <a href="paket.html" class="btn-cta-jadwal btn-ripple"><i class="bi bi-bag-check me-2"></i>Pilih Paket Ini</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer-dk">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div class="footer-brand">
+          <img src="logo-dapurkost.png" alt="Logo DapurKost">
+          <span>DapurKost</span>
+        </div>
+        <p class="footer-desc">Solusi makan harian untuk mahasiswa dan anak kost. Rasa rumahan, harga bersahabat, antar tepat waktu.</p>
+        <div class="footer-social">
+          <a href="#"><i class="bi bi-instagram"></i></a>
+          <a href="#"><i class="bi bi-whatsapp"></i></a>
+          <a href="#"><i class="bi bi-tiktok"></i></a>
+          <a href="#"><i class="bi bi-facebook"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-6">
+        <div class="footer-title">Navigasi</div>
+        <ul class="footer-links">
+          <li><a href="home.html">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="tentang.html">Tentang Kami</a></li>
+          <li><a href="cara-order.html">Cara Order</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-title">Layanan</div>
+        <ul class="footer-links">
+          <li><a href="paket.html">Paket Harian</a></li>
+          <li><a href="jadwal-menu.html?paket=mingguan">Paket Mingguan</a></li>
+          <li><a href="jadwal-menu.html?paket=bulanan">Paket Bulanan</a></li>
+          <li><a href="#">Syarat &amp; Ketentuan</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-title">Kontak</div>
+        <div class="footer-contact-item"><i class="bi bi-geo-alt"></i><span>Jl. Sekeloa Dalam No. 12, Bandung</span></div>
+        <div class="footer-contact-item"><i class="bi bi-whatsapp"></i><span>0812-3456-7890</span></div>
+        <div class="footer-contact-item"><i class="bi bi-envelope"></i><span>halo@dapurkost.id</span></div>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 DapurKost. Seluruh hak cipta dilindungi.</div>
+  </div>
+</footer>
+
+<button id="backToTop"><i class="bi bi-arrow-up"></i></button>
+
+<div class="toast-dk" id="toastDK">
+  <i class="bi bi-check-circle-fill"></i>
+  <span id="toastMessage">Berhasil</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  /* ==========================================================
+     1. LOADING SCREEN
+  ========================================================== */
+  window.addEventListener('load', function(){
+    const loader = document.getElementById('loading-screen');
+    setTimeout(function(){ loader.classList.add('hide'); }, 500);
+  });
+
+  /* ==========================================================
+     2. NAVBAR SCROLL + BACK TO TOP
+  ========================================================== */
+  const navbar = document.getElementById('mainNavbar');
+  const backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 40){ navbar.classList.add('scrolled'); } else { navbar.classList.remove('scrolled'); }
+    if(window.scrollY > 400){ backToTop.classList.add('visible'); } else { backToTop.classList.remove('visible'); }
+  });
+  backToTop.addEventListener('click', function(){ window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+  /* ==========================================================
+     3. RIPPLE BUTTON
+  ========================================================== */
+  document.addEventListener('click', function(e){
+    const btn = e.target.closest('.btn-ripple');
+    if(!btn) return;
+    const rect = btn.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    const size = Math.max(rect.width, rect.height);
+    ripple.className = 'ripple-span';
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+    ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+    btn.appendChild(ripple);
+    setTimeout(function(){ ripple.remove(); }, 600);
+  });
+
+  /* ==========================================================
+     4. DATA POOL MENU (7 PILIHAN PER WAKTU MAKAN)
+     Susunan menu ini yang akan "dirotasi" penempatan harinya
+  ========================================================== */
+  const pagiPool = [
+    'Nasi Uduk Ayam Suwir', 'Bubur Ayam Kampung', 'Roti Bakar Cokelat Keju',
+    'Nasi Kuning Komplit', 'Lontong Sayur Padang', 'Bubur Kacang Hijau', 'Nasi Uduk Telur Dadar'
+  ];
+  const siangPool = [
+    'Ayam Geprek Sambal Bawang', 'Rendang Daging Sapi', 'Sayur Asem Iga',
+    'Ikan Nila Bakar Kecap', 'Tempe Orek Kentang', 'Ayam Bakar Madu', 'Gulai Ayam Kampung'
+  ];
+  const malamPool = [
+    'Soto Ayam Lamongan', 'Nasi Goreng Kampung', 'Sop Iga Sapi',
+    'Nasi Ayam Rica-Rica', 'Pepes Ikan Kembung', 'Capcay Kuah Ayam', 'Mie Goreng Jawa'
+  ];
+
+  const dayNames = ['Senin', 'Selasa', 'Rabu', 'Kamis', "Jumat", 'Sabtu', 'Minggu'];
+
+  /* ==========================================================
+     5. STATE
+  ========================================================== */
+  let currentPaketType = 'mingguan'; // 'mingguan' | 'bulanan'
+  let weekOffset = 0;                // untuk navigasi mingguan (bisa maju/mundur)
+  let selectedMonthWeek = 0;         // untuk tab bulanan (0-3)
+
+  /* ==========================================================
+     6. BACA PARAMETER URL (?paket=mingguan / bulanan)
+  ========================================================== */
+  const urlParams = new URLSearchParams(window.location.search);
+  const paketParam = urlParams.get('paket');
+  if(paketParam === 'bulanan'){ currentPaketType = 'bulanan'; }
+
+  /* ==========================================================
+     7. UTIL: HITUNG NOMOR MINGGU (UNTUK ROTASI)
+  ========================================================== */
+  function getWeekNumber(date){
+    const firstJan = new Date(date.getFullYear(), 0, 1);
+    const days = Math.floor((date - firstJan) / (24 * 60 * 60 * 1000));
+    return Math.floor((days + firstJan.getDay()) / 7);
+  }
+
+  function getMondayOfWeek(offsetWeeks){
+    const today = new Date();
+    const day = today.getDay(); // 0 = Minggu
+    const diffToMonday = day === 0 ? -6 : 1 - day;
+    const monday = new Date(today);
+    monday.setDate(today.getDate() + diffToMonday + (offsetWeeks * 7));
+    monday.setHours(0,0,0,0);
+    return monday;
+  }
+
+  function formatTanggalPendek(date){
+    const bulan = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+    return date.getDate() + ' ' + bulan[date.getMonth()];
+  }
+  function formatTanggalLengkap(date){
+    const bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+    return date.getDate() + ' ' + bulan[date.getMonth()] + ' ' + date.getFullYear();
+  }
+
+  /* ==========================================================
+     8. RENDER JADWAL BERDASARKAN ROTASI
+     Rotasi: pool menu digeser sebanyak (nomor minggu) posisi,
+     jadi tiap minggu susunan hari-ke-menu berbeda.
+  ========================================================== */
+  const jadwalGrid = document.getElementById('jadwalGrid');
+
+  function rotateArray(arr, shift){
+    const n = arr.length;
+    const s = ((shift % n) + n) % n;
+    return arr.slice(s).concat(arr.slice(0, s));
+  }
+
+  function renderJadwal(rotationIndex, mondayDate){
+    const pagiRotated = rotateArray(pagiPool, rotationIndex);
+    const siangRotated = rotateArray(siangPool, rotationIndex * 2);
+    const malamRotated = rotateArray(malamPool, rotationIndex * 3);
+
+    const todayStr = new Date().toDateString();
+
+    jadwalGrid.innerHTML = '';
+
+    for(let i = 0; i < 7; i++){
+      const cellDate = new Date(mondayDate);
+      cellDate.setDate(mondayDate.getDate() + i);
+      const isToday = cellDate.toDateString() === todayStr;
+
+      const card = document.createElement('div');
+      card.className = 'day-card' + (isToday ? ' is-today' : '');
+      card.innerHTML = `
+        <div class="day-card-header">
+          <div class="day-name">${dayNames[i]}</div>
+          <div class="day-date">${formatTanggalPendek(cellDate)}</div>
+          ${isToday ? '<div class="day-today-badge">Hari Ini</div>' : ''}
+        </div>
+        <div class="meal-slot">
+          <div class="meal-slot-label"><i class="bi bi-sunrise"></i> Pagi</div>
+          <div class="meal-slot-menu">${pagiRotated[i]}</div>
+        </div>
+        <div class="meal-slot">
+          <div class="meal-slot-label"><i class="bi bi-sun"></i> Siang</div>
+          <div class="meal-slot-menu">${siangRotated[i]}</div>
+        </div>
+        <div class="meal-slot">
+          <div class="meal-slot-label"><i class="bi bi-moon-stars"></i> Malam</div>
+          <div class="meal-slot-menu">${malamRotated[i]}</div>
+        </div>
+      `;
+      jadwalGrid.appendChild(card);
+    }
+
+    // Animasi muncul bertahap
+    const cards = jadwalGrid.querySelectorAll('.day-card');
+    cards.forEach(function(card, index){
+      setTimeout(function(){ card.classList.add('show'); }, index * 80);
+    });
+  }
+
+  /* ==========================================================
+     9. MODE MINGGUAN: NAVIGASI MINGGU
+  ========================================================== */
+  const weekRangeTitle = document.getElementById('weekRangeTitle');
+  const weekRangeSub = document.getElementById('weekRangeSub');
+  const prevWeekBtn = document.getElementById('prevWeekBtn');
+  const nextWeekBtn = document.getElementById('nextWeekBtn');
+
+  function renderMingguan(){
+    const monday = getMondayOfWeek(weekOffset);
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+
+    weekRangeTitle.textContent = weekOffset === 0 ? 'Minggu Ini' : (weekOffset > 0 ? 'Minggu Depan (+' + weekOffset + ')' : 'Minggu Lalu (' + weekOffset + ')');
+    weekRangeSub.textContent = formatTanggalPendek(monday) + ' - ' + formatTanggalLengkap(sunday);
+
+    prevWeekBtn.disabled = weekOffset <= -2;
+    nextWeekBtn.disabled = weekOffset >= 3;
+
+    const rotationIndex = getWeekNumber(monday);
+    renderJadwal(rotationIndex, monday);
+  }
+
+  prevWeekBtn.addEventListener('click', function(){
+    if(weekOffset > -2){ weekOffset--; renderMingguan(); }
+  });
+  nextWeekBtn.addEventListener('click', function(){
+    if(weekOffset < 3){ weekOffset++; renderMingguan(); }
+  });
+
+  /* ==========================================================
+     10. MODE BULANAN: TAB MINGGU 1-4
+  ========================================================== */
+  function renderBulanan(){
+    const firstMonday = getMondayOfWeek(0);
+    const targetMonday = new Date(firstMonday);
+    targetMonday.setDate(firstMonday.getDate() + (selectedMonthWeek * 7));
+
+    const rotationIndex = getWeekNumber(firstMonday) + selectedMonthWeek;
+    renderJadwal(rotationIndex, targetMonday);
+  }
+
+  document.querySelectorAll('.month-tab-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.month-tab-btn').forEach(function(b){ b.classList.remove('active'); });
+      this.classList.add('active');
+      selectedMonthWeek = parseInt(this.getAttribute('data-week'), 10);
+      renderBulanan();
+    });
+  });
+
+  /* ==========================================================
+     11. TOGGLE JENIS PAKET (MINGGUAN / BULANAN)
+  ========================================================== */
+  const paketTypeLabel = document.getElementById('paketTypeLabel');
+  const paketTypeBadge = document.getElementById('paketTypeBadge');
+  const weekNavigator = document.getElementById('weekNavigator');
+  const monthTabsWrap = document.getElementById('monthTabsWrap');
+
+  function updatePaketTypeView(){
+    document.querySelectorAll('.paket-switch-btn').forEach(function(btn){
+      btn.classList.toggle('active', btn.getAttribute('data-paket') === currentPaketType);
+    });
+
+    if(currentPaketType === 'mingguan'){
+      paketTypeLabel.textContent = 'Paket Mingguan';
+      paketTypeBadge.querySelector('i').className = 'bi bi-calendar-week';
+      weekNavigator.style.display = 'flex';
+      monthTabsWrap.style.display = 'none';
+      renderMingguan();
+    } else {
+      paketTypeLabel.textContent = 'Paket Bulanan';
+      paketTypeBadge.querySelector('i').className = 'bi bi-calendar-month';
+      weekNavigator.style.display = 'none';
+      monthTabsWrap.style.display = 'flex';
+      selectedMonthWeek = 0;
+      document.querySelectorAll('.month-tab-btn').forEach(function(b, idx){ b.classList.toggle('active', idx === 0); });
+      renderBulanan();
+    }
+  }
+
+  document.querySelectorAll('.paket-switch-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      currentPaketType = this.getAttribute('data-paket');
+      weekOffset = 0;
+      updatePaketTypeView();
+    });
+  });
+
+  /* ==========================================================
+     12. TOAST NOTIFIKASI
+  ========================================================== */
+  let toastTimeout;
+  function showToast(message){
+    const toast = document.getElementById('toastDK');
+    document.getElementById('toastMessage').textContent = message;
+    toast.classList.add('show');
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(function(){ toast.classList.remove('show'); }, 2800);
+  }
+
+  /* ==========================================================
+     13. INISIALISASI
+  ========================================================== */
+  updatePaketTypeView();
+</script>
+
+</body>
+</html>

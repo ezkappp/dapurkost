@@ -1,0 +1,25 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# PHP
+vendor/
+composer.lock
+
+# Environment / secrets lokal (kalau nanti ditambah file .env)
+.env
+.env.local
+
+# Logs
+*.log
+
+# Backup / dump database lokal (jangan commit data asli)
+*.sql.bak
+/database/*.dump
+
+# Uploads lokal (kalau nanti pindah ke upload file beneran, bukan base64)
+/backend/public/uploads/

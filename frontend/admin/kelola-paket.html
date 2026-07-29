@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kelola Paket | DapurKost</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+<link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body>
+
+<!-- TOAST NOTIFIKASI -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:1080;">
+  <div id="appToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="appToastBody">Berhasil.</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-icon"><img src="../assets/images/logo.png" alt="Logo DapurKost" class="logo-img"></div>
+    <div>
+      <h3>DapurKost</h3>
+      <p>Admin Panel</p>
+    </div>
+  </div>
+
+  <div class="sidebar-menu">
+    <a href="dashboard-admin.html"><i class="bi bi-grid-fill"></i><span>Dashboard</span></a>
+    <a href="kelola-menu.html"><i class="bi bi-cup-hot"></i><span>Kelola Menu</span></a>
+    <a href="#" class="active"><i class="bi bi-box-seam"></i><span>Kelola Paket</span></a>
+    <a href="pesanan-admin.html"><i class="bi bi-bag-check"></i><span>Pesanan</span></a>
+    <a href="pelanggan-admin.html"><i class="bi bi-people-fill"></i><span>Pelanggan</span></a>
+    <a href="pembayaran-admin.html"><i class="bi bi-credit-card-2-front"></i><span>Pembayaran</span></a>
+    <a href="laporan-admin.html"><i class="bi bi-bar-chart-line"></i><span>Laporan</span></a>
+    <a href="ai-assistant.html"><i class="bi bi-stars"></i><span>AI Assistant</span></a>
+  </div>
+
+  <div class="logout">
+    <a href="login-admin.html" data-bs-toggle="modal" data-bs-target="#logoutModal"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="topbar">
+    <div>
+      <h2>Kelola Paket 📦</h2>
+      <p>Atur paket berlangganan yang tampil di halaman customer.</p>
+    </div>
+    <div class="admin-info">
+      <div class="dropdown">
+        <div class="notification" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+          <i class="bi bi-bell"></i>
+          <span class="badge-notif">3</span>
+        </div>
+        <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-2" style="width:330px; border-radius:16px;">
+          <li class="d-flex justify-content-between align-items-center px-2 py-1">
+            <span class="fw-semibold" style="color:var(--dark);">Notifikasi</span>
+            <span class="badge bg-danger rounded-pill">3 Baru</span>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item rounded-3 py-2 mb-1" href="laporan-admin.html">
+              <div class="d-flex gap-2">
+                <i class="bi bi-graph-up-arrow text-danger mt-1"></i>
+                <div>
+                  <div class="small fw-semibold">Paket Mingguan jadi favorit</div>
+                  <div class="small text-muted">52 pelanggan berlangganan minggu ini</div>
+                  <div class="text-muted" style="font-size:11px;">Baru saja</div>
+                </div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item rounded-3 py-2 mb-1" href="pelanggan-admin.html">
+              <div class="d-flex gap-2">
+                <i class="bi bi-arrow-up-circle text-danger mt-1"></i>
+                <div>
+                  <div class="small fw-semibold">Upgrade paket</div>
+                  <div class="small text-muted">Astri Wahyu Lestari naik ke Paket Bulanan</div>
+                  <div class="text-muted" style="font-size:11px;">2 jam lalu</div>
+                </div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item rounded-3 py-2" href="#">
+              <div class="d-flex gap-2">
+                <i class="bi bi-question-circle text-danger mt-1"></i>
+                <div>
+                  <div class="small fw-semibold">Pertanyaan seputar Paket Harian</div>
+                  <div class="small text-muted">5 calon pelanggan menanyakan detail paket</div>
+                  <div class="text-muted" style="font-size:11px;">5 jam lalu</div>
+                </div>
+              </div>
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item text-center small fw-semibold text-danger rounded-3" href="notifikasi-admin.html">Lihat Semua Notifikasi</a></li>
+        </ul>
+      </div>
+      <div class="avatar">👨🏻‍🍳</div>
+    </div>
+  </div>
+
+  <div class="toolbar-card">
+    <p><i class="bi bi-info-circle me-1"></i> Total <b id="totalPaket">3</b> paket aktif ditampilkan di web customer.</p>
+    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#paketModal" onclick="openAddModal()">
+      <i class="bi bi-plus-circle me-1"></i> Tambah Paket
+    </button>
+  </div>
+
+  <!-- GRID PAKET -->
+  <div class="row g-4" id="paketGrid"></div>
+
+  <!-- TABEL PERBANDINGAN -->
+  <div class="table-card">
+    <h4>Tabel Perbandingan Paket</h4>
+    <div class="table-responsive">
+      <table class="table table-hover align-middle" id="compareTable">
+        <thead>
+          <tr>
+            <th>Fitur</th>
+            <th>Paket Harian</th>
+            <th>Paket Mingguan</th>
+            <th>Paket Bulanan</th>
+          </tr>
+        </thead>
+        <tbody id="compareBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL TAMBAH / EDIT PAKET -->
+<div class="modal fade" id="paketModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" style="border-radius:18px;">
+      <form id="paketForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitle">Tambah Paket</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="paketId">
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Nama Paket</label>
+              <input type="text" class="form-control" id="paketName" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Jenis Paket</label>
+              <select class="form-select" id="paketJenis" required>
+                <option value="">Pilih jenis paket...</option>
+                <option value="hemat">💰 Hemat</option>
+                <option value="favorit">❤️ Favorit</option>
+                <option value="premium">💎 Premium</option>
+                <option value="bestseller">🏆 Best Seller</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Harga (Rp)</label>
+              <input type="number" class="form-control" id="paketPrice" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Keterangan Harga</label>
+              <input type="text" class="form-control" id="paketPeriod" placeholder="/ 1x makan" required>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Durasi</label>
+              <input type="text" class="form-control" id="paketDurasi" placeholder="1 Hari" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Estimasi Antar</label>
+              <input type="text" class="form-control" id="paketEstimasi" placeholder="± 45 Menit" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Menu Berganti</label>
+              <input type="text" class="form-control" id="paketMenuGanti" placeholder="Setiap Hari" required>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Keuntungan / Benefit (1 baris = 1 poin)</label>
+              <textarea class="form-control" id="paketBenefits" rows="3" placeholder="Cocok untuk coba-coba dulu&#10;Tanpa kontrak jangka panjang"></textarea>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label d-block">Fitur Tambahan</label>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="paketOngkir">
+                <label class="form-check-label" for="paketOngkir">Gratis Ongkir</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="paketKonsultasi">
+                <label class="form-check-label" for="paketKonsultasi">Konsultasi Menu</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="paketPrioritas">
+                <label class="form-check-label" for="paketPrioritas">Prioritas Pengiriman</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-danger">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL KONFIRMASI HAPUS PAKET -->
+<div class="modal fade" id="deletePaketModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius:18px;">
+      <div class="modal-body text-center p-4">
+        <i class="bi bi-trash3 text-danger" style="font-size:42px;"></i>
+        <h5 class="mt-3 mb-1">Yakin hapus paket <span id="deletePaketName" class="text-danger">ini</span>?</h5>
+        <p class="text-muted mb-4">Paket ini juga akan hilang dari halaman customer dan tidak dapat dikembalikan.</p>
+        <div class="d-flex gap-2 justify-content-center">
+          <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Batal</button>
+          <button type="button" class="btn btn-danger px-4" id="confirmDeletePaketBtn">Ya, Hapus</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL KONFIRMASI LOGOUT -->
+<div class="modal fade" id="logoutModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius:18px;">
+      <div class="modal-body text-center p-4">
+        <i class="bi bi-box-arrow-right text-danger" style="font-size:42px;"></i>
+        <h5 class="mt-3 mb-1">Keluar dari Admin Panel?</h5>
+        <p class="text-muted mb-4">Anda perlu login kembali untuk mengakses dashboard.</p>
+        <div class="d-flex gap-2 justify-content-center">
+          <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Batal</button>
+          <a href="login-admin.html" class="btn btn-danger px-4">Ya, Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="../assets/js/admin.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/paket.js"></script>
+
+</body>
+</html>

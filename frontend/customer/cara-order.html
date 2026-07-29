@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cara Order - DapurKost</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  /* ==========================================================
+     ROOT VARIABLES (konsisten dengan halaman lain)
+  ========================================================== */
+  :root{
+    --cream: #FEF9E1;
+    --beige: #E5D0AC;
+    --merah: #A31D1D;
+    --dark-red: #6D2323;
+    --white: #ffffff;
+    --gradient-primary: linear-gradient(135deg, var(--merah) 0%, var(--dark-red) 100%);
+    --shadow-soft: 0 10px 30px rgba(109, 35, 35, 0.12);
+    --shadow-soft-lg: 0 20px 50px rgba(109, 35, 35, 0.18);
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 10px;
+    --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--cream);
+    color: var(--dark-red);
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+  h1,h2,h3,h4,h5,h6{ font-family: 'Poppins', sans-serif; font-weight: 700; }
+  a{ text-decoration: none; }
+  ::selection{ background: var(--merah); color: var(--cream); }
+  ::-webkit-scrollbar{ width: 10px; }
+  ::-webkit-scrollbar-track{ background: var(--cream); }
+  ::-webkit-scrollbar-thumb{ background: var(--merah); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover{ background: var(--dark-red); }
+
+  /* ==========================================================
+     LOADING SCREEN
+  ========================================================== */
+  #loading-screen{
+    position: fixed; inset: 0; background: var(--gradient-primary); z-index: 99999;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+  #loading-screen.hide{ opacity: 0; visibility: hidden; pointer-events: none; }
+  .loader-logo{
+    width: 80px; height: 80px; border-radius: 50%; background: var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size: 1.8rem; color: var(--merah);
+    margin-bottom: 20px; animation: pulseLogo 1.4s ease-in-out infinite;
+  }
+  @keyframes pulseLogo{
+    0%{ transform: scale(1); box-shadow: 0 0 0 0 rgba(254,249,225,0.5); }
+    70%{ transform: scale(1.08); box-shadow: 0 0 0 20px rgba(254,249,225,0); }
+    100%{ transform: scale(1); box-shadow: 0 0 0 0 rgba(254,249,225,0); }
+  }
+  .loader-text{ color: var(--cream); font-weight: 500; letter-spacing: 2px; font-size: 0.9rem; text-transform: uppercase; opacity: 0.9; }
+  .loader-bar{ width: 160px; height: 4px; background: rgba(254,249,225,0.25); border-radius: 10px; margin-top: 16px; overflow: hidden; }
+  .loader-bar::after{
+    content:''; display:block; width: 40%; height: 100%; background: var(--cream); border-radius: 10px;
+    animation: loaderMove 1.2s ease-in-out infinite;
+  }
+  @keyframes loaderMove{ 0%{ margin-left: -40%; } 100%{ margin-left: 100%; } }
+
+  /* ==========================================================
+     NAVBAR (identik)
+  ========================================================== */
+  .navbar-dapurkost{
+    position: sticky; top: 0; z-index: 1000; padding: 18px 0;
+    background: rgba(254, 249, 225, 0.65);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border-bottom: 1px solid rgba(163, 29, 29, 0.08);
+    transition: var(--transition);
+  }
+  .navbar-dapurkost.scrolled{ padding: 10px 0; background: rgba(254, 249, 225, 0.9); box-shadow: var(--shadow-soft); }
+  .navbar-brand-dk{ display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.4rem; color: var(--merah) !important; }
+  .navbar-brand-dk img{ height: 42px; width: 42px; object-fit: contain; border-radius: 50%; transition: var(--transition); }
+  .navbar-brand-dk span{ background: var(--gradient-primary); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .navbar-nav .nav-link{
+    font-weight: 500; color: var(--dark-red) !important; margin: 0 12px;
+    position: relative; padding: 6px 2px !important; transition: var(--transition);
+  }
+  .navbar-nav .nav-link::after{
+    content: ''; position: absolute; left: 0; bottom: 0; width: 0%; height: 2px;
+    background: var(--gradient-primary); border-radius: 10px; transition: width 0.3s ease;
+  }
+  .navbar-nav .nav-link:hover::after, .navbar-nav .nav-link.active::after{ width: 100%; }
+  .navbar-nav .nav-link:hover{ color: var(--merah) !important; }
+  .btn-navbar-order{
+    background: var(--gradient-primary); color: var(--cream) !important; padding: 10px 26px;
+    border-radius: 50px; font-weight: 600; font-size: 0.92rem; box-shadow: var(--shadow-soft);
+    border: none; transition: var(--transition); position: relative; overflow: hidden;
+  }
+  .btn-navbar-order:hover{ transform: translateY(-3px); box-shadow: var(--shadow-soft-lg); color: var(--cream) !important; }
+  .navbar-toggler{ border: none; box-shadow: none !important; }
+
+  /* ==========================================================
+     RIPPLE BUTTON
+  ========================================================== */
+  .btn-ripple{ position: relative; overflow: hidden; }
+  .ripple-span{
+    position: absolute; border-radius: 50%; background: rgba(255,255,255,0.55);
+    transform: scale(0); animation: rippleAnim 0.6s linear; pointer-events: none;
+  }
+  @keyframes rippleAnim{ to{ transform: scale(3); opacity: 0; } }
+
+  .btn-primary-dk{
+    background: var(--gradient-primary); color: var(--cream); border: none;
+    padding: 14px 34px; border-radius: 50px; font-weight: 600;
+    box-shadow: var(--shadow-soft); transition: var(--transition);
+  }
+  .btn-primary-dk:hover{ transform: translateY(-4px); box-shadow: var(--shadow-soft-lg); color: var(--cream); }
+
+  /* ==========================================================
+     GENERAL SECTION
+  ========================================================== */
+  section{ padding: 90px 0; position: relative; }
+  .section-eyebrow{ color: var(--merah); font-weight: 600; letter-spacing: 2px; text-transform: uppercase; font-size: 0.85rem; }
+  .section-title{ font-size: 2.4rem; font-weight: 800; color: var(--dark-red); margin-top: 8px; }
+  .section-desc{ color: #7a4a4a; font-size: 1.02rem; max-width: 620px; }
+
+  .reveal{ opacity: 0; transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal-left{ transform: translateX(-50px); }
+  .reveal-right{ transform: translateX(50px); }
+  .reveal.show{ opacity: 1; transform: translate(0); }
+
+  /* ==========================================================
+     HERO CARA ORDER
+  ========================================================== */
+  .hero-cara{ padding-top: 70px; padding-bottom: 40px; text-align: center; position: relative; overflow: hidden; }
+  .hero-cara::before{
+    content:''; position: absolute; width: 450px; height: 450px; background: var(--beige);
+    border-radius: 50%; top: -220px; left: -150px; opacity: 0.45; z-index: 0;
+  }
+  .hero-cara .container{ position: relative; z-index: 1; }
+  .hero-cara-title{ font-size: 2.8rem; font-weight: 800; color: var(--dark-red); margin-bottom: 16px; }
+  .hero-cara-title .highlight{
+    background: var(--gradient-primary); -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero-cara-desc{ color: #7a4a4a; max-width: 620px; margin: 0 auto; font-size: 1.05rem; }
+
+  /* ==========================================================
+     TIMELINE SECTION
+  ========================================================== */
+  .timeline-section{ background: var(--white); padding-top: 40px; }
+
+  .timeline-wrap{
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 0;
+  }
+
+  .timeline-track{
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: rgba(163,29,29,0.1);
+    transform: translateX(-50%);
+    border-radius: 10px;
+  }
+  .timeline-fill{
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%; height: 0%;
+    background: var(--gradient-primary);
+    border-radius: 10px;
+    transition: height 0.15s ease-out;
+  }
+
+  .timeline-item{
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 60px;
+    min-height: 120px;
+  }
+  .timeline-item:last-child{ margin-bottom: 0; }
+
+  .timeline-item .timeline-content{
+    width: 44%;
+  }
+  .timeline-item.left .timeline-content{ margin-right: auto; text-align: right; padding-right: 40px; }
+  .timeline-item.right .timeline-content{ margin-left: auto; text-align: left; padding-left: 40px; }
+
+  .timeline-node{
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 3px solid rgba(163,29,29,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; color: var(--merah);
+    box-shadow: var(--shadow-soft);
+    z-index: 2;
+    transition: var(--transition);
+  }
+  .timeline-item.active .timeline-node{
+    background: var(--gradient-primary); color: var(--cream); border-color: transparent;
+    box-shadow: var(--shadow-soft-lg);
+    animation: pulseNode 1.8s ease-in-out infinite;
+  }
+  @keyframes pulseNode{
+    0%,100%{ box-shadow: 0 0 0 0 rgba(163,29,29,0.3), var(--shadow-soft-lg); }
+    50%{ box-shadow: 0 0 0 10px rgba(163,29,29,0), var(--shadow-soft-lg); }
+  }
+
+  .timeline-step-number{
+    position: absolute; top: -8px; right: -4px;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--dark-red); color: var(--cream);
+    font-size: 0.7rem; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: var(--shadow-soft);
+  }
+  .timeline-item.left .timeline-step-number{ left: -4px; right: auto; }
+
+  .timeline-card{
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-md);
+    padding: 22px 24px;
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition);
+    display: inline-block;
+    width: 100%;
+  }
+  .timeline-item.active .timeline-card{
+    box-shadow: var(--shadow-soft-lg);
+    border: 1px solid rgba(163,29,29,0.15);
+  }
+  .timeline-card:hover{ transform: translateY(-6px); box-shadow: var(--shadow-soft-lg); }
+
+  .timeline-card-title{ font-size: 1.05rem; font-weight: 800; color: var(--dark-red); margin-bottom: 6px; }
+  .timeline-card-desc{ font-size: 0.85rem; color: #8a5a5a; }
+
+  .timeline-illustration{
+    width: 46px; height: 46px; border-radius: 12px;
+    background: rgba(163,29,29,0.08); color: var(--merah);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; margin-bottom: 10px;
+  }
+  .timeline-item.left .timeline-illustration{ margin-left: auto; }
+  .timeline-item.active .timeline-illustration{ background: var(--gradient-primary); color: var(--cream); }
+
+  /* ==========================================================
+     CTA SECTION
+  ========================================================== */
+  .cta-section{
+    background: var(--gradient-primary); border-radius: var(--radius-lg);
+    max-width: 1200px; margin: 0 auto; padding: 70px 40px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-section::before, .cta-section::after{ content:''; position: absolute; border-radius: 50%; background: rgba(254,249,225,0.08); }
+  .cta-section::before{ width: 250px; height: 250px; top: -100px; left: -80px; }
+  .cta-section::after{ width: 320px; height: 320px; bottom: -140px; right: -100px; }
+  .cta-title{ color: var(--cream); font-size: 2.1rem; font-weight: 800; margin-bottom: 16px; position: relative; z-index: 1; }
+  .cta-desc{ color: rgba(254,249,225,0.85); max-width: 560px; margin: 0 auto 30px; position: relative; z-index: 1; }
+  .btn-cta{
+    background: var(--cream); color: var(--merah); padding: 15px 40px; border-radius: 50px;
+    font-weight: 700; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    position: relative; z-index: 1; transition: var(--transition);
+  }
+  .btn-cta:hover{ transform: translateY(-4px); color: var(--merah); box-shadow: 0 15px 40px rgba(0,0,0,0.25); }
+
+  /* ==========================================================
+     FOOTER (identik)
+  ========================================================== */
+  .footer-dk{ background: var(--dark-red); color: rgba(254,249,225,0.85); padding: 80px 0 0; margin-top: 60px; }
+  .footer-brand{ display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+  .footer-brand img{ height: 40px; width: 40px; border-radius: 50%; object-fit: contain; }
+  .footer-brand span{ font-size: 1.3rem; font-weight: 800; color: var(--cream); }
+  .footer-desc{ font-size: 0.9rem; opacity: 0.85; max-width: 320px; }
+  .footer-title{ color: var(--cream); font-weight: 700; font-size: 1rem; margin-bottom: 22px; text-transform: uppercase; letter-spacing: 1px; }
+  .footer-links{ list-style: none; padding: 0; margin: 0; }
+  .footer-links li{ margin-bottom: 12px; }
+  .footer-links a{ color: rgba(254,249,225,0.75); font-size: 0.9rem; transition: var(--transition); }
+  .footer-links a:hover{ color: var(--cream); padding-left: 6px; }
+  .footer-contact-item{ display: flex; gap: 12px; margin-bottom: 16px; font-size: 0.9rem; align-items: flex-start; }
+  .footer-contact-item i{ color: var(--beige); margin-top: 3px; }
+  .footer-social{ display: flex; gap: 12px; margin-top: 18px; }
+  .footer-social a{
+    width: 40px; height: 40px; border-radius: 50%; background: rgba(254,249,225,0.1);
+    display: flex; align-items: center; justify-content: center; color: var(--cream); transition: var(--transition);
+  }
+  .footer-social a:hover{ background: var(--beige); color: var(--dark-red); transform: translateY(-4px); }
+  .footer-bottom{ border-top: 1px solid rgba(254,249,225,0.15); margin-top: 50px; padding: 22px 0; text-align: center; font-size: 0.85rem; opacity: 0.75; }
+
+  #backToTop{
+    position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; border-radius: 50%;
+    background: var(--gradient-primary); color: var(--cream); display: flex; align-items: center;
+    justify-content: center; font-size: 1.2rem; border: none; box-shadow: var(--shadow-soft-lg);
+    opacity: 0; visibility: hidden; transform: translateY(20px); transition: var(--transition); z-index: 999;
+  }
+  #backToTop.visible{ opacity: 1; visibility: visible; transform: translateY(0); }
+  #backToTop:hover{ transform: translateY(-6px); }
+
+  /* ==========================================================
+     RESPONSIVE
+  ========================================================== */
+  @media (max-width: 767px){
+    .hero-cara-title{ font-size: 2rem; }
+    .section-title{ font-size: 1.9rem; }
+    .cta-title{ font-size: 1.6rem; }
+
+    .timeline-track{ left: 30px; }
+    .timeline-node{ left: 30px; width: 52px; height: 52px; font-size: 1.2rem; }
+    .timeline-item{ margin-bottom: 42px; }
+    .timeline-item .timeline-content,
+    .timeline-item.left .timeline-content,
+    .timeline-item.right .timeline-content{
+      width: calc(100% - 80px);
+      margin-left: 80px;
+      margin-right: 0;
+      text-align: left;
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .timeline-item.left .timeline-illustration{ margin-left: 0; }
+    .timeline-item.left .timeline-step-number{ left: auto; right: -4px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loading-screen">
+  <div class="loader-logo">DK</div>
+  <div class="loader-text">DapurKost</div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dapurkost" id="mainNavbar">
+  <div class="container">
+    <a class="navbar-brand navbar-brand-dk" href="home.html">
+      <img src="logo-dapurkost.png" alt="Logo DapurKost">
+      <span>DapurKost</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <i class="bi bi-list" style="font-size:1.8rem; color: var(--merah);"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="menu.html">Menu</a></li>
+        <li class="nav-item"><a class="nav-link" href="paket.html">Paket</a></li>
+        <li class="nav-item"><a class="nav-link active" href="cara-order.html">Cara Order</a></li>
+      </ul>
+      <a href="menu.html" class="btn btn-navbar-order btn-ripple">Pesan Sekarang</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero-cara">
+  <div class="container">
+    <span class="section-eyebrow reveal reveal-left show">Panduan Lengkap</span>
+    <h1 class="hero-cara-title reveal reveal-left show">Cara <span class="highlight">Order di DapurKost</span></h1>
+    <p class="hero-cara-desc reveal reveal-left show mx-auto">
+      Cuma 8 langkah mudah dari pilih menu sampai makanan sampai di depan pintu kostmu. Yuk simak alurnya di bawah ini.
+    </p>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="timeline-section">
+  <div class="container">
+
+    <div class="timeline-wrap" id="timelineWrap">
+      <div class="timeline-track">
+        <div class="timeline-fill" id="timelineFill"></div>
+      </div>
+
+      <!-- STEP 1 -->
+      <div class="timeline-item left">
+        <div class="timeline-content">
+          <div class="timeline-card">
+            <div class="timeline-illustration"><i class="bi bi-basket"></i></div>
+            <div class="timeline-card-title">Pilih Menu</div>
+            <p class="timeline-card-desc">Jelajahi berbagai menu harian mulai dari sarapan sampai dessert sesuai selera.</p>
+          </div>
+        </div>
+        <div class="timeline-node"><i class="bi bi-basket"></i><span class="timeline-step-number">1</span></div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="timeline-item right">
+        <div class="timeline-content">
+          <div class="timeline-card">
+            <div class="timeline-illustration"><i class="bi bi-calendar-week"></i></div>
+            <div class="timeline-card-title">Pilih Paket</div>
+            <p class="timeline-card-desc">Tentukan paket berlangganan: Harian, Mingguan, atau Bulanan sesuai kebutuhanmu.</p>
+          </div>
+        </div>
+        <div class="timeline-node"><i class="bi bi-calendar-week"></i><span class="timeline-step-number">2</span></div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="timeline-item left">
+        <div class="timeline-content">
+          <div class="timeline-card">
+            <div class="timeline-illustration"><i class="bi bi-box-arrow-in-right"></i></div>
+            <div class="timeline-card-title">Login</div>
+            <p class="timeline-card-desc">Masuk ke akunmu atau daftar baru dalam hitungan detik untuk melanjutkan pesanan.</p>
+          </div>
+        </div>
+        <div class="timeline-node"><i class="bi bi-box-arrow-in-right"></i><span class="timeline-step-number">3</span></div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div class="timeline-item right">
+        <div class="timeline-content">
+          <div class="timeline-card">
+            <div class="timeline-illustration"><i class="bi bi-cart-check"></i></div>
+            <div class="timeline-card-title">Checkout</div>
+            <p class="timeline-card-desc">Isi alamat kost, tanggal mulai pengiriman, dan periksa kembali ringkasan pesananmu.</p>
+          </div>
+        </div>
+        <div class="timeline-node"><i class="bi bi-cart-check"></i><span class="timeline-step-number">4</span></div>
+      </div>
+
+      <!-- STEP 5 -->
+      <div class="timeline-item left">
+        <div class="timeline-content">
+          <div class="timeline-card">
+            <div class="timeline-illustration"><i class="bi bi-credit-card"></i></div>
+            <div class="timeline-card-title">Pembayaran</div>
+            <p class="timeline-card-desc">Pilih metode pembayaran favoritmu dan unggah bukti transfer dengan mudah.</p>
+          </div>
+        </div>
+        <div class="timeline-node"><i class="bi bi-credit-card"></i><span class="timeline-step-number">5</span></div>
+      </div>
+
+      <!-- STEP 6 -->
+      <div class="timeline-item right">
+        <div class="timeline-content">
+          <div class="timeline-card">
+            <div class="timeline-illustration"><i class="bi bi-person-check"></i></div>
+            <div class="timeline-card-title">Admin Konfirmasi</div>
+            <p class="timeline-card-desc">Tim kami memverifikasi pembayaranmu secara cepat, biasanya kurang dari 30 menit.</p>
+          </div>
+        </div>
+        <div class="timeline-node"><i class="bi bi-person-check"></i><span class="timeline-step-number">6</span></div>
+      </div>
+
+      <!-- STEP 7 -->
+      <div class="timeline-item left">
+        <div class="timeline-content">
+          <div class="timeline-card">
+            <div class="timeline-illustration"><i class="bi bi-gear-fill"></i></div>
+            <div class="timeline-card-title">Pesanan Diproses</div>
+            <p class="timeline-card-desc">Dapur kami mulai menyiapkan makananmu dengan bahan segar dan penuh perhatian.</p>
+          </div>
+        </div>
+        <div class="timeline-node"><i class="bi bi-gear-fill"></i><span class="timeline-step-number">7</span></div>
+      </div>
+
+      <!-- STEP 8 -->
+      <div class="timeline-item right">
+        <div class="timeline-content">
+          <div class="timeline-card">
+            <div class="timeline-illustration"><i class="bi bi-house-check"></i></div>
+            <div class="timeline-card-title">Pesanan Sampai</div>
+            <p class="timeline-card-desc">Makanan hangat siap dinikmati, diantar langsung ke depan pintu kostmu tepat waktu.</p>
+          </div>
+        </div>
+        <div class="timeline-node"><i class="bi bi-house-check"></i><span class="timeline-step-number">8</span></div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section>
+  <div class="container">
+    <div class="cta-section reveal show">
+      <h2 class="cta-title">Siap Mencoba Kemudahannya?</h2>
+      <p class="cta-desc">Mulai dari langkah pertama sekarang dan rasakan kemudahan makan harian tanpa ribet bersama DapurKost.</p>
+      <a href="menu.html" class="btn btn-cta btn-ripple"><i class="bi bi-basket me-2"></i>Mulai Pesan Sekarang</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer-dk">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div class="footer-brand">
+          <img src="logo-dapurkost.png" alt="Logo DapurKost">
+          <span>DapurKost</span>
+        </div>
+        <p class="footer-desc">Solusi makan harian untuk mahasiswa dan anak kost. Rasa rumahan, harga bersahabat, antar tepat waktu.</p>
+        <div class="footer-social">
+          <a href="#"><i class="bi bi-instagram"></i></a>
+          <a href="#"><i class="bi bi-whatsapp"></i></a>
+          <a href="#"><i class="bi bi-tiktok"></i></a>
+          <a href="#"><i class="bi bi-facebook"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-6">
+        <div class="footer-title">Navigasi</div>
+        <ul class="footer-links">
+          <li><a href="home.html">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="tentang.html">Tentang Kami</a></li>
+          <li><a href="cara-order.html">Cara Order</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-title">Layanan</div>
+        <ul class="footer-links">
+          <li><a href="paket.html">Paket Harian</a></li>
+          <li><a href="paket.html">Paket Mingguan</a></li>
+          <li><a href="paket.html">Paket Bulanan</a></li>
+          <li><a href="#">Syarat &amp; Ketentuan</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-title">Kontak</div>
+        <div class="footer-contact-item"><i class="bi bi-geo-alt"></i><span>Jl. Sekeloa Dalam No. 12, Bandung</span></div>
+        <div class="footer-contact-item"><i class="bi bi-whatsapp"></i><span>0812-3456-7890</span></div>
+        <div class="footer-contact-item"><i class="bi bi-envelope"></i><span>halo@dapurkost.id</span></div>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 DapurKost. Seluruh hak cipta dilindungi.</div>
+  </div>
+</footer>
+
+<button id="backToTop"><i class="bi bi-arrow-up"></i></button>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  /* ==========================================================
+     1. LOADING SCREEN
+  ========================================================== */
+  window.addEventListener('load', function(){
+    const loader = document.getElementById('loading-screen');
+    setTimeout(function(){ loader.classList.add('hide'); }, 500);
+  });
+
+  /* ==========================================================
+     2. NAVBAR SCROLL + BACK TO TOP
+  ========================================================== */
+  const navbar = document.getElementById('mainNavbar');
+  const backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 40){ navbar.classList.add('scrolled'); } else { navbar.classList.remove('scrolled'); }
+    if(window.scrollY > 400){ backToTop.classList.add('visible'); } else { backToTop.classList.remove('visible'); }
+    updateTimelineProgress();
+  });
+  window.addEventListener('resize', updateTimelineProgress);
+  backToTop.addEventListener('click', function(){ window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+  /* ==========================================================
+     3. SMOOTH SCROLL
+  ========================================================== */
+  document.querySelectorAll('a[href^="#"]').forEach(function(anchor){
+    anchor.addEventListener('click', function(e){
+      const targetId = this.getAttribute('href');
+      if(targetId.length > 1){
+        const targetEl = document.querySelector(targetId);
+        if(targetEl){
+          e.preventDefault();
+          const top = targetEl.getBoundingClientRect().top + window.pageYOffset - 80;
+          window.scrollTo({ top: top, behavior: 'smooth' });
+        }
+      }
+    });
+  });
+
+  /* ==========================================================
+     4. RIPPLE BUTTON
+  ========================================================== */
+  document.addEventListener('click', function(e){
+    const btn = e.target.closest('.btn-ripple');
+    if(!btn) return;
+    const rect = btn.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    const size = Math.max(rect.width, rect.height);
+    ripple.className = 'ripple-span';
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+    ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+    btn.appendChild(ripple);
+    setTimeout(function(){ ripple.remove(); }, 600);
+  });
+
+  /* ==========================================================
+     5. SCROLL REVEAL TIMELINE ITEMS (KIRI/KANAN)
+  ========================================================== */
+  const timelineItems = document.querySelectorAll('.timeline-item');
+  timelineItems.forEach(function(item){
+    const content = item.querySelector('.timeline-content');
+    content.classList.add('reveal', item.classList.contains('left') ? 'reveal-left' : 'reveal-right');
+  });
+
+  const revealObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add('show');
+
+        const parentItem = entry.target.closest('.timeline-item');
+        if(parentItem){ parentItem.classList.add('active'); }
+
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.35 });
+
+  document.querySelectorAll('.timeline-content.reveal').forEach(function(el){
+    revealObserver.observe(el);
+  });
+
+  /* ==========================================================
+     6. PROGRESS LINE TIMELINE (BERDASARKAN SCROLL)
+  ========================================================== */
+  const timelineWrap = document.getElementById('timelineWrap');
+  const timelineFill = document.getElementById('timelineFill');
+
+  function updateTimelineProgress(){
+    const rect = timelineWrap.getBoundingClientRect();
+    const viewportCenter = window.innerHeight * 0.55;
+
+    let progress = (viewportCenter - rect.top) / rect.height;
+    progress = Math.max(0, Math.min(1, progress));
+
+    timelineFill.style.height = (progress * 100) + '%';
+  }
+
+  updateTimelineProgress();
+
+  /* ==========================================================
+     7. GENERAL SCROLL REVEAL (HERO & CTA)
+  ========================================================== */
+  const generalReveal = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add('show');
+        generalReveal.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal:not(.timeline-content)').forEach(function(el){
+    generalReveal.observe(el);
+  });
+</script>
+
+</body>
+</html>

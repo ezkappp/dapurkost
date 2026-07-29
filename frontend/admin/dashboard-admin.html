@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard Admin | DapurKost</title>
+
+<!-- Google Font -->
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+<!-- Bootstrap -->
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<!-- Bootstrap Icons -->
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+rel="stylesheet">
+<link href="assets/css/admin.css" rel="stylesheet">
+
+<style>
+
+/* :root dipindah ke assets/css/admin.css */
+
+*{
+
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+
+}
+
+body{
+
+background:var(--cream);
+color:var(--text);
+
+}
+
+/* ==========================
+SIDEBAR
+========================== */
+
+.sidebar{
+
+position:fixed;
+
+top:0;
+left:0;
+
+width:230px;
+
+height:100vh;
+
+background:linear-gradient(
+180deg,
+var(--red),
+var(--dark));
+
+padding:18px 20px;
+
+color:white;
+
+display:flex;
+
+flex-direction:column;
+
+}
+
+.logo{
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+margin-bottom:18px;
+
+}
+
+.logo-icon{
+
+width: 48px;
+height: 48px;
+
+border-radius:15px;
+
+background:rgba(255,255,255,.15);
+
+display:flex;
+
+justify-content:center;
+align-items:center;
+
+font-size:24px;
+
+overflow:hidden;
+
+}
+
+.logo-icon img{
+
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
+
+opacity:.8;
+
+font-size:13px;
+
+}
+
+/* ==========================
+MENU
+========================== */
+
+.sidebar-menu{
+
+margin-top:0px;
+
+}
+
+.sidebar-menu a{
+
+display:flex;
+
+align-items:center;
+
+gap:14px;
+
+text-decoration:none;
+
+color:white;
+
+padding:15px 18px;
+
+border-radius:14px;
+
+margin-bottom:8px;
+
+transition:.25s;
+
+font-weight:500;
+
+}
+
+.sidebar-menu a:hover{
+
+background:rgba(255,255,255,.15);
+
+transform:translateX(5px);
+
+}
+
+.sidebar-menu .active{
+
+background:white;
+
+color:var(--red);
+
+font-weight:600;
+
+}
+
+.sidebar-menu i{
+
+font-size:16px;
+
+width:22px;
+
+}
+
+/* ==========================
+LOGOUT
+========================== */
+
+.logout{
+
+margin-top:auto;
+
+}
+
+.logout a{
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+text-decoration:none;
+
+padding:15px 18px;
+
+border-radius:16px;
+
+background:rgba(255,255,255,.12);
+
+color:white;
+
+transition:.3s;
+
+}
+
+.logout a:hover{
+
+background:white;
+
+color:var(--red);
+
+}
+
+/* ==========================
+CONTENT
+========================== */
+
+.main{
+
+margin-left:230px;
+
+padding:24px 28px;
+
+}
+
+/* ==========================
+TOPBAR
+========================== */
+
+.topbar{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:35px;
+
+}
+
+.topbar h2{
+
+font-weight:700;
+
+font-size:34px;
+
+color:var(--dark);
+
+margin-bottom:5px;
+
+}
+
+.topbar p{
+
+margin:0;
+
+font-size:16px;
+
+color:var(--gray);
+
+}
+
+.admin-info{
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+}
+
+.notification{
+
+position:relative;
+
+font-size:24px;
+
+cursor:pointer;
+
+}
+
+.badge-notif{
+
+position:absolute;
+
+top:-6px;
+right:-6px;
+
+background:#dc3545;
+
+color:white;
+
+font-size:11px;
+
+width:18px;
+height:18px;
+
+border-radius:50%;
+
+display:flex;
+
+justify-content:center;
+align-items:center;
+
+}
+
+.avatar{
+
+width:42px;
+height:42px;
+
+border-radius:50%;
+
+background:var(--gold);
+
+display:flex;
+
+justify-content:center;
+align-items:center;
+
+font-size:24px;
+
+}
+
+/* Profile dropdown styles dipindah ke assets/css/admin.css (QA-02, dipakai bersama beberapa halaman) */
+
+/* ==========================
+CARD
+========================== */
+
+.dashboard-card{
+
+background:white;
+
+border:none;
+
+border-radius:18px;
+
+padding:18px;
+
+box-shadow:var(--shadow);
+
+transition:.25s;
+
+height:100%;
+
+}
+
+.dashboard-card:hover{
+
+transform:translateY(-4px);
+
+}
+
+.card-icon{
+
+width:52px;
+height:52px;
+
+border-radius:18px;
+
+display:flex;
+
+justify-content:center;
+align-items:center;
+
+font-size:22px;
+
+margin-bottom:14px;
+
+color:white;
+
+}
+
+.bg-red{
+
+background:var(--red);
+
+}
+
+.bg-gold{
+
+background:#D4A017;
+
+}
+
+.bg-green{
+
+background:#2E8B57;
+
+}
+
+.bg-blue{
+
+background:#3B82F6;
+
+}
+
+.dashboard-card h3{
+
+font-size:28px;
+
+font-weight:700;
+
+margin:4px 0;
+
+}
+
+.dashboard-card p{
+
+font-size:15px;
+margin:0;
+
+color:var(--gray);
+
+}
+
+.dashboard-card small{
+
+font-size:13px;
+
+}
+
+.table-card,
+.quick-card{
+
+margin-top:30px;
+
+background:white;
+
+border-radius:18px;
+
+padding:20px;
+
+box-shadow:var(--shadow);
+
+}
+
+.table-card h4,
+.quick-card h4{
+
+font-weight:700;
+
+font-size:22px;
+color:var(--dark);
+
+margin-bottom:20px;
+
+}
+.table th,
+.table td{
+
+padding:12px;
+
+font-size:14px;
+
+}
+
+.quick-card .btn{
+
+padding:10px;
+
+font-size:15px;
+
+border-radius:12px;
+
+}
+
+/* ==========================
+RESPONSIVE
+========================== */
+
+/* @media(max-width:992px) sidebar-collapse dipindah ke assets/css/admin.css */
+
+</style>
+
+
+</head>
+
+<body>
+
+<!-- TOAST NOTIFIKASI -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:1080;">
+  <div id="appToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="appToastBody">Berhasil.</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<div class="sidebar">
+
+    <!-- LOGO -->
+
+    <div class="logo">
+
+        <div class="logo-icon">
+
+            <img src="assets/img/logo.png" alt="Logo DapurKost">
+
+        </div>
+
+        <div>
+
+            <h3>DapurKost</h3>
+
+            <p>Admin Panel</p>
+
+        </div>
+
+    </div>
+
+    <!-- MENU -->
+
+    <div class="sidebar-menu">
+
+        <a href="#" class="active">
+
+            <i class="bi bi-grid-fill"></i>
+
+            <span>Dashboard</span>
+
+        </a>
+
+        <a href="kelola-menu.html">
+
+            <i class="bi bi-cup-hot"></i>
+
+            <span>Kelola Menu</span>
+
+        </a>
+
+        <a href="kelola-paket.html">
+
+            <i class="bi bi-box-seam"></i>
+
+            <span>Kelola Paket</span>
+
+        </a>
+
+        <a href="pesanan-admin.html">
+
+            <i class="bi bi-bag-check"></i>
+
+            <span>Pesanan</span>
+
+        </a>
+
+        <a href="pelanggan-admin.html">
+
+            <i class="bi bi-people-fill"></i>
+
+            <span>Pelanggan</span>
+
+        </a>
+
+        <a href="pembayaran-admin.html">
+
+            <i class="bi bi-credit-card-2-front"></i>
+
+            <span>Pembayaran</span>
+
+        </a>
+
+        <a href="laporan-admin.html">
+
+            <i class="bi bi-bar-chart-line"></i>
+
+            <span>Laporan</span>
+
+        </a>
+        <a href="ai-assistant.html"><i class="bi bi-stars"></i><span>AI Assistant</span></a>
+
+
+    </div>
+
+    <!-- LOGOUT -->
+
+    <div class="logout">
+
+        <a href="login-admin.html">
+
+            <i class="bi bi-box-arrow-right"></i>
+
+            <span>Logout</span>
+
+        </a>
+
+    </div>
+
+</div>
+
+<!-- ===========================
+MAIN CONTENT
+=========================== -->
+
+<div class="main">
+
+    <!-- TOPBAR -->
+
+    <div class="topbar">
+
+        <div>
+
+            <h2>
+
+                Halo, Admin 👋
+
+            </h2>
+
+            <p>
+
+                Selamat datang kembali di Dashboard DapurKost.
+
+            </p>
+
+        </div>
+
+        <div class="admin-info">
+
+            <div class="dropdown">
+                <div class="notification" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                    <i class="bi bi-bell"></i>
+                    <span class="badge-notif">4</span>
+                </div>
+                <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-2" style="width:340px; border-radius:16px;">
+                    <li class="d-flex justify-content-between align-items-center px-2 py-1">
+                        <span class="fw-semibold" style="color:var(--dark);">Notifikasi</span>
+                        <span class="badge bg-danger rounded-pill">4 Baru</span>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item rounded-3 py-2 mb-1" href="pesanan-admin.html">
+                            <div class="d-flex gap-2">
+                                <i class="bi bi-bag-check text-danger mt-1"></i>
+                                <div>
+                                    <div class="small fw-semibold">Pesanan baru #DK109</div>
+                                    <div class="small text-muted">Salsa Billa Aurilia memesan Paket Mingguan</div>
+                                    <div class="text-muted" style="font-size:11px;">5 menit lalu</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item rounded-3 py-2 mb-1" href="pembayaran-admin.html">
+                            <div class="d-flex gap-2">
+                                <i class="bi bi-credit-card-2-front text-danger mt-1"></i>
+                                <div>
+                                    <div class="small fw-semibold">Pembayaran menunggu verifikasi</div>
+                                    <div class="small text-muted">QRIS dari Fadila Putri Hartanto</div>
+                                    <div class="text-muted" style="font-size:11px;">20 menit lalu</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item rounded-3 py-2 mb-1" href="pelanggan-admin.html">
+                            <div class="d-flex gap-2">
+                                <i class="bi bi-person-plus text-danger mt-1"></i>
+                                <div>
+                                    <div class="small fw-semibold">Pelanggan baru mendaftar</div>
+                                    <div class="small text-muted">Ervina Riszan bergabung ke DapurKost</div>
+                                    <div class="text-muted" style="font-size:11px;">1 jam lalu</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item rounded-3 py-2" href="kelola-menu.html">
+                            <div class="d-flex gap-2">
+                                <i class="bi bi-exclamation-triangle text-danger mt-1"></i>
+                                <div>
+                                    <div class="small fw-semibold">Stok menu menipis</div>
+                                    <div class="small text-muted">"Ayam Bakar" hampir habis hari ini</div>
+                                    <div class="text-muted" style="font-size:11px;">2 jam lalu</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>    <a class="dropdown-item text-center small fw-semibold text-danger rounded-3"
+       href="#"
+       data-bs-toggle="modal"
+       data-bs-target="#notifikasiModal">
+        Lihat Semua Notifikasi
+    </a></li>
+                </ul>
+            </div>
+
+            <!-- PROFIL DROPDOWN -->
+            <div class="profile-wrap">
+                <div class="avatar" id="profileTrigger">👨🏻‍🍳</div>
+
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="profile-header">
+                        <div class="avatar" style="width:44px;height:44px;font-size:20px;">👨🏻‍🍳</div>
+                        <div>
+                            <strong>Admin DapurKost</strong>
+                            <small>Super Admin</small>
+                        </div>
+                    </div>
+
+                    <div class="profile-menu">
+                        <button type="button" class="profile-item" data-bs-toggle="modal" data-bs-target="#profilModal">
+                            <i class="bi bi-person-circle"></i> Profil Saya
+                        </button>
+                        <button type="button" class="profile-item" data-bs-toggle="modal" data-bs-target="#passwordModal">
+                            <i class="bi bi-shield-lock"></i> Ubah Password
+                        </button>
+                        <!-- QA-02: entri Logout di sini dihapus (logout ganda dengan sidebar). Logout cukup lewat sidebar. -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- CARD -->
+
+    <div class="row g-4">
+
+        <!-- MENU -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <div class="card-icon bg-red">
+
+                    <i class="bi bi-cup-hot"></i>
+
+                </div>
+
+                <p>Total Menu</p>
+
+                <h3>18</h3>
+
+                <small class="text-muted">
+
+                    Menu Aktif
+
+                </small>
+
+            </div>
+
+        </div>
+
+        <!-- PESANAN -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <div class="card-icon bg-gold">
+
+                    <i class="bi bi-bag-check"></i>
+
+                </div>
+
+                <p>Pesanan Hari Ini</p>
+
+                <h3>12</h3>
+
+                <small class="text-muted">
+
+                    Pesanan Baru
+
+                </small>
+
+            </div>
+
+        </div>
+
+        <!-- PELANGGAN -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <div class="card-icon bg-green">
+
+                    <i class="bi bi-people-fill"></i>
+
+                </div>
+
+                <p>Total Pelanggan</p>
+
+                <h3>58</h3>
+
+                <small class="text-muted">
+
+                    Customer
+
+                </small>
+
+            </div>
+
+        </div>
+
+        <!-- OMZET -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <div class="card-icon bg-blue">
+
+                    <i class="bi bi-wallet2"></i>
+
+                </div>
+
+                <p>Omzet Hari Ini</p>
+
+                <h3>
+
+                    Rp2,3jt
+
+                </h3>
+
+                <small class="text-muted">
+
+                    Pembayaran Berhasil
+
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- ==========================
+    ROW 2
+    ========================== -->
+
+    <div class="row mt-4">
+
+        <!-- =======================
+        PESANAN TERBARU
+        ======================== -->
+
+        <div class="col-lg-8">
+
+            <div class="table-card">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+
+                    <h4 class="mb-0">Pesanan Terbaru</h4>
+
+                    <a href="pesanan-admin.html"
+                        class="btn btn-outline-danger btn-sm">
+
+                        Lihat Semua
+
+                    </a>
+
+                </div>
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>ID</th>
+                                <th>Pelanggan</th>
+                                <th>Paket</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+
+                                <td>#DK001</td>
+
+                                <td>Salsa</td>
+
+                                <td>Paket Hemat</td>
+
+                                <td>
+
+                                    <span class="badge bg-warning text-dark">
+
+                                        Menunggu
+
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <a href="pesanan-admin.html" class="btn btn-sm btn-danger">
+
+                                        Detail
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>#DK002</td>
+
+                                <td>Rina</td>
+
+                                <td>Paket Bulanan</td>
+
+                                <td>
+
+                                    <span class="badge bg-primary">
+
+                                        Diproses
+
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <a href="pesanan-admin.html" class="btn btn-sm btn-danger">
+
+                                        Detail
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>#DK003</td>
+
+                                <td>Andi</td>
+
+                                <td>Paket Premium</td>
+
+                                <td>
+
+                                    <span class="badge bg-success">
+
+                                        Dikirim
+
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <a href="pesanan-admin.html" class="btn btn-sm btn-danger">
+
+                                        Detail
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- =======================
+        QUICK ACTION
+        ======================== -->
+
+        <div class="col-lg-4">
+
+            <div class="quick-card">
+
+                <h4>Quick Action</h4>
+
+                <div class="d-grid gap-3 mt-4">
+
+                    <a href="kelola-menu.html"
+                        class="btn btn-danger">
+
+                        <i class="bi bi-plus-circle me-2"></i>
+
+                        Tambah Menu
+
+                    </a>
+
+                    <a href="kelola-paket.html"
+                        class="btn btn-outline-danger">
+
+                        <i class="bi bi-box-seam me-2"></i>
+
+                        Tambah Paket
+
+                    </a>
+
+                    <a href="pesanan-admin.html"
+                        class="btn btn-outline-dark">
+
+                        <i class="bi bi-bag-check me-2"></i>
+
+                        Lihat Pesanan
+
+                    </a>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- =======================
+    FOOTER
+    ======================== -->
+
+    <footer class="text-center mt-5 text-muted">
+
+        © 2026 DapurKost Admin Panel
+
+    </footer>
+
+</div>
+<!-- MODAL SEMUA NOTIFIKASI -->
+<div class="modal fade" id="notifikasiModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content" style="border-radius:18px;">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-bell-fill text-danger me-2"></i>
+                    Semua Notifikasi
+                </h5>
+
+                <button class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <h6 class="text-muted mb-3">Hari Ini</h6>
+
+                <div class="list-group mb-4">
+
+                    <div class="list-group-item notif-item">
+                        <div class="fw-semibold">
+                            🛒 Pesanan Baru #DK109
+                        </div>
+                        <small class="text-muted">
+                            Salsa Billa Aurilia memesan Paket Mingguan
+                        </small>
+                        <br>
+                        <small class="text-secondary">
+                            5 menit lalu
+                        </small>
+                    </div>
+
+                    <div class="list-group-item notif-item">
+                        <div class="fw-semibold">
+                            💳 Pembayaran Menunggu Verifikasi
+                        </div>
+                        <small class="text-muted">
+                            QRIS dari Fadila Putri Hartanto
+                        </small>
+                        <br>
+                        <small class="text-secondary">
+                            20 menit lalu
+                        </small>
+                    </div>
+
+                    <div class="list-group-item notif-item">
+                        <div class="fw-semibold">
+                            👤 Pelanggan Baru
+                        </div>
+                        <small class="text-muted">
+                            Ervina Riszan bergabung ke DapurKost
+                        </small>
+                        <br>
+                        <small class="text-secondary">
+                            1 jam lalu
+                        </small>
+                    </div>
+
+                    <div class="list-group-item notif-item">
+                        <div class="fw-semibold">
+                            ⚠️ Stok Menu Menipis
+                        </div>
+                        <small class="text-muted">
+                            "Ayam Bakar" hampir habis hari ini
+                        </small>
+                        <br>
+                        <small class="text-secondary">
+                            2 jam lalu
+                        </small>
+                    </div>
+
+                </div>
+
+                <h6 class="text-muted mb-3">Kemarin</h6>
+
+                <div class="list-group mb-4">
+
+                    <div class="list-group-item notif-item">
+                        <div class="fw-semibold">
+                            ✅ Pesanan #DK108 selesai
+                        </div>
+                        <small class="text-muted">
+                            Pesanan milik Rina telah berhasil diselesaikan.
+                        </small>
+                    </div>
+
+                    <div class="list-group-item notif-item">
+                        <div class="fw-semibold">
+                            💰 Pembayaran Berhasil Diverifikasi
+                        </div>
+                        <small class="text-muted">
+                            Pembayaran Paket Bulanan dari Andi berhasil diverifikasi.
+                        </small>
+                    </div>
+
+                </div>
+
+                <h6 class="text-muted mb-3">Minggu Ini</h6>
+
+                <div class="list-group">
+
+                    <div class="list-group-item notif-item">
+                        <div class="fw-semibold">
+                            🍱 Menu Baru Ditambahkan
+                        </div>
+                        <small class="text-muted">
+                            Menu "Nasi Goreng Spesial" berhasil ditambahkan.
+                        </small>
+                    </div>
+
+                    <div class="list-group-item notif-item">
+                        <div class="fw-semibold">
+                            📦 Paket Premium Diperbarui
+                        </div>
+                        <small class="text-muted">
+                            Harga Paket Premium berhasil diperbarui.
+                        </small>
+                    </div>
+
+                    <div class="list-group-item notif-item">
+                        <div class="fw-semibold">
+                            ⭐ Rating Baru
+                        </div>
+                        <small class="text-muted">
+                            Pelanggan memberikan rating 5⭐ untuk Paket Mingguan.
+                        </small>
+                    </div>
+
+                    <div class="list-group-item notif-item">
+                        <div class="fw-semibold">
+                            📊 Laporan Bulanan Siap
+                        </div>
+                        <small class="text-muted">
+                            Laporan omzet bulan Juni berhasil dibuat.
+                        </small>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary"
+                        data-bs-dismiss="modal">
+                    Tutup
+                </button>
+
+                <button class="btn btn-danger" id="readAllNotif">
+                Tandai Semua Sudah Dibaca
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- MODAL PROFIL SAYA -->
+<div class="modal fade" id="profilModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" style="border-radius:18px;">
+      <form id="profilForm">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-person-circle me-2"></i>Profil Saya</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Nama</label>
+            <input type="text" class="form-control" value="Admin DapurKost" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" value="admin@dapurkost.id" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Nomor HP</label>
+            <input type="text" class="form-control" value="0812-3456-7890" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-danger">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL UBAH PASSWORD -->
+<div class="modal fade" id="passwordModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" style="border-radius:18px;">
+      <form id="passwordForm">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-shield-lock me-2"></i>Ubah Password</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Password Lama</label>
+            <input type="password" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Password Baru</label>
+            <input type="password" class="form-control" id="passBaru" required minlength="6">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Konfirmasi Password Baru</label>
+            <input type="password" class="form-control" id="passKonfirmasi" required minlength="6">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-danger">Simpan Password</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL KONFIRMASI LOGOUT -->
+<div class="modal fade" id="logoutModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius:18px;">
+      <div class="modal-body text-center p-4">
+        <i class="bi bi-box-arrow-right text-danger" style="font-size:42px;"></i>
+        <h5 class="mt-3 mb-1">Keluar dari Admin Panel?</h5>
+        <p class="text-muted mb-4">Anda perlu login kembali untuk mengakses dashboard.</p>
+        <div class="d-flex gap-2 justify-content-center">
+          <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Batal</button>
+          <a href="login-admin.html" class="btn btn-danger px-4">Ya, Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Bootstrap JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/admin.js"></script>
+
+<script>
+
+
+/* ==================== PROFIL DROPDOWN ==================== */
+const profileTrigger = document.getElementById("profileTrigger");
+const profileDropdown = document.getElementById("profileDropdown");
+
+profileTrigger.addEventListener("click", function(e){
+    e.stopPropagation();
+    profileDropdown.classList.toggle("show");
+});
+
+// Tutup dropdown kalau klik di luar
+document.addEventListener("click", function(e){
+    if(!profileDropdown.contains(e.target) && e.target !== profileTrigger){
+        profileDropdown.classList.remove("show");
+    }
+});
+
+// QA-02: tutup dropdown saat item di dalamnya membuka modal (Profil Saya / Ubah Password),
+// supaya dropdown tidak "nyangkut" terbuka di belakang modal.
+document.querySelectorAll("#profileDropdown .profile-item").forEach(function(item){
+    item.addEventListener("click", function(){
+        profileDropdown.classList.remove("show");
+    });
+});
+
+/* ==================== SIMPAN PROFIL ==================== */
+document.getElementById("profilForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    bootstrap.Modal.getInstance(document.getElementById("profilModal")).hide();
+    tampilkanToast("Profil berhasil diperbarui!", "success");
+});
+
+/* ==================== SIMPAN PASSWORD ==================== */
+document.getElementById("passwordForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const baru = document.getElementById("passBaru").value;
+    const konfirmasi = document.getElementById("passKonfirmasi").value;
+
+    if(baru !== konfirmasi){
+        tampilkanToast("Password baru dan konfirmasi tidak sama!", "danger");
+        return;
+    }
+
+    document.getElementById("passwordForm").reset();
+    bootstrap.Modal.getInstance(document.getElementById("passwordModal")).hide();
+    tampilkanToast("Password berhasil diubah!", "success");
+});
+
+
+</script>
+
+</body>
+
+</html>

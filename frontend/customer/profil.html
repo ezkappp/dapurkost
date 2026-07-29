@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil Saya - DapurKost</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  /* ==========================================================
+     ROOT VARIABLES (konsisten dengan halaman lain)
+  ========================================================== */
+  :root{
+    --cream: #FEF9E1;
+    --beige: #E5D0AC;
+    --merah: #A31D1D;
+    --dark-red: #6D2323;
+    --white: #ffffff;
+    --gradient-primary: linear-gradient(135deg, var(--merah) 0%, var(--dark-red) 100%);
+    --shadow-soft: 0 10px 30px rgba(109, 35, 35, 0.12);
+    --shadow-soft-lg: 0 20px 50px rgba(109, 35, 35, 0.18);
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 10px;
+    --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--cream);
+    color: var(--dark-red);
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+  h1,h2,h3,h4,h5,h6{ font-family: 'Poppins', sans-serif; font-weight: 700; }
+  a{ text-decoration: none; }
+  ::selection{ background: var(--merah); color: var(--cream); }
+  ::-webkit-scrollbar{ width: 10px; }
+  ::-webkit-scrollbar-track{ background: var(--cream); }
+  ::-webkit-scrollbar-thumb{ background: var(--merah); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover{ background: var(--dark-red); }
+
+  /* ==========================================================
+     LOADING SCREEN
+  ========================================================== */
+  #loading-screen{
+    position: fixed; inset: 0; background: var(--gradient-primary); z-index: 99999;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+  #loading-screen.hide{ opacity: 0; visibility: hidden; pointer-events: none; }
+  .loader-logo{
+    width: 80px; height: 80px; border-radius: 50%; background: var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size: 1.8rem; color: var(--merah);
+    margin-bottom: 20px; animation: pulseLogo 1.4s ease-in-out infinite;
+  }
+  @keyframes pulseLogo{
+    0%{ transform: scale(1); box-shadow: 0 0 0 0 rgba(254,249,225,0.5); }
+    70%{ transform: scale(1.08); box-shadow: 0 0 0 20px rgba(254,249,225,0); }
+    100%{ transform: scale(1); box-shadow: 0 0 0 0 rgba(254,249,225,0); }
+  }
+  .loader-text{ color: var(--cream); font-weight: 500; letter-spacing: 2px; font-size: 0.9rem; text-transform: uppercase; opacity: 0.9; }
+  .loader-bar{ width: 160px; height: 4px; background: rgba(254,249,225,0.25); border-radius: 10px; margin-top: 16px; overflow: hidden; }
+  .loader-bar::after{
+    content:''; display:block; width: 40%; height: 100%; background: var(--cream); border-radius: 10px;
+    animation: loaderMove 1.2s ease-in-out infinite;
+  }
+  @keyframes loaderMove{ 0%{ margin-left: -40%; } 100%{ margin-left: 100%; } }
+
+  /* ==========================================================
+     NAVBAR (identik)
+  ========================================================== */
+  .navbar-dapurkost{
+    position: sticky; top: 0; z-index: 1000; padding: 18px 0;
+    background: rgba(254, 249, 225, 0.65);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border-bottom: 1px solid rgba(163, 29, 29, 0.08);
+    transition: var(--transition);
+  }
+  .navbar-dapurkost.scrolled{ padding: 10px 0; background: rgba(254, 249, 225, 0.9); box-shadow: var(--shadow-soft); }
+  .navbar-brand-dk{ display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.4rem; color: var(--merah) !important; }
+  .navbar-brand-dk img{ height: 42px; width: 42px; object-fit: contain; border-radius: 50%; transition: var(--transition); }
+  .navbar-brand-dk span{ background: var(--gradient-primary); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .navbar-nav .nav-link{
+    font-weight: 500; color: var(--dark-red) !important; margin: 0 12px;
+    position: relative; padding: 6px 2px !important; transition: var(--transition);
+  }
+  .navbar-nav .nav-link::after{
+    content: ''; position: absolute; left: 0; bottom: 0; width: 0%; height: 2px;
+    background: var(--gradient-primary); border-radius: 10px; transition: width 0.3s ease;
+  }
+  .navbar-nav .nav-link:hover::after, .navbar-nav .nav-link.active::after{ width: 100%; }
+  .navbar-nav .nav-link:hover{ color: var(--merah) !important; }
+  .btn-navbar-order{
+    background: var(--gradient-primary); color: var(--cream) !important; padding: 10px 26px;
+    border-radius: 50px; font-weight: 600; font-size: 0.92rem; box-shadow: var(--shadow-soft);
+    border: none; transition: var(--transition); position: relative; overflow: hidden;
+  }
+  .btn-navbar-order:hover{ transform: translateY(-3px); box-shadow: var(--shadow-soft-lg); color: var(--cream) !important; }
+  .navbar-toggler{ border: none; box-shadow: none !important; }
+
+  /* ==========================================================
+     RIPPLE BUTTON
+  ========================================================== */
+  .btn-ripple{ position: relative; overflow: hidden; }
+  .ripple-span{
+    position: absolute; border-radius: 50%; background: rgba(255,255,255,0.55);
+    transform: scale(0); animation: rippleAnim 0.6s linear; pointer-events: none;
+  }
+  @keyframes rippleAnim{ to{ transform: scale(3); opacity: 0; } }
+
+  /* ==========================================================
+     PAGE WRAPPER
+  ========================================================== */
+  .profil-main{ padding: 50px 0 100px; }
+  .profil-container{ max-width: 640px; margin: 0 auto; }
+
+  /* ==========================================================
+     PROFILE HEADER CARD
+  ========================================================== */
+  .profile-header-card{
+    background: var(--gradient-primary);
+    border-radius: var(--radius-lg);
+    padding: 40px 30px;
+    text-align: center;
+    color: var(--cream);
+    box-shadow: var(--shadow-soft-lg);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 26px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUpProfile 0.7s ease forwards;
+  }
+  @keyframes fadeUpProfile{ to{ opacity: 1; transform: translateY(0); } }
+
+  .profile-header-card::before{
+    content:''; position: absolute; width: 260px; height: 260px;
+    background: rgba(254,249,225,0.08); border-radius: 50%; top: -120px; right: -80px;
+  }
+  .profile-header-card::after{
+    content:''; position: absolute; width: 200px; height: 200px;
+    background: rgba(254,249,225,0.08); border-radius: 50%; bottom: -100px; left: -60px;
+  }
+
+  .profile-avatar-wrap{
+    position: relative; width: 108px; height: 108px; margin: 0 auto 18px; z-index: 1;
+  }
+  .profile-avatar{
+    width: 108px; height: 108px; border-radius: 50%;
+    object-fit: cover; border: 4px solid rgba(254,249,225,0.4);
+    box-shadow: var(--shadow-soft-lg);
+  }
+  .profile-avatar-badge{
+    position: absolute; bottom: 2px; right: 2px;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--cream); color: var(--merah);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; box-shadow: var(--shadow-soft);
+    border: 2px solid var(--merah);
+  }
+
+  .profile-name{ font-size: 1.4rem; font-weight: 800; margin-bottom: 4px; position: relative; z-index: 1; }
+  .profile-membership{
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(254,249,225,0.15); padding: 5px 14px; border-radius: 50px;
+    font-size: 0.74rem; font-weight: 700; margin-bottom: 20px; position: relative; z-index: 1;
+  }
+
+  .profile-info-list{ text-align: left; position: relative; z-index: 1; margin-bottom: 24px; }
+  .profile-info-item{
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 16px; background: rgba(254,249,225,0.1);
+    border-radius: var(--radius-sm); margin-bottom: 10px;
+  }
+  .profile-info-item i{ font-size: 1.05rem; opacity: 0.85; width: 20px; text-align: center; }
+  .profile-info-item .info-content{ min-width: 0; }
+  .profile-info-item .info-label{ font-size: 0.7rem; opacity: 0.75; }
+  .profile-info-item .info-value{ font-size: 0.88rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .profile-header-actions{
+    display: flex; gap: 12px; position: relative; z-index: 1;
+  }
+  .btn-edit-profile{
+    flex: 1; background: var(--cream); color: var(--merah); border: none;
+    padding: 13px; border-radius: 50px; font-weight: 700; font-size: 0.88rem;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: var(--transition);
+  }
+  .btn-edit-profile:hover{ transform: translateY(-3px); box-shadow: var(--shadow-soft); }
+  .btn-logout-profile{
+    flex: 1; background: rgba(254,249,225,0.12); color: var(--cream);
+    border: 1.5px solid rgba(254,249,225,0.4);
+    padding: 13px; border-radius: 50px; font-weight: 700; font-size: 0.88rem;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: var(--transition);
+  }
+  .btn-logout-profile:hover{ background: rgba(254,249,225,0.22); transform: translateY(-3px); }
+
+  /* ==========================================================
+     MENU LIST
+  ========================================================== */
+  .menu-list-card{
+    background: rgba(255,255,255,0.65);
+    backdrop-filter: blur(12px);
+    border-radius: var(--radius-lg);
+    padding: 12px;
+    box-shadow: var(--shadow-soft);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUpProfile 0.7s ease forwards;
+    animation-delay: 0.15s;
+  }
+  .menu-list-item{
+    display: flex; align-items: center; gap: 16px;
+    padding: 16px 14px; border-radius: var(--radius-md);
+    transition: var(--transition); cursor: pointer;
+  }
+  .menu-list-item:hover{ background: rgba(163,29,29,0.06); transform: translateX(4px); }
+  .menu-list-item + .menu-list-item{ border-top: 1px dashed rgba(163,29,29,0.1); }
+
+  .menu-item-icon{
+    width: 44px; height: 44px; border-radius: 14px;
+    background: var(--gradient-primary); color: var(--cream);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.15rem; flex-shrink: 0;
+  }
+  .menu-item-content{ flex-grow: 1; min-width: 0; }
+  .menu-item-title{ font-weight: 700; font-size: 0.94rem; color: var(--dark-red); }
+  .menu-item-desc{ font-size: 0.78rem; color: #8a5a5a; }
+  .menu-item-chevron{ color: #c99; font-size: 1rem; flex-shrink: 0; }
+
+  /* ==========================================================
+     MODAL EDIT PROFIL
+  ========================================================== */
+  .modal-content-dk{
+    border-radius: var(--radius-lg); border: none; overflow: hidden; box-shadow: var(--shadow-soft-lg);
+  }
+  .modal-header-dk{
+    background: var(--gradient-primary); color: var(--cream); border: none; padding: 22px 28px;
+  }
+  .modal-header-dk .btn-close{ filter: invert(1) grayscale(100%) brightness(200%); }
+  .modal-body-dk{ padding: 28px; }
+
+  .edit-avatar-wrap{
+    position: relative; width: 100px; height: 100px; margin: 0 auto 24px;
+  }
+  .edit-avatar-preview{
+    width: 100px; height: 100px; border-radius: 50%; object-fit: cover;
+    border: 3px solid rgba(163,29,29,0.15); box-shadow: var(--shadow-soft);
+  }
+  .edit-avatar-upload-btn{
+    position: absolute; bottom: 0; right: 0; width: 34px; height: 34px; border-radius: 50%;
+    background: var(--gradient-primary); color: var(--cream); border: 3px solid var(--white);
+    display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
+    cursor: pointer; transition: var(--transition);
+  }
+  .edit-avatar-upload-btn:hover{ transform: scale(1.1); }
+  #editAvatarInput{ display: none; }
+
+  .form-group-dk{ margin-bottom: 18px; }
+  .form-label-dk{ display: block; font-size: 0.85rem; font-weight: 600; color: var(--dark-red); margin-bottom: 7px; }
+  .form-control-dk{
+    width: 100%; padding: 12px 16px; border-radius: var(--radius-sm);
+    border: 1.5px solid rgba(163,29,29,0.15); background: rgba(255,255,255,0.8);
+    font-family: 'Poppins', sans-serif; font-size: 0.9rem; color: var(--dark-red);
+    transition: var(--transition);
+  }
+  textarea.form-control-dk{ resize: none; min-height: 76px; }
+  .form-control-dk:focus{
+    outline: none; border-color: var(--merah); background: var(--white);
+    box-shadow: 0 0 0 4px rgba(163,29,29,0.08);
+  }
+  .form-control-dk.is-invalid{ border-color: #d9534f; }
+  .error-message{ color: #d9534f; font-size: 0.76rem; margin-top: 5px; display: none; align-items: center; gap: 5px; }
+  .error-message.show{ display: flex; }
+
+  .btn-save-profile{
+    width: 100%; padding: 14px; border-radius: 50px; border: none;
+    background: var(--gradient-primary); color: var(--cream); font-weight: 700; font-size: 0.94rem;
+    display: flex; align-items: center; justify-content: center; gap: 10px; transition: var(--transition);
+  }
+  .btn-save-profile:hover{ transform: translateY(-2px); box-shadow: var(--shadow-soft); }
+  .btn-save-profile:disabled{ opacity: 0.75; cursor: not-allowed; transform: none; }
+
+  .spinner-dk{
+    width: 17px; height: 17px; border: 2.5px solid rgba(254,249,225,0.4);
+    border-top-color: var(--cream); border-radius: 50%;
+    animation: spinDK 0.7s linear infinite; display: none;
+  }
+  .spinner-dk.show{ display: inline-block; }
+  @keyframes spinDK{ to{ transform: rotate(360deg); } }
+
+  /* ==========================================================
+     MODAL LOGOUT
+  ========================================================== */
+  .logout-modal-icon{
+    width: 70px; height: 70px; border-radius: 50%;
+    background: rgba(163,29,29,0.1); color: var(--merah);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem; margin: 0 auto 18px;
+  }
+
+  .toast-dk{
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+    background: var(--gradient-primary); color: var(--cream); padding: 16px 28px; border-radius: 50px;
+    box-shadow: var(--shadow-soft-lg); display: flex; align-items: center; gap: 10px;
+    font-weight: 600; font-size: 0.9rem; z-index: 9999; opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4,0,0.2,1); pointer-events: none;
+  }
+  .toast-dk.show{ transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* ==========================================================
+     FOOTER (identik)
+  ========================================================== */
+  .footer-dk{ background: var(--dark-red); color: rgba(254,249,225,0.85); padding: 70px 0 0; margin-top: 40px; }
+  .footer-brand{ display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+  .footer-brand img{ height: 40px; width: 40px; border-radius: 50%; object-fit: contain; }
+  .footer-brand span{ font-size: 1.3rem; font-weight: 800; color: var(--cream); }
+  .footer-desc{ font-size: 0.9rem; opacity: 0.85; max-width: 320px; }
+  .footer-title{ color: var(--cream); font-weight: 700; font-size: 1rem; margin-bottom: 22px; text-transform: uppercase; letter-spacing: 1px; }
+  .footer-links{ list-style: none; padding: 0; margin: 0; }
+  .footer-links li{ margin-bottom: 12px; }
+  .footer-links a{ color: rgba(254,249,225,0.75); font-size: 0.9rem; transition: var(--transition); }
+  .footer-links a:hover{ color: var(--cream); padding-left: 6px; }
+  .footer-contact-item{ display: flex; gap: 12px; margin-bottom: 16px; font-size: 0.9rem; align-items: flex-start; }
+  .footer-contact-item i{ color: var(--beige); margin-top: 3px; }
+  .footer-social{ display: flex; gap: 12px; margin-top: 18px; }
+  .footer-social a{
+    width: 40px; height: 40px; border-radius: 50%; background: rgba(254,249,225,0.1);
+    display: flex; align-items: center; justify-content: center; color: var(--cream); transition: var(--transition);
+  }
+  .footer-social a:hover{ background: var(--beige); color: var(--dark-red); transform: translateY(-4px); }
+  .footer-bottom{ border-top: 1px solid rgba(254,249,225,0.15); margin-top: 50px; padding: 22px 0; text-align: center; font-size: 0.85rem; opacity: 0.75; }
+
+  #backToTop{
+    position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; border-radius: 50%;
+    background: var(--gradient-primary); color: var(--cream); display: flex; align-items: center;
+    justify-content: center; font-size: 1.2rem; border: none; box-shadow: var(--shadow-soft-lg);
+    opacity: 0; visibility: hidden; transform: translateY(20px); transition: var(--transition); z-index: 999;
+  }
+  #backToTop.visible{ opacity: 1; visibility: visible; transform: translateY(0); }
+  #backToTop:hover{ transform: translateY(-6px); }
+
+  /* ==========================================================
+     RESPONSIVE
+  ========================================================== */
+  @media (max-width: 767px){
+    .profile-header-card{ padding: 32px 22px; }
+    .profile-header-actions{ flex-direction: column; }
+    .menu-item-desc{ display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loading-screen">
+  <div class="loader-logo">DK</div>
+  <div class="loader-text">DapurKost</div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dapurkost" id="mainNavbar">
+  <div class="container">
+    <a class="navbar-brand navbar-brand-dk" href="home.html">
+      <img src="logo-dapurkost.png" alt="Logo DapurKost">
+      <span>DapurKost</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <i class="bi bi-list" style="font-size:1.8rem; color: var(--merah);"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="menu.html">Menu</a></li>
+        <li class="nav-item"><a class="nav-link" href="paket.html">Paket</a></li>
+        <li class="nav-item"><a class="nav-link" href="cara-order.html">Cara Order</a></li>
+      </ul>
+      <a href="profil.html" class="btn btn-navbar-order btn-ripple">Akun saya</a>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="profil-main">
+  <div class="container">
+    <div class="profil-container">
+
+      <!-- PROFILE HEADER -->
+      <div class="profile-header-card">
+        <div class="profile-avatar-wrap">
+          <img src="assets/images/user-avatar.png" alt="Foto Profil" class="profile-avatar" id="displayAvatar">
+          <div class="profile-avatar-badge"><i class="bi bi-patch-check-fill"></i></div>
+        </div>
+        <div class="profile-name" id="displayName">Rani Anjani</div>
+        <div class="profile-membership"><i class="bi bi-stars"></i> Member Sejak Jan 2026</div>
+
+        <div class="profile-info-list">
+          <div class="profile-info-item">
+            <i class="bi bi-envelope"></i>
+            <div class="info-content">
+              <div class="info-label">Email</div>
+              <div class="info-value" id="displayEmail">rani.anjani@email.com</div>
+            </div>
+          </div>
+          <div class="profile-info-item">
+            <i class="bi bi-phone"></i>
+            <div class="info-content">
+              <div class="info-label">No. HP</div>
+              <div class="info-value" id="displayHp">0812-3456-7890</div>
+            </div>
+          </div>
+          <div class="profile-info-item">
+            <i class="bi bi-geo-alt"></i>
+            <div class="info-content">
+              <div class="info-label">Alamat</div>
+              <div class="info-value" id="displayAlamat">Kost Melati Asri, Jl. Sekeloa Dalam No. 12, Bandung</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-header-actions">
+          <button type="button" class="btn-edit-profile btn-ripple" data-bs-toggle="modal" data-bs-target="#modalEditProfile">
+            <i class="bi bi-pencil-square"></i> Edit Profil
+          </button>
+          <button type="button" class="btn-logout-profile btn-ripple" data-bs-toggle="modal" data-bs-target="#modalLogout">
+            <i class="bi bi-box-arrow-right"></i> Logout
+          </button>
+        </div>
+      </div>
+
+      <!-- MENU LIST -->
+      <div class="menu-list-card">
+        <a href="checkout.html" class="menu-list-item">
+          <div class="menu-item-icon"><i class="bi bi-geo-alt"></i></div>
+          <div class="menu-item-content">
+            <div class="menu-item-title">Alamat</div>
+            <div class="menu-item-desc">Kelola alamat pengiriman kostmu</div>
+          </div>
+          <i class="bi bi-chevron-right menu-item-chevron"></i>
+        </a>
+        <a href="pembayaran.html" class="menu-list-item">
+          <div class="menu-item-icon"><i class="bi bi-credit-card"></i></div>
+          <div class="menu-item-content">
+            <div class="menu-item-title">Metode Pembayaran</div>
+            <div class="menu-item-desc">Kelola rekening dan e-wallet</div>
+          </div>
+          <i class="bi bi-chevron-right menu-item-chevron"></i>
+        </a>
+        <div class="menu-list-item" id="menuKeamanan">
+          <div class="menu-item-icon"><i class="bi bi-shield-lock"></i></div>
+          <div class="menu-item-content">
+            <div class="menu-item-title">Keamanan</div>
+            <div class="menu-item-desc">Ubah password dan keamanan akun</div>
+          </div>
+          <i class="bi bi-chevron-right menu-item-chevron"></i>
+        </div>
+        <a href="riwayat.html" class="menu-list-item">
+          <div class="menu-item-icon"><i class="bi bi-clock-history"></i></div>
+          <div class="menu-item-content">
+            <div class="menu-item-title">Riwayat</div>
+            <div class="menu-item-desc">Lihat pesanan aktif dan riwayat</div>
+          </div>
+          <i class="bi bi-chevron-right menu-item-chevron"></i>
+        </a>
+        <a href="tentang.html" class="menu-list-item">
+          <div class="menu-item-icon"><i class="bi bi-info-circle"></i></div>
+          <div class="menu-item-content">
+            <div class="menu-item-title">Tentang</div>
+            <div class="menu-item-desc">Info aplikasi dan layanan DapurKost</div>
+          </div>
+          <i class="bi bi-chevron-right menu-item-chevron"></i>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer-dk">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div class="footer-brand">
+          <img src="logo-dapurkost.png" alt="Logo DapurKost">
+          <span>DapurKost</span>
+        </div>
+        <p class="footer-desc">Solusi makan harian untuk mahasiswa dan anak kost. Rasa rumahan, harga bersahabat, antar tepat waktu.</p>
+        <div class="footer-social">
+          <a href="#"><i class="bi bi-instagram"></i></a>
+          <a href="#"><i class="bi bi-whatsapp"></i></a>
+          <a href="#"><i class="bi bi-tiktok"></i></a>
+          <a href="#"><i class="bi bi-facebook"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-6">
+        <div class="footer-title">Navigasi</div>
+        <ul class="footer-links">
+          <li><a href="home.html">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="tentang.html">Tentang Kami</a></li>
+          <li><a href="cara-order.html">Cara Order</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-title">Layanan</div>
+        <ul class="footer-links">
+          <li><a href="paket.html">Paket Harian</a></li>
+          <li><a href="paket.html">Paket Mingguan</a></li>
+          <li><a href="paket.html">Paket Bulanan</a></li>
+          <li><a href="#">Syarat &amp; Ketentuan</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-title">Kontak</div>
+        <div class="footer-contact-item"><i class="bi bi-geo-alt"></i><span>Jl. Sekeloa Dalam No. 12, Bandung</span></div>
+        <div class="footer-contact-item"><i class="bi bi-whatsapp"></i><span>0812-3456-7890</span></div>
+        <div class="footer-contact-item"><i class="bi bi-envelope"></i><span>halo@dapurkost.id</span></div>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 DapurKost. Seluruh hak cipta dilindungi.</div>
+  </div>
+</footer>
+
+<button id="backToTop"><i class="bi bi-arrow-up"></i></button>
+
+<div class="toast-dk" id="toastDK">
+  <i class="bi bi-check-circle-fill"></i>
+  <span id="toastMessage">Berhasil</span>
+</div>
+
+<!-- ============================================================
+     MODAL EDIT PROFIL
+============================================================ -->
+<div class="modal fade" id="modalEditProfile" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modal-content-dk">
+      <div class="modal-header modal-header-dk">
+        <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Edit Profil</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body modal-body-dk">
+        <form id="editProfileForm" novalidate>
+
+          <div class="edit-avatar-wrap">
+            <img src="assets/images/user-avatar.png" alt="Preview Foto" class="edit-avatar-preview" id="editAvatarPreview">
+            <label for="editAvatarInput" class="edit-avatar-upload-btn"><i class="bi bi-camera-fill"></i></label>
+            <input type="file" id="editAvatarInput" accept="image/*">
+          </div>
+
+          <div class="form-group-dk">
+            <label class="form-label-dk" for="editNama">Nama Lengkap</label>
+            <input type="text" id="editNama" class="form-control-dk" placeholder="Masukkan nama lengkap">
+            <div class="error-message" id="editNamaError"><i class="bi bi-exclamation-circle"></i> <span>Nama minimal 3 karakter.</span></div>
+          </div>
+
+          <div class="form-group-dk">
+            <label class="form-label-dk" for="editEmail">Email</label>
+            <input type="email" id="editEmail" class="form-control-dk" placeholder="nama@email.com">
+            <div class="error-message" id="editEmailError"><i class="bi bi-exclamation-circle"></i> <span>Masukkan email yang valid.</span></div>
+          </div>
+
+          <div class="form-group-dk">
+            <label class="form-label-dk" for="editHp">No. HP</label>
+            <input type="tel" id="editHp" class="form-control-dk" placeholder="08xxxxxxxxxx">
+            <div class="error-message" id="editHpError"><i class="bi bi-exclamation-circle"></i> <span>No. HP minimal 10 digit angka.</span></div>
+          </div>
+
+          <div class="form-group-dk mb-0">
+            <label class="form-label-dk" for="editAlamat">Alamat Kost</label>
+            <textarea id="editAlamat" class="form-control-dk" placeholder="Nama kost, jalan, nomor, dan patokan lokasi"></textarea>
+            <div class="error-message" id="editAlamatError"><i class="bi bi-exclamation-circle"></i> <span>Alamat minimal 10 karakter.</span></div>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer" style="border:none; padding: 0 28px 28px;">
+        <button type="submit" form="editProfileForm" class="btn-save-profile btn-ripple" id="saveProfileBtn">
+          <span class="spinner-dk" id="saveProfileSpinner"></span>
+          <span id="saveProfileBtnText"><i class="bi bi-check2-circle me-1"></i> Simpan Perubahan</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL LOGOUT
+============================================================ -->
+<div class="modal fade" id="modalLogout" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modal-content-dk">
+      <div class="modal-body text-center" style="padding: 40px 28px;">
+        <div class="logout-modal-icon"><i class="bi bi-box-arrow-right"></i></div>
+        <h5 style="font-weight:800; color: var(--dark-red); margin-bottom: 8px;">Keluar dari Akun?</h5>
+        <p style="color:#8a5a5a; font-size:0.9rem; margin-bottom: 26px;">Kamu perlu login kembali untuk mengakses akun DapurKost-mu.</p>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn-menu-detail btn-ripple" style="flex:1; padding:12px; border-radius:50px; border:1.5px solid var(--merah); background:transparent; color:var(--merah); font-weight:600;" data-bs-dismiss="modal">Batal</button>
+          <button type="button" class="btn-save-profile btn-ripple" style="flex:1;" id="confirmLogoutBtn">
+            <span class="spinner-dk" id="logoutSpinner"></span>
+            <span id="logoutBtnText">Ya, Keluar</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/api.js"></script>
+
+<script>
+  /* ==========================================================
+     1. LOADING SCREEN
+  ========================================================== */
+  window.addEventListener('load', function(){
+    const loader = document.getElementById('loading-screen');
+    setTimeout(function(){ loader.classList.add('hide'); }, 500);
+  });
+
+  /* ==========================================================
+     2. NAVBAR SCROLL + BACK TO TOP
+  ========================================================== */
+  const navbar = document.getElementById('mainNavbar');
+  const backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 40){ navbar.classList.add('scrolled'); } else { navbar.classList.remove('scrolled'); }
+    if(window.scrollY > 400){ backToTop.classList.add('visible'); } else { backToTop.classList.remove('visible'); }
+  });
+  backToTop.addEventListener('click', function(){ window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+  /* ==========================================================
+     3. RIPPLE BUTTON
+  ========================================================== */
+  document.addEventListener('click', function(e){
+    const btn = e.target.closest('.btn-ripple');
+    if(!btn) return;
+    const rect = btn.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    const size = Math.max(rect.width, rect.height);
+    ripple.className = 'ripple-span';
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+    ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+    btn.appendChild(ripple);
+    setTimeout(function(){ ripple.remove(); }, 600);
+  });
+
+  /* ==========================================================
+     4. DATA PROFIL (dimuat dari backend)
+  ========================================================== */
+  let profileData = {
+    id: null,
+    nama: '-',
+    email: '-',
+    hp: '-',
+    alamat: '-',
+    avatar: 'assets/images/user-avatar.png'
+  };
+
+  const displayName = document.getElementById('displayName');
+  const displayEmail = document.getElementById('displayEmail');
+  const displayHp = document.getElementById('displayHp');
+  const displayAlamat = document.getElementById('displayAlamat');
+  const displayAvatar = document.getElementById('displayAvatar');
+
+  async function loadProfileFromBackend(){
+    try {
+      const me = await DapurKostAPI.me();
+      if(me.data.user.table !== 'pelanggan'){
+        showToast('Halaman ini khusus untuk akun pelanggan.');
+        return;
+      }
+
+      const detail = await DapurKostAPI.getPelangganById(me.data.user.id);
+      const p = detail.data.pelanggan;
+
+      profileData.id = p.id;
+      profileData.nama = p.nama;
+      profileData.email = p.email;
+      profileData.hp = p.no_hp || '-';
+      profileData.alamat = p.alamat || '-';
+
+      displayName.textContent = profileData.nama;
+      displayEmail.textContent = profileData.email;
+      displayHp.textContent = profileData.hp;
+      displayAlamat.textContent = profileData.alamat;
+    } catch (err) {
+      showToast('Silakan login terlebih dahulu.');
+      setTimeout(function(){ window.location.href = 'login.html'; }, 1200);
+    }
+  }
+
+  /* ==========================================================
+     5. MODAL EDIT PROFIL - ISI DATA SAAT DIBUKA
+  ========================================================== */
+  const modalEditProfile = document.getElementById('modalEditProfile');
+  const editNama = document.getElementById('editNama');
+  const editEmail = document.getElementById('editEmail');
+  const editHp = document.getElementById('editHp');
+  const editAlamat = document.getElementById('editAlamat');
+  const editAvatarPreview = document.getElementById('editAvatarPreview');
+  const editAvatarInput = document.getElementById('editAvatarInput');
+
+  let newAvatarDataUrl = null;
+
+  modalEditProfile.addEventListener('show.bs.modal', function(){
+    editNama.value = profileData.nama;
+    editEmail.value = profileData.email;
+    editEmail.setAttribute('readonly', 'readonly');
+    editHp.value = profileData.hp === '-' ? '' : profileData.hp;
+    editAlamat.value = profileData.alamat === '-' ? '' : profileData.alamat;
+    editAvatarPreview.src = profileData.avatar;
+    newAvatarDataUrl = null;
+    clearEditErrors();
+  });
+
+  /* ==========================================================
+     6. PREVIEW FOTO
+  ========================================================== */
+  editAvatarInput.addEventListener('change', function(){
+    const file = this.files[0];
+    if(!file) return;
+
+    if(!file.type.startsWith('image/')){
+      showToast('File harus berupa gambar');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e){
+      editAvatarPreview.src = e.target.result;
+      newAvatarDataUrl = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  /* ==========================================================
+     7. VALIDASI FORM EDIT PROFIL
+  ========================================================== */
+  function toggleFieldError(inputEl, errorEl, isValid){
+    inputEl.classList.toggle('is-invalid', !isValid);
+    errorEl.classList.toggle('show', !isValid);
+  }
+
+  function clearEditErrors(){
+    [editNama, editEmail, editHp, editAlamat].forEach(function(el){ el.classList.remove('is-invalid'); });
+    document.querySelectorAll('#editProfileForm .error-message').forEach(function(el){ el.classList.remove('show'); });
+  }
+
+  function validateEditForm(){
+    const validNama = editNama.value.trim().length >= 3;
+    const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(editEmail.value.trim());
+    const validHp = /^[0-9\-]{10,16}$/.test(editHp.value.trim());
+    const validAlamat = editAlamat.value.trim().length >= 10;
+
+    toggleFieldError(editNama, document.getElementById('editNamaError'), validNama);
+    toggleFieldError(editEmail, document.getElementById('editEmailError'), validEmail);
+    toggleFieldError(editHp, document.getElementById('editHpError'), validHp);
+    toggleFieldError(editAlamat, document.getElementById('editAlamatError'), validAlamat);
+
+    return validNama && validEmail && validHp && validAlamat;
+  }
+
+  /* ==========================================================
+     8. SIMPAN PERUBAHAN PROFIL
+  ========================================================== */
+  const editProfileForm = document.getElementById('editProfileForm');
+  const saveProfileBtn = document.getElementById('saveProfileBtn');
+  const saveProfileBtnText = document.getElementById('saveProfileBtnText');
+  const saveProfileSpinner = document.getElementById('saveProfileSpinner');
+
+  editProfileForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+
+    if(!validateEditForm()){
+      return;
+    }
+
+    saveProfileBtn.disabled = true;
+    saveProfileSpinner.classList.add('show');
+    saveProfileBtnText.textContent = 'Menyimpan...';
+
+    try {
+      await DapurKostAPI.updatePelanggan(profileData.id, {
+        nama: editNama.value.trim(),
+        no_hp: editHp.value.trim(),
+        alamat: editAlamat.value.trim()
+      });
+
+      // Update tampilan dari data yang baru saja disimpan
+      profileData.nama = editNama.value.trim();
+      profileData.hp = editHp.value.trim();
+      profileData.alamat = editAlamat.value.trim();
+      if(newAvatarDataUrl){ profileData.avatar = newAvatarDataUrl; }
+
+      displayName.textContent = profileData.nama;
+      displayHp.textContent = profileData.hp;
+      displayAlamat.textContent = profileData.alamat;
+      displayAvatar.src = profileData.avatar;
+
+      const modalInstance = bootstrap.Modal.getInstance(modalEditProfile);
+      modalInstance.hide();
+
+      showToast('Profil berhasil diperbarui');
+    } catch (err) {
+      showToast(err.message || 'Gagal menyimpan profil. Coba lagi.');
+    } finally {
+      saveProfileSpinner.classList.remove('show');
+      saveProfileBtnText.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Simpan Perubahan';
+      saveProfileBtn.disabled = false;
+    }
+  });
+
+  /* ==========================================================
+     9. MENU KEAMANAN (DUMMY)
+  ========================================================== */
+  document.getElementById('menuKeamanan').addEventListener('click', function(){
+    showToast('Fitur keamanan akan segera tersedia');
+  });
+
+  /* ==========================================================
+     10. LOGOUT
+  ========================================================== */
+  const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
+  const logoutBtnText = document.getElementById('logoutBtnText');
+  const logoutSpinner = document.getElementById('logoutSpinner');
+  const modalLogout = document.getElementById('modalLogout');
+
+  confirmLogoutBtn.addEventListener('click', async function(){
+    confirmLogoutBtn.disabled = true;
+    logoutSpinner.classList.add('show');
+    logoutBtnText.textContent = 'Memproses...';
+
+    try {
+      await DapurKostAPI.logout();
+    } catch (err) {
+      // Tetap lanjut redirect walau logout backend gagal (misal sesi sudah expired)
+      console.error('Logout error:', err);
+    }
+
+    logoutSpinner.classList.remove('show');
+    logoutBtnText.textContent = 'Ya, Keluar';
+    confirmLogoutBtn.disabled = false;
+
+    const modalInstance = bootstrap.Modal.getInstance(modalLogout);
+    modalInstance.hide();
+
+    showToast('Berhasil logout. Mengalihkan ke halaman login...');
+
+    setTimeout(function(){
+      window.location.href = 'login.html';
+    }, 1200);
+  });
+
+  /* ==========================================================
+     11. TOAST NOTIFIKASI
+  ========================================================== */
+  let toastTimeout;
+  function showToast(message){
+    const toast = document.getElementById('toastDK');
+    document.getElementById('toastMessage').textContent = message;
+    toast.classList.add('show');
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(function(){ toast.classList.remove('show'); }, 2800);
+  }
+
+  /* ==========================================================
+     12. INIT
+  ========================================================== */
+  loadProfileFromBackend();
+</script>
+
+</body>
+</html>

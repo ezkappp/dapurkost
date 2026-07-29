@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout - DapurKost</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  /* ==========================================================
+     ROOT VARIABLES (konsisten dengan halaman lain)
+  ========================================================== */
+  :root{
+    --cream: #FEF9E1;
+    --beige: #E5D0AC;
+    --merah: #A31D1D;
+    --dark-red: #6D2323;
+    --white: #ffffff;
+    --gradient-primary: linear-gradient(135deg, var(--merah) 0%, var(--dark-red) 100%);
+    --shadow-soft: 0 10px 30px rgba(109, 35, 35, 0.12);
+    --shadow-soft-lg: 0 20px 50px rgba(109, 35, 35, 0.18);
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 10px;
+    --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--cream);
+    color: var(--dark-red);
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+  h1,h2,h3,h4,h5,h6{ font-family: 'Poppins', sans-serif; font-weight: 700; }
+  a{ text-decoration: none; }
+  ::selection{ background: var(--merah); color: var(--cream); }
+  ::-webkit-scrollbar{ width: 10px; }
+  ::-webkit-scrollbar-track{ background: var(--cream); }
+  ::-webkit-scrollbar-thumb{ background: var(--merah); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover{ background: var(--dark-red); }
+
+  /* ==========================================================
+     LOADING SCREEN
+  ========================================================== */
+  #loading-screen{
+    position: fixed; inset: 0; background: var(--gradient-primary); z-index: 99999;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+  #loading-screen.hide{ opacity: 0; visibility: hidden; pointer-events: none; }
+  .loader-logo{
+    width: 80px; height: 80px; border-radius: 50%; background: var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size: 1.8rem; color: var(--merah);
+    margin-bottom: 20px; animation: pulseLogo 1.4s ease-in-out infinite;
+  }
+  @keyframes pulseLogo{
+    0%{ transform: scale(1); box-shadow: 0 0 0 0 rgba(254,249,225,0.5); }
+    70%{ transform: scale(1.08); box-shadow: 0 0 0 20px rgba(254,249,225,0); }
+    100%{ transform: scale(1); box-shadow: 0 0 0 0 rgba(254,249,225,0); }
+  }
+  .loader-text{ color: var(--cream); font-weight: 500; letter-spacing: 2px; font-size: 0.9rem; text-transform: uppercase; opacity: 0.9; }
+  .loader-bar{ width: 160px; height: 4px; background: rgba(254,249,225,0.25); border-radius: 10px; margin-top: 16px; overflow: hidden; }
+  .loader-bar::after{
+    content:''; display:block; width: 40%; height: 100%; background: var(--cream); border-radius: 10px;
+    animation: loaderMove 1.2s ease-in-out infinite;
+  }
+  @keyframes loaderMove{ 0%{ margin-left: -40%; } 100%{ margin-left: 100%; } }
+
+  /* ==========================================================
+     NAVBAR (identik)
+  ========================================================== */
+  .navbar-dapurkost{
+    position: sticky; top: 0; z-index: 1000; padding: 18px 0;
+    background: rgba(254, 249, 225, 0.65);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border-bottom: 1px solid rgba(163, 29, 29, 0.08);
+    transition: var(--transition);
+  }
+  .navbar-dapurkost.scrolled{ padding: 10px 0; background: rgba(254, 249, 225, 0.9); box-shadow: var(--shadow-soft); }
+  .navbar-brand-dk{ display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.4rem; color: var(--merah) !important; }
+  .navbar-brand-dk img{ height: 42px; width: 42px; object-fit: contain; border-radius: 50%; transition: var(--transition); }
+  .navbar-brand-dk span{ background: var(--gradient-primary); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .navbar-nav .nav-link{
+    font-weight: 500; color: var(--dark-red) !important; margin: 0 12px;
+    position: relative; padding: 6px 2px !important; transition: var(--transition);
+  }
+  .navbar-nav .nav-link::after{
+    content: ''; position: absolute; left: 0; bottom: 0; width: 0%; height: 2px;
+    background: var(--gradient-primary); border-radius: 10px; transition: width 0.3s ease;
+  }
+  .navbar-nav .nav-link:hover::after, .navbar-nav .nav-link.active::after{ width: 100%; }
+  .navbar-nav .nav-link:hover{ color: var(--merah) !important; }
+  .btn-navbar-order{
+    background: var(--gradient-primary); color: var(--cream) !important; padding: 10px 26px;
+    border-radius: 50px; font-weight: 600; font-size: 0.92rem; box-shadow: var(--shadow-soft);
+    border: none; transition: var(--transition); position: relative; overflow: hidden;
+  }
+  .btn-navbar-order:hover{ transform: translateY(-3px); box-shadow: var(--shadow-soft-lg); color: var(--cream) !important; }
+  .navbar-toggler{ border: none; box-shadow: none !important; }
+
+  /* ==========================================================
+     RIPPLE BUTTON
+  ========================================================== */
+  .btn-ripple{ position: relative; overflow: hidden; }
+  .ripple-span{
+    position: absolute; border-radius: 50%; background: rgba(255,255,255,0.55);
+    transform: scale(0); animation: rippleAnim 0.6s linear; pointer-events: none;
+  }
+  @keyframes rippleAnim{ to{ transform: scale(3); opacity: 0; } }
+
+  /* ==========================================================
+     PAGE HEADER
+  ========================================================== */
+  .checkout-header{ padding: 50px 0 20px; }
+  .checkout-title{ font-size: 2rem; font-weight: 800; color: var(--dark-red); margin-bottom: 8px; }
+  .checkout-subtitle{ color: #8a5a5a; font-size: 0.95rem; }
+
+  .checkout-steps{ display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap; }
+  .checkout-step{
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.82rem; font-weight: 600; color: #b98787;
+    padding: 8px 16px; border-radius: 50px; background: rgba(163,29,29,0.06);
+  }
+  .checkout-step.active{ background: var(--gradient-primary); color: var(--cream); }
+  .checkout-step .step-num{
+    width: 20px; height: 20px; border-radius: 50%; background: currentColor;
+    display: flex; align-items: center; justify-content: center; font-size: 0.7rem;
+  }
+  .checkout-step.active .step-num{ background: rgba(254,249,225,0.25); }
+  .checkout-step:not(.active) .step-num{ color: var(--cream); }
+
+  /* ==========================================================
+     MAIN LAYOUT
+  ========================================================== */
+  .checkout-main{ padding: 30px 0 100px; }
+
+  .checkout-card{
+    background: rgba(255,255,255,0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: var(--radius-lg);
+    padding: 30px 28px;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 26px;
+    transition: var(--transition);
+  }
+  .checkout-card:hover{ box-shadow: var(--shadow-soft-lg); }
+
+  .checkout-card-title{
+    font-size: 1.1rem; font-weight: 700; color: var(--dark-red);
+    margin-bottom: 22px; display: flex; align-items: center; gap: 10px;
+  }
+  .checkout-card-title i{
+    width: 38px; height: 38px; border-radius: 12px;
+    background: var(--gradient-primary); color: var(--cream);
+    display: flex; align-items: center; justify-content: center; font-size: 1rem;
+  }
+
+  .form-group-dk{ margin-bottom: 20px; }
+  .form-label-dk{ display: block; font-size: 0.86rem; font-weight: 600; color: var(--dark-red); margin-bottom: 8px; }
+  .form-control-dk{
+    width: 100%; padding: 13px 18px; border-radius: var(--radius-sm);
+    border: 1.5px solid rgba(163,29,29,0.15); background: rgba(255,255,255,0.8);
+    font-family: 'Poppins', sans-serif; font-size: 0.92rem; color: var(--dark-red);
+    transition: var(--transition);
+  }
+  textarea.form-control-dk{ resize: none; min-height: 90px; }
+  .form-control-dk:focus{
+    outline: none; border-color: var(--merah); background: var(--white);
+    box-shadow: 0 0 0 4px rgba(163,29,29,0.08);
+  }
+  .form-control-dk::placeholder{ color: #c99; }
+  .form-control-dk.is-invalid{ border-color: #d9534f; background: rgba(217,83,79,0.04); }
+
+  .error-message{
+    color: #d9534f; font-size: 0.78rem; margin-top: 6px;
+    display: none; align-items: center; gap: 5px;
+  }
+  .error-message.show{ display: flex; }
+
+  .saved-address-chip{
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(163,29,29,0.08); border: 1px solid rgba(163,29,29,0.18);
+    color: var(--merah); padding: 8px 16px; border-radius: 50px;
+    font-size: 0.82rem; font-weight: 600; margin-bottom: 16px; cursor: pointer;
+    transition: var(--transition);
+  }
+  .saved-address-chip:hover{ background: rgba(163,29,29,0.14); }
+
+  /* --- RINGKASAN MENU (ITEM LIST) --- */
+  .order-item{
+    display: flex; align-items: center; gap: 16px;
+    padding: 16px 0; border-bottom: 1px dashed rgba(163,29,29,0.15);
+  }
+  .order-item:last-child{ border-bottom: none; }
+  .order-item-img{
+    width: 68px; height: 68px; border-radius: var(--radius-sm);
+    object-fit: cover; flex-shrink: 0;
+  }
+  .order-item-paket-icon{
+    width: 68px; height: 68px; border-radius: var(--radius-sm);
+    background: var(--gradient-primary); color: var(--cream);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem; flex-shrink: 0;
+  }
+  #orderSummaryTitle .ganti-paket-link{
+    float: right; font-size: 0.8rem; font-weight: 600;
+    color: var(--merah); text-decoration: underline; text-underline-offset: 2px;
+  }
+  .order-item-info{ flex-grow: 1; min-width: 0; }
+  .order-item-name{ font-weight: 700; font-size: 0.95rem; color: var(--dark-red); margin-bottom: 2px; }
+  .order-item-price{ font-size: 0.85rem; color: #8a5a5a; }
+
+  .qty-stepper{
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(163,29,29,0.06); border-radius: 50px; padding: 6px 10px;
+  }
+  .qty-btn{
+    width: 26px; height: 26px; border-radius: 50%; border: none;
+    background: var(--gradient-primary); color: var(--cream);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; transition: var(--transition); cursor: pointer;
+  }
+  .qty-btn:hover{ transform: scale(1.1); }
+  .qty-btn:disabled{ opacity: 0.4; cursor: not-allowed; transform: none; }
+  .qty-value{ font-weight: 700; font-size: 0.9rem; min-width: 18px; text-align: center; }
+
+  .order-item-subtotal{ font-weight: 700; color: var(--merah); font-size: 0.92rem; min-width: 90px; text-align: right; }
+
+  .remove-item-btn{
+    background: none; border: none; color: #c99; font-size: 1rem;
+    transition: var(--transition); cursor: pointer;
+  }
+  .remove-item-btn:hover{ color: var(--merah); transform: scale(1.15); }
+
+  /* ==========================================================
+     SUMMARY CARD (KANAN, STICKY)
+  ========================================================== */
+  .summary-card{
+    background: var(--gradient-primary);
+    border-radius: var(--radius-lg);
+    padding: 32px 28px;
+    color: var(--cream);
+    box-shadow: var(--shadow-soft-lg);
+    position: sticky;
+    top: 100px;
+  }
+  .summary-title{ font-size: 1.2rem; font-weight: 800; margin-bottom: 22px; }
+
+  .summary-row{
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.9rem; padding: 10px 0;
+    border-bottom: 1px dashed rgba(254,249,225,0.25);
+  }
+  .summary-row .label{ opacity: 0.85; }
+  .summary-row .value{ font-weight: 700; }
+  .summary-row.discount .value{ color: #d4f7d4; }
+
+  .voucher-wrap{ margin: 18px 0; }
+  .voucher-input-group{ display: flex; gap: 8px; }
+  .voucher-input{
+    flex-grow: 1; padding: 12px 16px; border-radius: 50px; border: none;
+    background: rgba(254,249,225,0.15); color: var(--cream);
+    font-family: 'Poppins', sans-serif; font-size: 0.85rem;
+  }
+  .voucher-input::placeholder{ color: rgba(254,249,225,0.6); }
+  .voucher-input:focus{ outline: none; background: rgba(254,249,225,0.25); }
+  .btn-voucher{
+    padding: 12px 20px; border-radius: 50px; border: none;
+    background: var(--cream); color: var(--merah); font-weight: 700; font-size: 0.82rem;
+    transition: var(--transition); white-space: nowrap;
+  }
+  .btn-voucher:hover{ transform: translateY(-2px); }
+  .voucher-message{ font-size: 0.78rem; margin-top: 8px; display: none; align-items: center; gap: 5px; }
+  .voucher-message.show{ display: flex; }
+  .voucher-message.success{ color: #d4f7d4; }
+  .voucher-message.error{ color: #ffd6d6; }
+
+  .summary-total-row{
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 20px; padding-top: 20px; border-top: 2px solid rgba(254,249,225,0.3);
+  }
+  .summary-total-label{ font-size: 1rem; font-weight: 700; }
+  .summary-total-value{ font-size: 1.6rem; font-weight: 800; }
+
+  .btn-checkout-final{
+    width: 100%; margin-top: 26px; padding: 16px; border-radius: 50px; border: none;
+    background: var(--cream); color: var(--merah); font-weight: 700; font-size: 0.98rem;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: var(--transition);
+  }
+  .btn-checkout-final:hover{ transform: translateY(-3px); box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+  .btn-checkout-final:disabled{ opacity: 0.7; cursor: not-allowed; transform: none; }
+
+  .spinner-dk{
+    width: 18px; height: 18px; border: 2.5px solid rgba(163,29,29,0.3);
+    border-top-color: var(--merah); border-radius: 50%;
+    animation: spinDK 0.7s linear infinite; display: none;
+  }
+  .spinner-dk.show{ display: inline-block; }
+  @keyframes spinDK{ to{ transform: rotate(360deg); } }
+
+  .summary-secure-note{
+    display: flex; align-items: center; gap: 8px; justify-content: center;
+    margin-top: 16px; font-size: 0.76rem; opacity: 0.8;
+  }
+
+  .toast-dk{
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+    background: var(--gradient-primary); color: var(--cream); padding: 16px 28px; border-radius: 50px;
+    box-shadow: var(--shadow-soft-lg); display: flex; align-items: center; gap: 10px;
+    font-weight: 600; font-size: 0.9rem; z-index: 9999; opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4,0,0.2,1); pointer-events: none;
+  }
+  .toast-dk.show{ transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* Empty State */
+  .empty-checkout{
+    text-align: center; padding: 60px 20px; background: rgba(255,255,255,0.65);
+    border-radius: var(--radius-lg); backdrop-filter: blur(12px);
+  }
+  .empty-checkout-icon{ font-size: 3.5rem; margin-bottom: 16px; opacity: 0.7; }
+  .empty-checkout-text{ color: #8a5a5a; font-size: 0.95rem; margin-bottom: 20px; }
+  .empty-checkout-link{
+    display: inline-block; background: var(--gradient-primary); color: var(--cream);
+    padding: 12px 28px; border-radius: 50px; font-weight: 600; transition: var(--transition);
+  }
+  .empty-checkout-link:hover{ transform: translateY(-3px); box-shadow: var(--shadow-soft); }
+
+  /* ==========================================================
+     FOOTER (identik)
+  ========================================================== */
+  .footer-dk{ background: var(--dark-red); color: rgba(254,249,225,0.85); padding: 70px 0 0; margin-top: 40px; }
+  .footer-brand{ display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+  .footer-brand img{ height: 40px; width: 40px; border-radius: 50%; object-fit: contain; }
+  .footer-brand span{ font-size: 1.3rem; font-weight: 800; color: var(--cream); }
+  .footer-desc{ font-size: 0.9rem; opacity: 0.85; max-width: 320px; }
+  .footer-title{ color: var(--cream); font-weight: 700; font-size: 1rem; margin-bottom: 22px; text-transform: uppercase; letter-spacing: 1px; }
+  .footer-links{ list-style: none; padding: 0; margin: 0; }
+  .footer-links li{ margin-bottom: 12px; }
+  .footer-links a{ color: rgba(254,249,225,0.75); font-size: 0.9rem; transition: var(--transition); }
+  .footer-links a:hover{ color: var(--cream); padding-left: 6px; }
+  .footer-contact-item{ display: flex; gap: 12px; margin-bottom: 16px; font-size: 0.9rem; align-items: flex-start; }
+  .footer-contact-item i{ color: var(--beige); margin-top: 3px; }
+  .footer-social{ display: flex; gap: 12px; margin-top: 18px; }
+  .footer-social a{
+    width: 40px; height: 40px; border-radius: 50%; background: rgba(254,249,225,0.1);
+    display: flex; align-items: center; justify-content: center; color: var(--cream); transition: var(--transition);
+  }
+  .footer-social a:hover{ background: var(--beige); color: var(--dark-red); transform: translateY(-4px); }
+  .footer-bottom{ border-top: 1px solid rgba(254,249,225,0.15); margin-top: 50px; padding: 22px 0; text-align: center; font-size: 0.85rem; opacity: 0.75; }
+
+  #backToTop{
+    position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; border-radius: 50%;
+    background: var(--gradient-primary); color: var(--cream); display: flex; align-items: center;
+    justify-content: center; font-size: 1.2rem; border: none; box-shadow: var(--shadow-soft-lg);
+    opacity: 0; visibility: hidden; transform: translateY(20px); transition: var(--transition); z-index: 999;
+  }
+  #backToTop.visible{ opacity: 1; visibility: visible; transform: translateY(0); }
+  #backToTop:hover{ transform: translateY(-6px); }
+
+  /* ==========================================================
+     RESPONSIVE
+  ========================================================== */
+  @media (max-width: 991px){
+    .summary-card{ position: static; margin-top: 10px; }
+  }
+  @media (max-width: 767px){
+    .checkout-title{ font-size: 1.6rem; }
+    .checkout-card{ padding: 24px 20px; }
+    .order-item{ flex-wrap: wrap; }
+    .order-item-subtotal{ text-align: left; margin-left: 84px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loading-screen">
+  <div class="loader-logo">DK</div>
+  <div class="loader-text">DapurKost</div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dapurkost" id="mainNavbar">
+  <div class="container">
+    <a class="navbar-brand navbar-brand-dk" href="home.html">
+      <img src="logo-dapurkost.png" alt="Logo DapurKost">
+      <span>DapurKost</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <i class="bi bi-list" style="font-size:1.8rem; color: var(--merah);"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="menu.html">Menu</a></li>
+        <li class="nav-item"><a class="nav-link" href="paket.html">Paket</a></li>
+        <li class="nav-item"><a class="nav-link" href="cara-order.html">Cara Order</a></li>
+      </ul>
+      <a href="profil.html" class="btn btn-navbar-order btn-ripple">Akun Saya</a>
+    </div>
+  </div>
+</nav>
+
+<!-- CHECKOUT HEADER -->
+<div class="checkout-header">
+  <div class="container">
+    <h1 class="checkout-title">Checkout Pesanan</h1>
+    <p class="checkout-subtitle">Lengkapi data pengiriman untuk menyelesaikan langganan cateringmu.</p>
+    <div class="checkout-steps">
+      <div class="checkout-step active"><span class="step-num">1</span> <span id="checkoutStep1Text">Keranjang</span></div>
+      <div class="checkout-step active"><span class="step-num">2</span> Checkout</div>
+      <div class="checkout-step"><span class="step-num">3</span> Pembayaran</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CHECKOUT -->
+<div class="checkout-main">
+  <div class="container">
+
+    <!-- EMPTY STATE -->
+    <div id="emptyCheckout" class="empty-checkout" style="display:none;">
+      <div class="empty-checkout-icon">🛒</div>
+      <div class="empty-checkout-text">Belum ada pesanan untuk di-checkout. Pilih menu atau paket terlebih dahulu.</div>
+      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+        <a href="menu.html" class="empty-checkout-link">
+          <i class="bi bi-basket me-1"></i> Pilih Menu
+        </a>
+        <a href="paket.html" class="empty-checkout-link">
+          <i class="bi bi-box-seam me-1"></i> Pilih Paket
+        </a>
+      </div>
+    </div>
+
+    <!-- CHECKOUT CONTENT -->
+    <div id="checkoutContent" style="display:none;">
+      <div class="row g-4">
+
+        <!-- ================= KIRI ================= -->
+        <div class="col-lg-7">
+
+          <!-- ALAMAT PENGIRIMAN -->
+          <div class="checkout-card">
+            <div class="checkout-card-title"><i class="bi bi-geo-alt"></i> Alamat Pengiriman</div>
+
+            <div class="saved-address-chip" id="savedAddressChip">
+              <i class="bi bi-bookmark-check"></i> Gunakan alamat kost tersimpan
+            </div>
+
+            <div class="form-group-dk">
+              <label class="form-label-dk" for="alamatInput">Alamat Lengkap</label>
+              <textarea id="alamatInput" class="form-control-dk" placeholder="Nama kost, jalan, nomor, dan patokan lokasi"></textarea>
+              <div class="error-message" id="alamatError"><i class="bi bi-exclamation-circle"></i> <span>Alamat pengiriman wajib diisi (minimal 10 karakter).</span></div>
+            </div>
+          </div>
+
+          <!-- TANGGAL MULAI & CATATAN -->
+          <div class="checkout-card">
+            <div class="checkout-card-title"><i class="bi bi-calendar-check"></i> Jadwal &amp; Catatan</div>
+
+            <div class="form-group-dk">
+              <label class="form-label-dk" for="tanggalInput">Tanggal Mulai Pengiriman</label>
+              <input type="date" id="tanggalInput" class="form-control-dk">
+              <div class="error-message" id="tanggalError"><i class="bi bi-exclamation-circle"></i> <span>Pilih tanggal mulai pengiriman.</span></div>
+            </div>
+
+            <div class="form-group-dk mb-0">
+              <label class="form-label-dk" for="catatanInput">Catatan Tambahan (Opsional)</label>
+              <textarea id="catatanInput" class="form-control-dk" placeholder="Contoh: tidak pakai cabai, taruh di depan pagar kost, dll."></textarea>
+            </div>
+          </div>
+
+          <!-- RINGKASAN MENU -->
+          <div class="checkout-card">
+            <div class="checkout-card-title" id="orderSummaryTitle"><i class="bi bi-basket"></i> Ringkasan Menu</div>
+            <div id="orderItemsList"></div>
+          </div>
+
+        </div>
+
+        <!-- ================= KANAN ================= -->
+        <div class="col-lg-5">
+          <div class="summary-card">
+            <div class="summary-title"><i class="bi bi-receipt me-2"></i>Ringkasan Pembayaran</div>
+
+            <div class="summary-row">
+              <span class="label">Subtotal</span>
+              <span class="value" id="subtotalValue">Rp0</span>
+            </div>
+            <div class="summary-row">
+              <span class="label">Ongkos Kirim</span>
+              <span class="value" id="ongkirValue">Rp0</span>
+            </div>
+            <div class="summary-row discount" id="discountRow" style="display:none;">
+              <span class="label">Diskon Voucher</span>
+              <span class="value" id="discountValue">-Rp0</span>
+            </div>
+
+            <div class="voucher-wrap">
+              <label class="form-label-dk" style="color: var(--cream);">Kode Voucher</label>
+              <div class="voucher-input-group">
+                <input type="text" id="voucherInput" class="voucher-input" placeholder="Contoh: HEMAT10">
+                <button type="button" class="btn-voucher btn-ripple" id="applyVoucherBtn">Pakai</button>
+              </div>
+              <div class="voucher-message" id="voucherMessage"><i class="bi bi-info-circle"></i> <span id="voucherMessageText"></span></div>
+            </div>
+
+            <div class="summary-total-row">
+              <span class="summary-total-label">Total Bayar</span>
+              <span class="summary-total-value" id="totalValue">Rp0</span>
+            </div>
+
+            <button type="button" class="btn-checkout-final btn-ripple" id="checkoutBtn">
+              <span class="spinner-dk" id="checkoutSpinner"></span>
+              <span id="checkoutBtnText">
+                  <i class="bi bi-lock-fill me-1"></i> Lanjut Pembayaran
+              </span>
+            </button>
+
+            <div class="summary-secure-note"><i class="bi bi-shield-check"></i> Pembayaran aman &amp; terenkripsi</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer-dk">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div class="footer-brand">
+          <img src="logo-dapurkost.png" alt="Logo DapurKost">
+          <span>DapurKost</span>
+        </div>
+        <p class="footer-desc">Solusi makan harian untuk mahasiswa dan anak kost. Rasa rumahan, harga bersahabat, antar tepat waktu.</p>
+        <div class="footer-social">
+          <a href="#"><i class="bi bi-instagram"></i></a>
+          <a href="#"><i class="bi bi-whatsapp"></i></a>
+          <a href="#"><i class="bi bi-tiktok"></i></a>
+          <a href="#"><i class="bi bi-facebook"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-6">
+        <div class="footer-title">Navigasi</div>
+        <ul class="footer-links">
+          <li><a href="home.html">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="tentang.html">Tentang Kami</a></li>
+          <li><a href="cara-order.html">Cara Order</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-title">Layanan</div>
+        <ul class="footer-links">
+          <li><a href="paket.html">Paket Harian</a></li>
+          <li><a href="paket.html">Paket Mingguan</a></li>
+          <li><a href="paket.html">Paket Bulanan</a></li>
+          <li><a href="#">Syarat &amp; Ketentuan</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="footer-title">Kontak</div>
+        <div class="footer-contact-item"><i class="bi bi-geo-alt"></i><span>Jl. Sekeloa Dalam No. 12, Bandung</span></div>
+        <div class="footer-contact-item"><i class="bi bi-whatsapp"></i><span>0812-3456-7890</span></div>
+        <div class="footer-contact-item"><i class="bi bi-envelope"></i><span>halo@dapurkost.id</span></div>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 DapurKost. Seluruh hak cipta dilindungi.</div>
+  </div>
+</footer>
+
+<button id="backToTop"><i class="bi bi-arrow-up"></i></button>
+
+<div class="toast-dk" id="toastDK">
+  <i class="bi bi-check-circle-fill"></i>
+  <span id="toastMessage">Berhasil</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="app.js"></script>
+
+<script>
+  /* ==========================================================
+     1. LOADING SCREEN
+  ========================================================== */
+  window.addEventListener('load', function(){
+    const loader = document.getElementById('loading-screen');
+    setTimeout(function(){ loader.classList.add('hide'); }, 500);
+  });
+
+  /* ==========================================================
+     2. NAVBAR SCROLL + BACK TO TOP
+  ========================================================== */
+  const navbar = document.getElementById('mainNavbar');
+  const backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 40){ navbar.classList.add('scrolled'); } else { navbar.classList.remove('scrolled'); }
+    if(window.scrollY > 400){ backToTop.classList.add('visible'); } else { backToTop.classList.remove('visible'); }
+  });
+  backToTop.addEventListener('click', function(){ window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+  /* ==========================================================
+     3. RIPPLE BUTTON
+  ========================================================== */
+  document.addEventListener('click', function(e){
+    const btn = e.target.closest('.btn-ripple');
+    if(!btn) return;
+    const rect = btn.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    const size = Math.max(rect.width, rect.height);
+    ripple.className = 'ripple-span';
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+    ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+    btn.appendChild(ripple);
+    setTimeout(function(){ ripple.remove(); }, 600);
+  });
+
+  /* ==========================================================
+     4. FORMAT CURRENCY
+  ========================================================== */
+  function formatRupiah(angka){
+    return 'Rp' + angka.toLocaleString('id-ID');
+  }
+
+  /* ==========================================================
+     5. DATA PESANAN (DARI CART + PAKET VIA APP.JS)
+  ========================================================== */
+  const checkoutContent = document.getElementById('checkoutContent');
+  const emptyCheckout = document.getElementById('emptyCheckout');
+
+  let checkoutMode = 'menu'; // Default
+  let orderItems = [];
+
+  function initCheckoutData(){
+    const cart = CartManager.getCart();
+    const selectedPackage = PackageManager.getSelectedPackage();
+
+    // Tentukan mode dan item
+    if(selectedPackage && cart.length === 0){
+      checkoutMode = 'package';
+      orderItems = [{
+        id: selectedPackage.id,
+        nama: selectedPackage.name,
+        harga: selectedPackage.price,
+        qty: 1,
+        img: null,
+        isPaket: true,
+        durasi: selectedPackage.duration + ' hari',
+        makan: selectedPackage.meals + 'x makan'
+      }];
+      document.getElementById('checkoutStep1Text').textContent = 'Pilih Paket';
+      document.getElementById('orderSummaryTitle').innerHTML =
+        '<i class="bi bi-box-seam"></i> Ringkasan Paket <a href="paket.html" class="ganti-paket-link">Ganti Paket</a>';
+    } else if(cart.length > 0){
+      checkoutMode = 'menu';
+      orderItems = cart.map(function(c){
+        return {
+          id: c.id,
+          nama: c.name,
+          harga: c.price,
+          qty: c.qty || 1,
+          img: c.img,
+          isPaket: false
+        };
+      });
+    } else {
+      // Tidak ada data
+      checkoutContent.style.display = 'none';
+      emptyCheckout.style.display = 'block';
+      return false;
+    }
+
+    checkoutContent.style.display = 'block';
+    emptyCheckout.style.display = 'none';
+    return true;
+  }
+
+  // Sync cart ke localStorage setiap kali berubah (untuk mode menu)
+  function syncCartToStorage(){
+    if(checkoutMode !== 'menu') return;
+    const cartData = orderItems.map(function(i){
+      return { id: i.id, name: i.nama, price: i.harga, img: i.img, qty: i.qty };
+    });
+    localStorage.setItem('dapurkost_cart', JSON.stringify(cartData));
+  }
+
+  function renderOrderItems(){
+    const orderItemsList = document.getElementById('orderItemsList');
+    orderItemsList.innerHTML = '';
+
+    orderItems.forEach(function(item){
+      const div = document.createElement('div');
+      div.className = 'order-item';
+
+      const mediaHtml = item.isPaket
+        ? '<div class="order-item-paket-icon"><i class="bi bi-box-seam"></i></div>'
+        : (item.img ? `<img src="${item.img}" alt="${item.nama}" class="order-item-img">` : '<div class="order-item-paket-icon" style="font-size:1.2rem;">🍱</div>');
+
+      const subLabel = item.isPaket
+        ? `${item.durasi} • ${item.makan}`
+        : formatRupiah(item.harga) + ' / porsi';
+
+      const removeBtnHtml = item.isPaket
+        ? ''
+        : `<button type="button" class="remove-item-btn" data-id="${item.id}"><i class="bi bi-trash3"></i></button>`;
+
+      div.innerHTML = `
+        ${mediaHtml}
+        <div class="order-item-info">
+          <div class="order-item-name">${item.nama}</div>
+          <div class="order-item-price">${subLabel}</div>
+        </div>
+        ${item.isPaket ? '' : `
+          <div class="qty-stepper">
+            <button type="button" class="qty-btn btn-qty-minus" data-id="${item.id}" ${item.qty <= 1 ? 'disabled' : ''}><i class="bi bi-dash"></i></button>
+            <span class="qty-value">${item.qty}</span>
+            <button type="button" class="qty-btn btn-qty-plus" data-id="${item.id}"><i class="bi bi-plus"></i></button>
+          </div>
+        `}
+        <div class="order-item-subtotal">${formatRupiah(item.harga * item.qty)}</div>
+        ${removeBtnHtml}
+      `;
+      orderItemsList.appendChild(div);
+    });
+
+    calculateTotal();
+  }
+
+  // Event listeners untuk qty & remove
+  document.getElementById('orderItemsList').addEventListener('click', function(e){
+    const plusBtn = e.target.closest('.btn-qty-plus');
+    const minusBtn = e.target.closest('.btn-qty-minus');
+    const removeBtn = e.target.closest('.remove-item-btn');
+
+    if(plusBtn){
+      const id = plusBtn.getAttribute('data-id');
+      const item = orderItems.find(function(i){ return String(i.id) === id; });
+      if(item){ item.qty++; syncCartToStorage(); renderOrderItems(); }
+    }
+
+    if(minusBtn){
+      const id = minusBtn.getAttribute('data-id');
+      const item = orderItems.find(function(i){ return String(i.id) === id; });
+      if(item && item.qty > 1){ item.qty--; syncCartToStorage(); renderOrderItems(); }
+    }
+
+    if(removeBtn){
+      const id = removeBtn.getAttribute('data-id');
+      orderItems = orderItems.filter(function(i){ return String(i.id) !== id; });
+      if(orderItems.length === 0){
+        CartManager.clearCart();
+        checkoutContent.style.display = 'none';
+        emptyCheckout.style.display = 'block';
+      } else {
+        syncCartToStorage();
+        renderOrderItems();
+      }
+      showToast('Menu dihapus dari pesanan');
+    }
+  });
+
+  /* ==========================================================
+     6. KALKULASI TOTAL OTOMATIS
+  ========================================================== */
+  const subtotalValue = document.getElementById('subtotalValue');
+  const ongkirValue = document.getElementById('ongkirValue');
+  const discountRow = document.getElementById('discountRow');
+  const discountValue = document.getElementById('discountValue');
+  const totalValue = document.getElementById('totalValue');
+
+  const FREE_ONGKIR_THRESHOLD = 100000;
+  const ONGKIR_NORMAL = 8000;
+
+  const voucherList = {
+    'HEMAT10': { type: 'percent', value: 10, label: 'Diskon 10%' },
+    'DAPUR20K': { type: 'flat', value: 20000, label: 'Potongan Rp20.000' },
+    'MAHASISWA5': { type: 'percent', value: 5, label: 'Diskon 5%' }
+  };
+
+  let appliedVoucher = null;
+  let lastCalculated = { subtotal: 0, ongkir: 0, discount: 0, total: 0 };
+
+  function calculateTotal(){
+    const subtotal = orderItems.reduce(function(sum, item){
+      return sum + (item.harga * item.qty);
+    }, 0);
+
+    const ongkir = (subtotal === 0 || subtotal >= FREE_ONGKIR_THRESHOLD) ? 0 : ONGKIR_NORMAL;
+
+    let discount = 0;
+    if(appliedVoucher){
+      const voucher = voucherList[appliedVoucher];
+      if(voucher){
+        discount = voucher.type === 'percent' ? Math.round(subtotal * voucher.value / 100) : voucher.value;
+        if(discount > subtotal) discount = subtotal;
+      }
+    }
+
+    const total = Math.max(subtotal + ongkir - discount, 0);
+
+    lastCalculated = { subtotal: subtotal, ongkir: ongkir, discount: discount, total: total };
+
+    subtotalValue.textContent = formatRupiah(subtotal);
+    ongkirValue.textContent = ongkir === 0 ? 'Gratis' : formatRupiah(ongkir);
+
+    if(discount > 0){
+      discountRow.style.display = 'flex';
+      discountValue.textContent = '-' + formatRupiah(discount);
+    } else {
+      discountRow.style.display = 'none';
+    }
+
+    totalValue.textContent = formatRupiah(total);
+  }
+
+  /* ==========================================================
+     7. VOUCHER
+  ========================================================== */
+  const voucherInput = document.getElementById('voucherInput');
+  const applyVoucherBtn = document.getElementById('applyVoucherBtn');
+  const voucherMessage = document.getElementById('voucherMessage');
+  const voucherMessageText = document.getElementById('voucherMessageText');
+
+  applyVoucherBtn.addEventListener('click', function(){
+    const code = voucherInput.value.trim().toUpperCase();
+
+    if(code.length === 0){
+      showVoucherMessage('Masukkan kode voucher terlebih dahulu.', 'error');
+      return;
+    }
+
+    if(voucherList[code]){
+      appliedVoucher = code;
+      showVoucherMessage('Voucher berhasil digunakan: ' + voucherList[code].label, 'success');
+      calculateTotal();
+      voucherInput.value = '';
+    } else {
+      appliedVoucher = null;
+      showVoucherMessage('Kode voucher tidak ditemukan atau sudah kedaluwarsa.', 'error');
+      calculateTotal();
+    }
+  });
+
+  function showVoucherMessage(text, type){
+    voucherMessageText.textContent = text;
+    voucherMessage.className = 'voucher-message show ' + type;
+  }
+
+  /* ==========================================================
+     8. VALIDASI FORM
+  ========================================================== */
+  const alamatInput = document.getElementById('alamatInput');
+  const alamatError = document.getElementById('alamatError');
+  const tanggalInput = document.getElementById('tanggalInput');
+  const tanggalError = document.getElementById('tanggalError');
+  const catatanInput = document.getElementById('catatanInput');
+
+  // Set tanggal minimum = hari esok
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const minDate = tomorrow.toISOString().split('T')[0];
+  tanggalInput.setAttribute('min', minDate);
+  tanggalInput.value = minDate;
+
+  function validateAlamat(){
+    const valid = alamatInput.value.trim().length >= 10;
+    alamatInput.classList.toggle('is-invalid', !valid);
+    alamatError.classList.toggle('show', !valid);
+    return valid;
+  }
+
+  function validateTanggal(){
+    const valid = tanggalInput.value !== '';
+    tanggalInput.classList.toggle('is-invalid', !valid);
+    tanggalError.classList.toggle('show', !valid);
+    return valid;
+  }
+
+  alamatInput.addEventListener('input', validateAlamat);
+  alamatInput.addEventListener('blur', validateAlamat);
+  tanggalInput.addEventListener('change', validateTanggal);
+
+  document.getElementById('savedAddressChip').addEventListener('click', function(){
+    alamatInput.value = 'Kost Melati Asri, Jl. Sekeloa Dalam No. 12, Bandung (dekat minimarket, pagar hijau)';
+    validateAlamat();
+    showToast('Alamat tersimpan berhasil digunakan');
+  });
+
+  /* ==========================================================
+     9. SUBMIT CHECKOUT → PENDING ORDER
+  ========================================================== */
+  const checkoutBtn = document.getElementById('checkoutBtn');
+  const checkoutSpinner = document.getElementById('checkoutSpinner');
+  const checkoutBtnText = document.getElementById('checkoutBtnText');
+
+  checkoutBtn.addEventListener('click', async function(){
+    const validAlamat = validateAlamat();
+    const validTanggal = validateTanggal();
+
+    if(orderItems.length === 0){
+      showToast(checkoutMode === 'package' ? 'Belum ada paket yang dipilih.' : 'Belum ada menu di pesananmu.');
+      return;
+    }
+
+    if(!validAlamat || !validTanggal){
+      showToast('Lengkapi alamat dan tanggal pengiriman terlebih dahulu.');
+      return;
+    }
+
+    if(checkoutMode !== 'package'){
+      showToast('Saat ini pemesanan hanya tersedia untuk paket berlangganan.');
+      return;
+    }
+
+    checkoutBtn.disabled = true;
+    checkoutSpinner.classList.add('show');
+    checkoutBtnText.textContent = 'Memproses...';
+
+    try {
+      // Pastikan sudah login sebagai pelanggan
+      const me = await DapurKostAPI.me();
+      if(me.data.user.table !== 'pelanggan'){
+        showToast('Silakan login sebagai pelanggan untuk memesan.');
+        checkoutBtn.disabled = false;
+        checkoutSpinner.classList.remove('show');
+        checkoutBtnText.textContent = 'Buat Pesanan';
+        return;
+      }
+
+      // 1. Buat pending order lokal (untuk ringkasan tampilan)
+      const formData = {
+        address: alamatInput.value.trim(),
+        startDate: tanggalInput.value,
+        notes: catatanInput.value.trim()
+      };
+      OrderManager.createPendingOrder(formData);
+
+      // 2. Kirim pesanan sungguhan ke backend (tabel `pesanan`)
+      await OrderManager.submitOrderToBackend();
+
+      showToast('Pesanan berhasil dibuat, lanjut ke pembayaran');
+
+      setTimeout(function(){
+        window.location.href = 'pembayaran.html';
+      }, 700);
+    } catch (err) {
+      if(err && err.status === 401){
+        showToast('Silakan login terlebih dahulu untuk memesan.');
+        setTimeout(function(){ window.location.href = 'login.html'; }, 1200);
+      } else {
+        showToast(err.message || 'Gagal membuat pesanan. Coba lagi.');
+      }
+      checkoutBtn.disabled = false;
+      checkoutSpinner.classList.remove('show');
+      checkoutBtnText.textContent = 'Buat Pesanan';
+    }
+  });
+
+  /* ==========================================================
+     10. TOAST NOTIFIKASI
+  ========================================================== */
+  let toastTimeout;
+  function showToast(message){
+    const toast = document.getElementById('toastDK');
+    document.getElementById('toastMessage').textContent = message;
+    toast.classList.add('show');
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(function(){ toast.classList.remove('show'); }, 2800);
+  }
+
+  /* ==========================================================
+     11. INISIALISASI
+  ========================================================== */
+  if(initCheckoutData()){
+    renderOrderItems();
+  }
+</script>
+
+</body>
+</html>

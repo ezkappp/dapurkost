@@ -4,6 +4,13 @@
    assets/js/api.js (DapurKostAPI) sudah dimuat lebih dulu.
    ==================================================== */
 
+// Format angka jadi "RpX.XXX.XXX" (fungsi ini tidak ada di admin.js,
+// jadi didefinisikan di sini juga—sama seperti pola di menu.js/paket.js/laporan.js/pesanan.js)
+function formatRupiah(angka){
+    if(!angka) return "Rp0";
+    return "Rp" + Math.round(angka).toLocaleString("id-ID");
+}
+
 // Data pembayaran dimuat dari backend (GET /api/pembayaran)
 let pembayaranList = [];
 

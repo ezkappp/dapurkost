@@ -1695,7 +1695,7 @@ async function loadPesanan(){
                 nama: row.nama_pelanggan || "-",
                 hp: row.no_hp || "-",
                 alamat: row.alamat || "-",
-                paket: row.nama_paket || "-",
+                paket: row.nama_paket || (row.nama_menu ? row.nama_menu + " (satuan)" : "-"),
                 menu: row.nama_menu || "",
                 tanggal: formatTanggalPesan(row.tanggal_pesan),
                 total: Number(row.total_harga)

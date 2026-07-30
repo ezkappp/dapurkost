@@ -925,11 +925,6 @@
       return;
     }
 
-    if(checkoutMode !== 'package'){
-      showToast('Saat ini pemesanan hanya tersedia untuk paket berlangganan.');
-      return;
-    }
-
     checkoutBtn.disabled = true;
     checkoutSpinner.classList.add('show');
     checkoutBtnText.textContent = 'Memproses...';

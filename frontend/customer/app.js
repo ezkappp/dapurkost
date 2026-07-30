@@ -201,52 +201,81 @@ class OrderManager {
   }
 
   /**
-   * Kirim pending order (mode paket) ke backend supaya benar-benar tersimpan
-   * di tabel `pesanan`. Dipanggil dari checkout.html setelah pending order
-   * lokal dibuat. Catatan: skema `pesanan` saat ini butuh paket_id (wajib
-   * berlangganan paket), jadi hanya mode 'paket' yang bisa dikirim ke backend.
+   * Kirim pending order ke backend supaya benar-benar tersimpan di tabel
+   * `pesanan`. Dipanggil dari checkout.html setelah pending order lokal
+   * dibuat. Support 2 mode:
+   * - 'paket': satu paket berlangganan -> satu pesanan (backendPesananId)
+   * - 'menu': keranjang menu satuan, bisa banyak jenis item sekaligus ->
+   *   backend bikin satu baris pesanan per item (backendPesananIds, array)
    * Hasilnya (id pesanan asli + total dari backend) disimpan balik ke
    * pending order supaya halaman pembayaran.html bisa memakainya.
    */
   static async submitOrderToBackend() {
     const order = this.getPendingOrder();
-    if (!order || order.type !== 'paket') {
-      throw new Error('Hanya pemesanan paket yang bisa diproses saat ini.');
+    if (!order) {
+      throw new Error('Tidak ada pesanan yang sedang diproses.');
     }
 
-    const paketId = order.items[0] && order.items[0].id;
-    if (!paketId) {
-      throw new Error('Paket tidak valid.');
+    if (order.type === 'paket') {
+      const paketId = order.items[0] && order.items[0].id;
+      if (!paketId) {
+        throw new Error('Paket tidak valid.');
+      }
+
+      const res = await DapurKostAPI.createPesanan({
+        paket_id: paketId,
+        jumlah: 1,
+        tanggal_pesan: order.formData.startDate
+      });
+
+      order.backendPesananId = res.data.id;
+      order.pricing.total = Number(res.data.total_harga) + order.pricing.ongkir;
+    } else {
+      // mode 'menu': keranjang bisa berisi beberapa jenis menu sekaligus
+      const items = order.items.map(function (i) {
+        return { menu_id: i.id, jumlah: i.qty || 1 };
+      });
+
+      if (items.length === 0) {
+        throw new Error('Keranjang kosong.');
+      }
+
+      const res = await DapurKostAPI.createPesanan({
+        items: items,
+        tanggal_pesan: order.formData.startDate
+      });
+
+      order.backendPesananIds = res.data.ids;
+      order.pricing.total = Number(res.data.total_harga) + order.pricing.ongkir;
     }
 
-    const res = await DapurKostAPI.createPesanan({
-      paket_id: paketId,
-      jumlah: 1,
-      tanggal_pesan: order.formData.startDate
-    });
-
-    order.backendPesananId = res.data.id;
-    order.pricing.total = Number(res.data.total_harga) + order.pricing.ongkir;
     localStorage.setItem(STORAGE_KEYS.PENDING_ORDER, JSON.stringify(order));
 
     return order;
   }
 
   /**
-   * Kirim bukti pembayaran ke backend (tabel `pembayaran`), lalu update
-   * status pending order jadi menunggu verifikasi admin.
+   * Kirim bukti pembayaran ke backend (tabel `pembayaran`). Kalau pesanan
+   * hasil checkout keranjang (banyak baris pesanan), bukti yang sama
+   * dikirim untuk tiap baris pesanan satu-satu (nominal masing-masing
+   * dihitung otomatis oleh backend dari total_harga baris itu).
    */
   static async submitPaymentToBackend(metode, buktiNamaFile) {
     const order = this.getPendingOrder();
-    if (!order || !order.backendPesananId) {
+    if (!order || (!order.backendPesananId && !order.backendPesananIds)) {
       throw new Error('Pesanan belum tersimpan di server.');
     }
 
-    await DapurKostAPI.createPembayaran({
-      pesanan_id: order.backendPesananId,
-      metode_pembayaran: metode === 'cash' ? 'cash' : 'transfer',
-      bukti_transfer: buktiNamaFile || ''
-    });
+    const metodeBackend = metode === 'cash' ? 'cash' : 'transfer';
+    const idList = order.backendPesananIds || [order.backendPesananId];
+
+    for (const pesananId of idList) {
+      await DapurKostAPI.createPembayaran({
+        pesanan_id: pesananId,
+        metode_pembayaran: metodeBackend,
+        bukti_transfer: buktiNamaFile || ''
+      });
+    }
 
     this.updatePaymentMethod(metode, { fileName: buktiNamaFile });
     return order;
